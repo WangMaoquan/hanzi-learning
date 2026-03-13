@@ -14,13 +14,13 @@
 
 ## 关键文件
 
-| 文件 | 说明 |
-|------|------|
-| `apps/web/vite.config.ts` | Vite 配置，包含 Tailwind 4.x 插件 |
-| `apps/web/src/router/index.ts` | 路由配置 |
-| `apps/web/src/main.ts` | 应用入口 |
-| `apps/web/src/styles/main.css` | Tailwind 4.x 样式入口 |
-| `packages/hanzi-vue/src/index.ts` | Hanzi Writer Vue 封装 |
+| 文件                              | 说明                              |
+| --------------------------------- | --------------------------------- |
+| `apps/web/vite.config.ts`         | Vite 配置，包含 Tailwind 4.x 插件 |
+| `apps/web/src/router/index.ts`    | 路由配置                          |
+| `apps/web/src/main.ts`            | 应用入口                          |
+| `apps/web/src/styles/main.css`    | Tailwind 4.x 样式入口             |
+| `packages/hanzi-vue/src/index.ts` | Hanzi Writer Vue 封装             |
 
 ```
 hanzi-learning/
@@ -41,30 +41,35 @@ hanzi-learning/
 ## 学习路线（演进计划）
 
 ### 阶段一：汉字学习（MVP）
+
 - 笔顺动画演示
 - 拼音、笔画数、部首、结构展示
 - 组词、例句学习
 - 难度分级（按年级）
 
 ### 阶段二：古诗词学习
+
 - 经典唐诗宋词收录
 - 原文、拼音、译文对照
 - 注释、赏析、创作背景
 - 背诵模式（挖空练习）
 
 ### 阶段三：成语学习
+
 - 成语故事、典故出处
 - 近义词、反义词
 - 看图猜成语
 - 成语接龙游戏
 
 ### 阶段四：文言文学习
+
 - 初中必背文言文
 - 古今对译
 - 实词、虚词练习
 - 文法讲解
 
 ### 阶段五：内容管理（可选）
+
 - 引入 Headless CMS（Strapi/Sanity）
 - 支持用户上传内容
 - 管理员后台
@@ -94,6 +99,38 @@ pnpm format
 pnpm clean
 ```
 
+## 代码规范
+
+### Commit Message 规范
+
+使用 Conventional Commits 格式：
+
+```
+<type>(<scope>): <subject>
+
+# type 类型:
+feat     - 新功能
+fix      - Bug 修复
+docs     - 文档更新
+style    - 代码格式
+refactor - 重构
+test     - 测试
+chore    - 构建/工具配置
+```
+
+**示例：**
+
+```bash
+git commit -m "feat: 添加用户登录功能"
+git commit -m "fix: 修复汉字笔顺动画显示问题"
+git commit -m "docs: 更新 API 文档"
+```
+
+### Git Hooks
+
+- **pre-commit**: 自动运行 ESLint + Prettier 修复暂存文件
+- **commit-msg**: 校验 commit message 格式
+
 ## 常见问题 (Gotchas)
 
 1. **Tailwind CSS 4.x**: 使用 `@tailwindcss/vite` 插件，CSS 中使用 `@import "tailwindcss"`，无需 `tailwind.config.js`
@@ -104,6 +141,7 @@ pnpm clean
 ## 内容数据
 
 内容数据存放在 `packages/data/src/content/` 目录下：
+
 - `characters/` - 汉字数据
 - `poems/` - 古诗数据
 - `prose/` - 文言文数据（待扩展）
@@ -113,12 +151,12 @@ pnpm clean
 
 ### 技术选型
 
-| 层级 | 推荐方案 |
-|------|----------|
-| **运行时** | Node.js 20+ 或 Bun |
-| **框架** | Fastify / NestJS / Hono |
-| **数据库** | PostgreSQL + Prisma ORM |
-| **认证** | JWT / NextAuth.js |
+| 层级         | 推荐方案                  |
+| ------------ | ------------------------- |
+| **运行时**   | Node.js 20+ 或 Bun        |
+| **框架**     | Fastify / NestJS / Hono   |
+| **数据库**   | PostgreSQL + Prisma ORM   |
+| **认证**     | JWT / NextAuth.js         |
 | **API 风格** | RESTful + GraphQL（可选） |
 
 ### 数据库设计
@@ -231,13 +269,13 @@ apps/
 
 ### 部署建议
 
-| 组件 | 推荐平台 |
-|------|----------|
-| 前端 | Vercel / Netlify |
-| 后端 | Railway / Render / 阿里云 FC |
-| 数据库 | Neon / Supabase / 阿里云 RDS |
-| 对象存储 | 阿里云 OSS / 腾讯云 COS |
-| CDN | 阿里云 CDN / 腾讯云 CDN |
+| 组件     | 推荐平台                     |
+| -------- | ---------------------------- |
+| 前端     | Vercel / Netlify             |
+| 后端     | Railway / Render / 阿里云 FC |
+| 数据库   | Neon / Supabase / 阿里云 RDS |
+| 对象存储 | 阿里云 OSS / 腾讯云 COS      |
+| CDN      | 阿里云 CDN / 腾讯云 CDN      |
 
 ### 服务端演进路线
 

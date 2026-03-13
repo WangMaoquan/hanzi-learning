@@ -36,6 +36,7 @@ export interface PoemContent extends BaseContent {
   author: string
   dynasty: 'tang' | 'song' | 'yuan' | 'ming' | 'qing' | 'han' | 'wei' | 'jin'
   verses: string[]
+  versePinyins?: string[][]  // 每句诗每个字的拼音
   annotation?: Record<string, string>
   appreciation?: string
   background?: string

@@ -43,22 +43,23 @@
           </div>
 
           <!-- 原文 -->
-          <div class="space-y-3 mb-6">
-            <p
-              v-for="(verse, idx) in poem.verses"
-              :key="idx"
-              class="text-xl text-center text-gray-900 leading-loose"
+          <div class="space-y-6 mb-6">
+            <div
+              v-for="(verse, verseIdx) in poem.verses"
+              :key="verseIdx"
+              class="flex justify-center gap-3 flex-wrap"
             >
-              {{ verse }}
-            </p>
-          </div>
-
-          <!-- 拼音 -->
-          <div v-if="poem.pinyin" class="border-t pt-4">
-            <h3 class="font-semibold text-gray-900 mb-2"> 拼音 </h3>
-            <p class="text-gray-500 text-center leading-loose whitespace-pre-line">
-              {{ poem.pinyin }}
-            </p>
+              <span
+                v-for="(char, charIdx) in verse"
+                :key="charIdx"
+                class="flex flex-col items-center"
+              >
+                <span class="text-sm text-gray-400">{{
+                  poem.versePinyins?.[verseIdx]?.[charIdx] || ''
+                }}</span>
+                <span class="text-xl text-gray-900">{{ char }}</span>
+              </span>
+            </div>
           </div>
 
           <!-- 翻译 -->

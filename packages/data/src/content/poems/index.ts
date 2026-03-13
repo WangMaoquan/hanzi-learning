@@ -20,6 +20,12 @@ export const poems: PoemContent[] = [
       '举头望明月',
       '低头思故乡',
     ],
+    versePinyins: [
+      ['chuáng', 'qián', 'míng', 'yuè', 'guāng'],
+      ['yí', 'shì', 'dì', 'shàng', 'shuāng'],
+      ['jǔ', 'tóu', 'wàng', 'míng', 'yuè'],
+      ['dī', 'tóu', 'sī', 'gù', 'xiāng'],
+    ],
     annotation: {
       静夜: '宁静的夜晚',
       明月: '明亮的月亮',
@@ -48,6 +54,12 @@ export const poems: PoemContent[] = [
       '处处闻啼鸟',
       '夜来风雨声',
       '花落知多少',
+    ],
+    versePinyins: [
+      ['chūn', 'mián', 'bù', 'jué', 'xiǎo'],
+      ['chù', 'chù', 'wén', 'tí', 'niǎo'],
+      ['yè', 'lái', 'fēng', 'yǔ', 'shēng'],
+      ['huā', 'luò', 'zhī', 'duō', 'shǎo'],
     ],
     annotation: {
       春晓: '春天的早晨',
@@ -78,6 +90,12 @@ export const poems: PoemContent[] = [
       '黄河入海流',
       '欲穷千里目',
       '更上一层楼',
+    ],
+    versePinyins: [
+      ['bái', 'rì', 'yī', 'shān', 'jìn'],
+      ['huáng', 'hé', 'rù', 'hǎi', 'liú'],
+      ['yù', 'qióng', 'qiān', 'lǐ', 'mù'],
+      ['gèng', 'shàng', 'yī', 'céng', 'lóu'],
     ],
     annotation: {
       鹳雀楼: '古代名楼，在山西永济，因常有鹳雀栖息而得名',

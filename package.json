@@ -18,11 +18,15 @@
   },
   "lint-staged": {
     "apps/web/src/**/*.{js,ts,vue,tsx}": [
-      "pnpm exec eslint --fix -c apps/web/eslint.config.js",
-      "pnpm exec prettier --write"
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "packages/**/*.{js,ts}": [
+      "eslint --fix",
+      "prettier --write"
     ],
     "*.{json,md}": [
-      "pnpm exec prettier --write"
+      "prettier --write"
     ]
   },
   "devDependencies": {

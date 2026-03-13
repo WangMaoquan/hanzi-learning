@@ -12,5 +12,9 @@
   },
   "devDependencies": {
     "@hanzi-learning/tsconfig": "workspace:*"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   }
 }

@@ -16,5 +16,9 @@
   "devDependencies": {
     "@hanzi-learning/tsconfig": "workspace:*",
     "@types/node": "^22.0.0"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   }
 }

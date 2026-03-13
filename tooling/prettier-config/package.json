@@ -1,0 +1,9 @@
+{
+  "name": "@hanzi-learning/prettier-config",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.json",
+  "peerDependencies": {
+    "prettier": "^3.0.0"
+  }
+}

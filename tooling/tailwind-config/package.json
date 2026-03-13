@@ -1,0 +1,13 @@
+{
+  "name": "@hanzi-learning/tailwind-config",
+  "version": "0.0.1",
+  "private": true,
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": "./src/index.js"
+  },
+  "peerDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}

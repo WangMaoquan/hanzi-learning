@@ -2,6 +2,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import { computed } from 'vue'
   import { poems } from '@hanzi-learning/data'
+  import { DYNASTY_LABELS } from '@hanzi-learning/utils'
 
   const route = useRoute()
   const router = useRouter()
@@ -10,14 +11,6 @@
     const id = route.params.id as string
     return poems.find((p) => p.id === id)
   })
-
-  const dynastyLabels: Record<string, string> = {
-    tang: '唐',
-    song: '宋',
-    yuan: '元',
-    ming: '明',
-    qing: '清',
-  }
 </script>
 
 <template>
@@ -37,7 +30,7 @@
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <div class="flex items-center gap-4 mb-4">
             <span class="px-2 py-1 bg-secondary-100 text-secondary-700 text-sm rounded">
-              {{ dynastyLabels[poem.dynasty] }}诗
+              {{ DYNASTY_LABELS[poem.dynasty] }}诗
             </span>
             <span class="text-gray-600">{{ poem.author }}</span>
           </div>

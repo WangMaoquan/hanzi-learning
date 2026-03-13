@@ -1,4 +1,4 @@
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch, type Ref } from 'vue'
 import HanziWriter from 'hanzi-writer'
 
 export interface HanziWriterOptions {

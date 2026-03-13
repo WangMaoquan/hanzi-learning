@@ -1,5 +1,7 @@
 import type { ContentType, DifficultyLevel } from '@hanzi-learning/types'
 
+export * from './constants'
+
 // 生成唯一ID
 export function generateId(): string {
   return `${Date.now()}-${Math.random().toString(36).substring(2, 9)}`
@@ -60,28 +62,85 @@ export function shuffleArray<T>(array: T[]): T[] {
 }
 
 // 本地存储工具
+const MAX_STORAGE_SIZE = 5 * 1024 * 1024 // 5MB
+
 export const storage = {
   get<T>(key: string, defaultValue?: T): T | null {
-    const item = localStorage.getItem(key)
-    if (!item) return defaultValue ?? null
     try {
+      const item = localStorage.getItem(key)
+      if (!item) return defaultValue ?? null
       return JSON.parse(item) as T
     }
     catch {
+      // 清理无效数据
+      try {
+        localStorage.removeItem(key)
+      }
+      catch {
+        // ignore
+      }
       return defaultValue ?? null
     }
   },
 
-  set<T>(key: string, value: T): void {
-    localStorage.setItem(key, JSON.stringify(value))
+  set<T>(key: string, value: T): boolean {
+    try {
+      const serialized = JSON.stringify(value)
+      const size = new Blob([serialized]).size
+
+      if (size > MAX_STORAGE_SIZE) {
+        console.warn(`Storage quota exceeded: ${key} (${size} bytes)`)
+        return false
+      }
+
+      localStorage.setItem(key, serialized)
+      return true
+    }
+    catch (error) {
+      // 可能是配额超限
+      if (error instanceof DOMException && error.name === 'QuotaExceededError') {
+        console.error('localStorage quota exceeded')
+      }
+      return false
+    }
   },
 
   remove(key: string): void {
-    localStorage.removeItem(key)
+    try {
+      localStorage.removeItem(key)
+    }
+    catch {
+      // ignore
+    }
   },
 
   clear(): void {
-    localStorage.clear()
+    try {
+      localStorage.clear()
+    }
+    catch {
+      // ignore
+    }
+  },
+
+  // 获取已用空间
+  getUsage(): number {
+    let total = 0
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i)
+        if (key) {
+          const value = localStorage.getItem(key)
+          if (value) {
+            total += new Blob([value]).size
+          }
+        }
+      }
+    }
+    catch {
+      // ignore
+    }
+    return total
   },
 }
 

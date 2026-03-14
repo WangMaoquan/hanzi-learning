@@ -50,3 +50,6 @@ coverage/
 # Temporary files
 *.tmp
 *.temp
+
+# Data (external data sources)
+apps/server/data/

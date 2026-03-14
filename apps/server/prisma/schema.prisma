@@ -38,15 +38,21 @@ model Idiom {
 }
 
 model Poem {
-  id          String   @id @default(uuid())
-  title       String   
-  author      String   
-  content     String[] 
-  dynasty     String?  
-  type        String?  
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String     @id @default(uuid())
+  title         String
+  author        String
+  content       String     // 完整内容，字符串格式，用换行符分隔
+  pinyin        String?    // 全文拼音
+  difficulty    Int?       // 难度 1-5
+  tags          String[]   // 标签，如 ['唐诗', '李白']
+  dynasty       String     // 英文: tang, song, yuan, ming, qing
+  type          String?    // 词牌名（宋词）
+  verses        String[]   // 每句诗的数组
+  versePinyins  Json?     // 每句每个字的拼音
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 
   @@index([title])
   @@index([author])
+  @@index([dynasty])
 }

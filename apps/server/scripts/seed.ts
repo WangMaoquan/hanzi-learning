@@ -2,1483 +2,250 @@
 import fs from "fs/promises";
 import path from "path";
 import { PrismaClient } from "@prisma/client";
-import { pinyin } from "pinyin";
+import {
+  toSimplified,
+  estimateDifficulty,
+  getPinyin,
+  getVersePinyins,
+  generateTags,
+} from "./utils";
 
 const prisma = new PrismaClient();
 
-// 简繁转换映射表（常用字）
-const SIMPLIFIED_TO_TRADITIONAL: Record<string, string> = {
-  // 常用简繁对照
-  诗: "詩",
-  声: "聲",
-  鸟: "鳥",
-  马: "馬",
-  车: "車",
-  门: "門",
-  鱼: "魚",
-  龟: "龜",
-  龟: "龜",
-  齐: "齊",
-  义: "義",
-  头: "頭",
-  面: "麵",
-  发: "發",
-  练: "練習",
-  丑: "醜",
-  历: "歷",
-  丽: "麗",
-  备: "備",
-  饥: "飢",
-  伤: "傷",
-  伫: "佇",
-  俩: "倆",
-  伪: "偽",
-  众: "眾",
-  优: "優",
-  会的: "會",
-  // 更多常用字...
-};
+// 分类配置
+const CATEGORIES = [
+  { name: "全唐诗", dynasty: "唐", dynastyEn: "tang", prefix: "poet.tang" },
+  {
+    name: "全唐诗",
+    dynasty: "宋",
+    dynastyEn: "song-poetry",
+    prefix: "poet.song",
+  }, // 宋诗
+  { name: "宋词", dynasty: "宋", dynastyEn: "song", prefix: "ci.song" },
+  { name: "元曲", dynasty: "元", dynastyEn: "yuan", prefix: "yuanqu" },
+  { name: "诗经", dynasty: "先秦", dynastyEn: "xianqin", prefix: "shijing" },
+  { name: "楚辞", dynasty: "先秦", dynastyEn: "xianqin", prefix: "chuci" },
+  { name: "论语", dynasty: "先秦", dynastyEn: "xianqin", prefix: "lunyu" },
+];
 
-// 创建反向映射（繁→简）
-const TRADITIONAL_TO_SIMPLIFIED: Record<string, string> = {};
-Object.entries(SIMPLIFIED_TO_TRADITIONAL).forEach(([s, t]) => {
-  TRADITIONAL_TO_SIMPLIFIED[t] = s;
-});
+// 获取目录下的数据文件
+async function getDataFiles(
+  categoryDir: string,
+  prefix: string,
+): Promise<string[]> {
+  const files = await fs.readdir(categoryDir);
+  // 精确匹配前缀
+  console.log(`  前缀: ${prefix}, 检查目录: ${categoryDir}`);
+  console.log(`  目录中的部分文件: ${files.slice(0, 10).join(", ")}`);
+  const matched = files.filter(
+    (f) => f === prefix + ".json" || f.startsWith(prefix + "."),
+  );
+  console.log(`  匹配到的文件数量: ${matched.length}`);
+  return matched;
+}
 
-// 常见繁体字手动映射（更完整）
-const MANUAL_T2S: Record<string, string> = {
-  詩: "诗",
-  聲: "声",
-  鳥: "鸟",
-  馬: "马",
-  車: "车",
-  門: "门",
-  魚: "鱼",
-  龜: "龟",
-  齊: "齐",
-  義: "义",
-  頭: "头",
-  麵: "面",
-  發: "发",
-  醜: "丑",
-  歷: "历",
-  麗: "丽",
-  備: "备",
-  飢: "饥",
-  傷: "伤",
-  佇: "伫",
-  倆: "俩",
-  偽: "伪",
-  眾: "众",
-  優: "优",
-  會: "会",
-  雲: "云",
-  說: "说",
-  為: "为",
-  與: "与",
-  國: "国",
-  時: "时",
-  間: "间",
-  門: "门",
-  問題: "问题",
-  東: "东",
-  西: "西",
-  南: "南",
-  北: "北",
-  中: "中",
-  山: "山",
-  水: "水",
-  火: "火",
-  木: "木",
-  金: "金",
-  土: "土",
-  人: "人",
-  心: "心",
-  手: "手",
-  目: "目",
-  耳: "耳",
-  口: "口",
-  日: "日",
-  月: "月",
-  田: "田",
-  力: "力",
-  男: "男",
-  女: "女",
-  子: "子",
-  好: "好",
-  字: "字",
-  学: "学",
-  校: "校",
-  家: "家",
-  国: "国",
-  民: "民",
-  政: "政",
-  經: "经",
-  濟: "济",
-  開: "开",
-  關: "关",
-  見: "见",
-  覚: "觉",
-  愛: "爱",
-  學: "学",
-  來: "来",
-  頭: "头",
-  萬: "万",
-  歲: "岁",
-  樓: "楼",
-  橋: "桥",
-  風: "风",
-  雨: "雨",
-  雪: "雪",
-  花: "花",
-  草: "草",
-  樹: "树",
-  鳥: "鸟",
-  魚: "鱼",
-  馬: "马",
-  牛: "牛",
-  羊: "羊",
-  猪: "猪",
-  狗: "狗",
-  猫: "猫",
-  紅: "红",
-  黃: "黄",
-  藍: "蓝",
-  綠: "绿",
-  黑: "黑",
-  白: "白",
-  天: "天",
-  地: "地",
-  海: "海",
-  河: "河",
-  湖: "湖",
-  江: "江",
-  城: "城",
-  村: "村",
-  街: "街",
-  道: "道",
-  路: "路",
-  樓: "楼",
-  房: "房",
-  窗: "窗",
-  門: "门",
-  床: "床",
-  椅: "椅",
-  桌: "桌",
-  書: "书",
-  筆: "笔",
-  紙: "纸",
-  墨: "墨",
-  硯: "砚",
-  刀: "刀",
-  劍: "剑",
-  琴: "琴",
-  棋: "棋",
-  畫: "画",
-  酒: "酒",
-  茶: "茶",
-  飯: "饭",
-  菜: "菜",
-  肉: "肉",
-  湯: "汤",
-  粥: "粥",
-  餅: "饼",
-  糖: "糖",
-  果: "果",
-  蔬: "蔬",
-  // 古诗常见繁体字
-  裏: "里",
-  遊: "游",
-  裏: "里",
-  異: "异",
-  夢: "梦",
-  鄉: "乡",
-  親: "亲",
-  亂: "乱",
-  離: "离",
-  誰: "谁",
-  難: "难",
-  告訴: "告诉",
-  告訴: "告诉",
-  遠: "远",
-  近: "近",
-  還: "还",
-  這: "这",
-  那: "那",
-  裏: "里",
-  邊: "边",
-  處: "处",
-  嗎: "吗",
-  吧: "吧",
-  呢: "呢",
-  啊: "啊",
-  問: "问",
-  話: "话",
-  請: "请",
-  讓: "让",
-  對: "对",
-  錯: "错",
-  謝: "谢",
-  幫: "帮",
-  想: "想",
-  愛: "爱",
-  變: "变",
-  帶: "带",
-  點: "点",
-  聲: "声",
-  聽: "听",
-  見: "见",
-  說: "说",
-  話: "话",
-  寫: "写",
-  讀: "读",
-  買: "买",
-  賣: "卖",
-  吃: "吃",
-  喝: "喝",
-  去: "去",
-  來: "来",
-  去: "去",
-  過: "过",
-  給: "给",
-  很: "很",
-  什麼: "什么",
-  為什麼: "为什么",
-  怎麼: "怎么",
-  這樣: "这样",
-  那樣: "那样",
-  這裡: "这里",
-  那裡: "那里",
-  什麼: "什么",
-  雖然: "虽然",
-  但是: "但是",
-  因為: "因为",
-  所以: "所以",
-  如果: "如果",
-  就是: "就是",
-  或者: "或者",
-  還是: "还是",
-  比較: "比较",
-  特別: "特别",
-  非常: "非常",
-  應該: "应该",
-  可能: "可能",
-  必須: "必须",
-  需要: "需要",
-  知道: "知道",
-  認為: "认为",
-  發現: "发现",
-  開始: "开始",
-  解決: "解决",
-  影響: "影响",
-  提供: "提供",
-  使用: "使用",
-  增加: "增加",
-  減少: "减少",
-  應該: "应该",
-  繼續: "继续",
-  關係: "关系",
-  通過: "通过",
-  內容: "内容",
-  方面: "方面",
-  問題: "问题",
-  情況: "情况",
-  原因: "原因",
-  結果: "结果",
-  過程: "过程",
-  發展: "发展",
-  方式: "方式",
-  歷史: "历史",
-  社會: "社会",
-  文化: "文化",
-  經濟: "经济",
-  政治: "政治",
-  教育: "教育",
-  科學: "科学",
-  技術: "技术",
-  信息: "信息",
-  管理: "管理",
-  服務: "服务",
-  工作: "工作",
-  生活: "生活",
-  時間: "时间",
-  空間: "空间",
-  地方: "地方",
-  世界: "世界",
-  國家: "国家",
-  人民: "人民",
-  企業: "企业",
-  機構: "机构",
-  組織: "组织",
-  產品: "产品",
-  系統: "系统",
-  程序: "程序",
-  應用: "应用",
-  網站: "网站",
-  數據: "数据",
-  資料: "资料",
-  設計: "设计",
-  開發: "开发",
-  測試: "测试",
-  維護: "维护",
-  建設: "建设",
-  實施: "实施",
-  完成: "完成",
-  成功: "成功",
-  失敗: "失败",
-  目標: "目标",
-  計劃: "计划",
-  策略: "策略",
-  方案: "方案",
-  措施: "措施",
-  方法: "方法",
-  手段: "手段",
-  工具: "工具",
-  條件: "条件",
-  基礎: "基础",
-  關鍵: "关键",
-  重要: "重要",
-  困難: "困难",
-  容易: "容易",
-  簡單: "简单",
-  複雜: "复杂",
-  快速: "快速",
-  慢慢: "慢慢",
-  突然: "突然",
-  當然: "当然",
-  仍然: "仍然",
-  已經: "已经",
-  正在: "正在",
-  將要: "将要",
-  可以: "可以",
-  能夠: "能够",
-  應該: "应该",
-  必須: "必须",
-  願意: "愿意",
-  希望: "希望",
-  準備: "准备",
-  開始: "开始",
-  繼續: "继续",
-  停止: "停止",
-  結束: "结束",
-  等待: "等待",
-  考慮: "考虑",
-  決定: "决定",
-  選擇: "选择",
-  相信: "相信",
-  知道: "知道",
-  明白: "明白",
-  理解: "理解",
-  學習: "学习",
-  研究: "研究",
-  討論: "讨论",
-  交流: "交流",
-  合作: "合作",
-  競爭: "竞争",
-  戰鬥: "战斗",
-  戰爭: "战争",
-  和平: "和平",
-  安全: "安全",
-  危險: "危险",
-  保護: "保护",
-  破壞: "破坏",
-  建設: "建设",
-  開發: "开发",
-  創造: "创造",
-  改變: "改变",
-  提高: "提高",
-  降低: "降低",
-  增加: "增加",
-  減少: "减少",
-  擴大: "扩大",
-  縮小: "缩小",
-  加強: "加强",
-  減弱: "减弱",
-  改善: "改善",
-  改進: "改进",
-  解決: "解决",
-  處理: "处理",
-  管理: "管理",
-  控制: "控制",
-  調節: "调节",
-  平衡: "平衡",
-  穩定: "稳定",
-  變化: "变化",
-  發展: "发展",
-  進步: "进步",
-  落後: "落后",
-  先進: "先进",
-  優秀: "优秀",
-  良好: "良好",
-  不好: "不好",
-  壞: "坏",
-  對: "对",
-  錯: "错",
-  是: "是",
-  非: "非",
-  有: "有",
-  無: "无",
-  多: "多",
-  少: "少",
-  大: "大",
-  小: "小",
-  長: "长",
-  短: "短",
-  高: "高",
-  低: "低",
-  深: "深",
-  淺: "浅",
-  寬: "宽",
-  窄: "窄",
-  厚: "厚",
-  薄: "薄",
-  重: "重",
-  輕: "轻",
-  硬: "硬",
-  軟: "软",
-  冷: "冷",
-  熱: "热",
-  溫: "温",
-  涼: "凉",
-  快: "快",
-  慢: "慢",
-  早: "早",
-  晚: "晚",
-  新: "新",
-  舊: "旧",
-  真: "真",
-  假: "假",
-  善: "善",
-  惡: "恶",
-  美: "美",
-  醜: "丑",
-  樂: "乐",
-  悲: "悲",
-  喜: "喜",
-  怒: "怒",
-  哀: "哀",
-  懼: "惧",
-  愛: "爱",
-  恨: "恨",
-  羨: "羡",
-  妒: "妒",
-  慚: "惭",
-  愧: "愧",
-  悔: "悔",
-  恨: "恨",
-  怕: "怕",
-  敢: "敢",
-  會: "会",
-  能: "能",
-  可: "可",
-  要: "要",
-  應: "应",
-  必: "必",
-  須: "须",
-  待: "待",
-  將: "将",
-  已: "已",
-  曾: "曾",
-  忽: "忽",
-  漸: "渐",
-  驟: "骤",
-  急: "急",
-  緩: "缓",
-  猛: "猛",
-  柔: "柔",
-  強: "强",
-  弱: "弱",
-  剛: "刚",
-  柔: "柔",
-  純: "纯",
-  雜: "杂",
-  精: "精",
-  粗: "粗",
-  細: "细",
-  密: "密",
-  疏: "疏",
-  晴: "晴",
-  陰: "阴",
-  雲: "云",
-  霧: "雾",
-  霜: "霜",
-  露: "露",
-  雷: "雷",
-  電: "电",
-  風: "风",
-  雨: "雨",
-  雪: "雪",
-  雹: "雹",
-  霞: "霞",
-  虹: "虹",
-  夜: "夜",
-  晝: "昼",
-  朝: "朝",
-  暮: "暮",
-  晨: "晨",
-  昏: "昏",
-  春: "春",
-  夏: "夏",
-  秋: "秋",
-  冬: "冬",
-  東: "东",
-  南: "南",
-  西: "西",
-  北: "北",
-  江: "江",
-  河: "河",
-  湖: "湖",
-  海: "海",
-  洲: "洲",
-  島: "岛",
-  峰: "峰",
-  嶺: "岭",
-  峡: "峡",
-  谷: "谷",
-  平原: "平原",
-  原: "原",
-  野: "野",
-  森: "森",
-  林: "林",
-  草: "草",
-  田: "田",
-  園: "园",
-  園: "园",
-  池: "池",
-  潭: "潭",
-  泉: "泉",
-  瀑: "瀑",
-  溪: "溪",
-  澗: "涧",
-  滄: "沧",
-  汪: "汪",
-  滔: "滔",
-  浪: "浪",
-  濤: "涛",
-  波: "波",
-  潮: "潮",
-  汐: "汐",
-  漢: "汉",
-  滿: "满",
-  濟: "济",
-  泗: "泗",
-  沂: "沂",
-  汾: "汾",
-  汝: "汝",
-  洛: "洛",
-  渭: "渭",
-  泾: "泾",
-  塗: "涂",
-  孟: "孟",
-  汪: "汪",
-  溢: "溢",
-  滋: "滋",
-  濡: "濡",
-  渴: "渴",
-  飲: "饮",
-  食: "食",
-  飽: "饱",
-  餓: "饿",
-  飢: "饥",
-  餘: "余",
-  餘: "余",
-  館: "馆",
-  驛: "驿",
-  舍: "舍",
-  廬: "庐",
-  庵: "庵",
-  寺: "寺",
-  廟: "庙",
-  觀: "观",
-  宮: "宫",
-  殿: "殿",
-  堂: "堂",
-  樓: "楼",
-  閣: "阁",
-  亭: "亭",
-  臺: "台",
-  榭: "榭",
-  廊: "廊",
-  廡: "庑",
-  廳: "厅",
-  巷: "巷",
-  街: "街",
-  道: "道",
-  路: "路",
-  徑: "径",
-  隧: "隧",
-  關: "关",
-  隘: "隘",
-  院: "院",
-  牆: "墙",
-  垣: "垣",
-  丘: "丘",
-  陵: "陵",
-  墓: "墓",
-  坟: "坟",
-  碑: "碑",
-  碣: "碣",
-  闕: "阙",
-  闍: "阇",
-  闆: "板",
-  閂: "闩",
-  閃: "闪",
-  閉: "闭",
-  開: "开",
-  間: "间",
-  悶: "闷",
-  閒: "闲",
-  間: "间",
-  閱: "阅",
-  閣: "阁",
-  闔: "阖",
-  闕: "阙",
-  闘: "斗",
-  鬥: "斗",
-  鬧: "闹",
-  鬨: "哄",
-  鬍: "胡",
-  鬚: "须",
-  鬢: "鬓",
-  魄: "魄",
-  魍: "魍",
-  魎: "魉",
-  魚: "鱼",
-  魯: "鲁",
-  魷: "鱿",
-  鮪: "鲔",
-  鮭: "鲑",
-  鮮: "鲜",
-  鯉: "鲤",
-  鯽: "鲫",
-  鯨: "鲸",
-  鯰: "鲶",
-  鰻: "鳗",
-  鱔: "鳝",
-  鱖: "鳜",
-  鱸: "鲈",
-  鳥: "鸟",
-  鳧: "凫",
-  鳩: "鸠",
-  鳳: "凤",
-  鳩: "鸠",
-  鳴: "鸣",
-  鴆: "鸩",
-  鴉: "鸦",
-  鴉: "鸦",
-  鴿: "鸽",
-  鴕: "鸵",
-  鴛: "鸳",
-  鴦: "鸯",
-  鴨: "鸭",
-  鴻: "鸿",
-  鴿: "鸽",
-  鸚: "鹦",
-  鸛: "鹳",
-  鸞: "鸾",
-  鳥: "鸟",
-  龍: "龙",
-  龜: "龟",
-  龠: "龠",
-  鹵: "卤",
-  鹹: "咸",
-  鹽: "盐",
-  麗: "丽",
-  麥: "麦",
-  麵: "面",
-  麻: "麻",
-  黃: "黄",
-  黍: "黍",
-  黒: "黑",
-  黽: "黾",
-  黿: "鼋",
-  龍: "龙",
-  龜: "龟",
-  龠: "龠",
-  齊: "齐",
-  齋: "斋",
-  齊: "齐",
-  臍: "脐",
-  齊: "齐",
-  龍: "龙",
-  龔: "龚",
-  龜: "龟",
-  侖: "仑",
-  傭: "佣",
-  僱: "雇",
-  儀: "仪",
-  儷: "俪",
-  儸: "罗",
-  儒: "儒",
-  儔: "俦",
-  儻: "傥",
-  儲: "储",
-  冊: "册",
-  冊: "册",
-  冊: "册",
-  幂: "幂",
-  岡: "冈",
-  岡: "冈",
-  峩: "峨",
-  嵗: "岁",
-  嶽: "岳",
-  嶺: "岭",
-  巔: "巅",
-  巖: "岩",
-  巢: "巢",
-  工程学院: "工程学院",
-  工業: "工业",
-  隊: "队",
-  阡: "阡",
-  陌: "陌",
-  陝: "陕",
-  陝: "陕",
-  隕: "陨",
-  際: "际",
-  隨: "随",
-  險: "险",
-  隱: "隐",
-  隻: "只",
-  隻: "只",
-  雙: "双",
-  獲: "获",
-  雞: "鸡",
-  寧: "宁",
-  寢: "寝",
-  寫: "写",
-  寬: "宽",
-  賓: "宾",
-  賊: "贼",
-  賜: "赐",
-  賤: "贱",
-  賞: "赏",
-  賦: "赋",
-  賢: "贤",
-  賺: "赚",
-  購: "购",
-  賽: "赛",
-  贊: "赞",
-  贈: "赠",
-  贏: "赢",
-  贍: "赡养",
-  贏: "赢",
-  酈: "郦",
-  醞: "酝",
-  醬: "酱",
-  釀: "酿",
-  釈: "释",
-  釋: "释",
-  裏: "里",
-  金額: "金额",
-  鍾: "钟",
-  鎖: "锁",
-  鍋: "锅",
-  鍾: "钟",
-  鎚: "锤",
-  鏟: "铲",
-  鏡: "镜",
-  鏽: "锈",
-  鏈: "链",
-  鐲: "镯",
-  鐲: "镯",
-  鐵: "铁",
-  鐃: "錾",
-  鐲: "镯",
-  鑑: "鉴",
-  鑒: "鉴",
-  鑠: "铄",
-  鑣: "镳",
-  鑲: "镶",
-  鑽: "钻",
-  鑰: "钥",
-  針: "针",
-  釣: "钓",
-  紋: "纹",
-  納: "纳",
-  紂: "纣",
-  紅: "红",
-  紇: "纥",
-  紊: "紊",
-  紋: "纹",
-  納: "纳",
-  紆: "纡",
-  紇: "纥",
-  純: "纯",
-  紕: "纰",
-  紗: "纱",
-  綱: "纲",
-  納: "纳",
-  紐: "纽",
-  紬: "绸",
-  綃: "绡",
-  絢: "绚",
-  綾: "绫",
-  綺: "绮",
-  綽: "绰",
-  綾: "绫",
-  緒: "绪",
-  緖: "绪",
-  線: "线",
-  総: "总",
-  緑: "绿",
-  維: "维",
-  緖: "绪",
-  緩: "缓",
-  緝: "缉",
-  緜: "绵",
-  緞: "缎",
-  縂: "总",
-  縉: "缙",
-  縣: "县",
-  縫: "缝",
-  縮: "缩",
-  繆: "缪",
-  繚: "缭",
-  繞: "绕",
-  纏: "缠",
-  總: "总",
-  繽: "缤",
-  纍: "累",
-  繭: "茧",
-  纊: "纩",
-  纓: "缨",
-  纖: "纤",
-  紋: "纹",
-  紙: "纸",
-  級: "级",
-  紡: "纺",
-  紆: "纡",
-  紂: "纣",
-  紂: "纣",
-  紋: "纹",
-  紊: "紊",
-  紋: "纹",
-  紡: "纺",
-  紋: "纹",
-  紂: "纣",
-  紋: "纹",
-  絢: "绚",
-  紋: "纹",
-  総: "总",
-  緑: "绿",
-  維: "维",
-  綿: "绵",
-  緞: "缎",
-  縦: "纵",
-  緖: "绪",
-  総: "总",
-  緑: "绿",
-  線: "线",
-  縦: "纵",
-  縮: "缩",
-  繪: "绘",
-  繫: "系",
-  織: "织",
-  修復: "修复",
-  脩: "修",
-  脩: "修",
-  膠: "胶",
-  臟: "脏",
-  臨: "临",
-  峽: "峡",
-  麗: "丽",
-  礦: "矿",
-  礙: "碍",
-  礦: "矿",
-  禪: "禅",
-  禍: "祸",
-  禱: "祷",
-  祿: "禄",
-  禎: "祯",
-  禍: "祸",
-  禪: "禅",
-  視: "视",
-  親: "亲",
-  覽: "览",
-  覺: "觉",
-  覿: "觌",
-  觀: "观",
-  觸: "触",
-  計: "计",
-  討: "讨",
-  訥: "讷",
-  訓: "训",
-  訊: "讯",
-  記: "记",
-  訒: "讱",
-  講: "讲",
-  諱: "讳",
-  詎: "讵",
-  訝: "讶",
-  診: "诊",
-  詁: "诂",
-  詆: "诋",
-  詔: "诏",
-  評: "评",
-  詛: "诅",
-  詞: "词",
-  詠: "咏",
-  詢: "询",
-  詣: "诣",
-  試: "试",
-  詩: "诗",
-  詫: "詫",
-  誇: "夸",
-  詭: "诡",
-  詵: "诜",
-  詳: "详",
-  詼: "诙",
-  詭: "诡",
-  詢: "询",
-  詣: "诣",
-  試: "试",
-  詩: "诗",
-  誇: "夸",
-  誌: "志",
-  認: "认",
-  誅: "诛",
-  誇: "夸",
-  誕: "诞",
-  誘: "诱",
-  誨: "诲",
-  說: "说",
-  説: "说",
-  誦: "诵",
-  誒: "诶",
-  請: "请",
-  諍: "诤",
-  諫: "谏",
-  諭: "谕",
-  諮: "谘",
-  諱: "讳",
-  諧: "谐",
-  謁: "谒",
-  謂: "谓",
-  謄: "謄",
-  謎: "谜",
-  謗: "谤",
-  謙: "谦",
-  謐: "谧",
-  謝: "谢",
-  謠: "谣",
-  審: "审",
-  謹: "谨",
-  謾: "谰",
-  譟: "噪",
-  譚: "谭",
-  譜: "谱",
-  譯: "译",
-  議: "议",
-  譴: "谴责",
-  讓: "让",
-  讚: "赞",
-  讙: "欢",
-  讚: "赞",
-  讜: "谠",
-  讚: "赞",
-  豈: "岂",
-  豐: "丰",
-  豬: "猪",
-  豎: "竖",
-  豐: "丰",
-  豔: "艳",
-  貝: "贝",
-  貞: "贞",
-  負: "负",
-  財: "财",
-  責: "责",
-  賢: "贤",
-  敗: "败",
-  貨: "货",
-  貫: "贯",
-  費: "费",
-  賀: "贺",
-  賁: "贲",
-  賈: "贾",
-  賓: "宾",
-  賕: "赇",
-  賙: "赒",
-  贈: "赠",
-  贊: "赞",
-  贍: "贍",
-  贏: "赢",
-  贜: "赃",
-  購: "购",
-  優: "优",
-  儲: "储",
-  讙: "欢",
-  壓: "压",
-  壘: "垒",
-  壙: "扩",
-  壞: "坏",
-  壟: "垄",
-  壟: "垄",
-  壓: "压",
-  壩: "坝",
-  壺: "壶",
-  壽: "寿",
-  夠: "够",
-  夢: "梦",
-  夾: "夹",
-  奐: "奂",
-  奧: "奥",
-  奪: "夺",
-  奐: "奂",
-  獎: "奖",
-  奮: "奋",
-  奧: "奥",
-  婁: "娄",
-  婁: "娄",
-  劇: "剧",
-  劉: "刘",
-  齊: "齐",
-  龍: "龙",
-  龜: "龟",
-  亂: "乱",
-  亙: "亘",
-  亞: "亚",
-  亟: "亟",
-  亠: "享",
-  亢: "亢",
-  亰: "京",
-  亳: "亳",
-  亶: "亶",
-  從: "从",
-  仂: "仂",
-  仃: "仃",
-  仄: "仄",
-  仆: "仆",
-  仇: "仇",
-  仉: "仉",
-  今: "今",
-  介: "介",
-  仉: "仉",
-  仍: "仍",
-  仝: "仝",
-  仞: "仞",
-  伕: "伕",
-  伽: "伽",
-  佁: "佁",
-  佗: "佗",
-  佘: "佘",
-  佈: "布",
-  佽: "佽",
-  佾: "佾",
-  侔: "侔",
-  侶: "侣",
-  俁: "俁",
-  俞: "俞",
-  俟: "俟",
-  俎: "俎",
-  借: "借",
-  倡: "倡",
-  値: "值",
-  俠: "侠",
-  脩: "修",
-  個: "个",
-  倀: "伥",
-  個: "个",
-  兩: "两",
-  倆: "俩",
-  侖: "仑",
-  侖: "仑",
-  傖: "伧",
-  倉: "仓",
-  個: "个",
-  們: "们",
-  億: "亿",
-  // 更多古诗常见繁体字
-  鬱: "郁",
-  霽: "霁",
-  瑤: "瑶",
-  崑: "昆",
-  崙: "仑",
-  廻: "回",
-  眇: "渺",
-  崢: "峥",
-  嶸: "嵘",
-  脩: "修",
-  蘭: "兰",
-  齒: "齿",
-  雙: "双",
-  嚬: "颦",
-  蓮: "莲",
-  凝: "凝",
-  脂: "脂",
-  蘋: "苹",
-  園: "园",
-  殘: "残",
-  錦: "里",
-  鵝: "鹅",
-  鴨: "鸭",
-  惱: "恼",
-  鄰: "邻",
-  濘: "泞",
-  築: "筑",
-  勞: "劳",
-  汩: "汩",
-  沒: "没",
-  鐵: "铁",
-  驪: "骊",
-  兒: "儿",
-  翁: "翁",
-  濤: "涛",
-  濔: "弥",
-  澹: "澹",
-  濂: "濂",
-  溪: "溪",
-  澗: "涧",
-  濤: "涛",
-  灑: "洒",
-  灝: "灏",
-  灣: "湾",
-  灑: "洒",
-  灩: "滟",
-  灝: "灏",
-  灑: "洒",
-  灣: "湾",
-  灣: "湾",
-  龍: "龙",
-  龜: "龟",
-  龠: "龠",
-  俠: "侠",
-  價: "价",
-  優: "优",
-  儲: "储",
-  儷: "俪",
-  儼: "俨",
-  儻: "傥",
-  償: "偿",
-  儻: "傥",
-  儼: "俨",
-  償: "偿",
-  儲: "储",
-  兒: "儿",
-  兜: "兜",
-  冪: "幂",
-  凜: "凛",
-  凞: "晰",
-  湞: "浈",
-  湛: "湛",
-  滅: "灭",
-  減: "减",
-  湯: "汤",
-  濁: "浊",
-  濁: "浊",
-  沖: "冲",
-  澤: "泽",
-  澠: "渑",
-  灣: "湾",
-  濤: "涛",
-  濤: "涛",
-  濂: "濂",
-  溪: "溪",
-  湍: "湍",
-  測: "测",
-  湯: "汤",
-  濕: "湿",
-  溫: "温",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-  灣: "湾",
-};
-
-// 简繁转换函数
-function toSimplified(str: string): string {
-  let result = "";
-  for (const char of str) {
-    result += MANUAL_T2S[char] || char;
+// 统计数据文件中的条目数量
+async function countDataItems(
+  categoryDir: string,
+  files: string[],
+): Promise<number> {
+  let total = 0;
+  for (const file of files) {
+    try {
+      const content = await fs.readFile(path.join(categoryDir, file), "utf-8");
+      const data = JSON.parse(content);
+      total += Array.isArray(data) ? data.length : 1;
+    } catch (err) {
+      console.error(`读取文件失败: ${file}`, err);
+    }
   }
-  return result;
+  return total;
 }
 
-// 朝代映射
-const DYNASTY_MAP: Record<string, string> = {
-  唐: "tang",
-  宋: "song",
-  元: "yuan",
-  明: "ming",
-  清: "qing",
-  汉: "han",
-  魏: "wei",
-  晋: "jin",
-  秦: "qin",
-  楚: "chu",
-  隋: "sui",
-  五代: "wudai",
-};
-
-// 估算难度（根据诗句总字数）
-function estimateDifficulty(verses: string[]): number {
-  const totalChars = verses.join("").length;
-  if (totalChars <= 20) return 1; // 绝句
-  if (totalChars <= 28) return 2; // 律诗
-  if (totalChars <= 40) return 3; // 词
-  if (totalChars <= 60) return 4; // 长词/排律
-  return 5; // 长诗
+// 检查数据库中已有数量
+async function getDbCount(dynastyEn: string): Promise<number> {
+  return prisma.poem.count({ where: { dynasty: dynastyEn } });
 }
 
-// 生成拼音
-function getPinyin(text: string): string {
+// 清空指定分类的数据
+async function clearCategory(dynastyEn: string): Promise<void> {
+  await prisma.poem.deleteMany({ where: { dynasty: dynastyEn } });
+}
+
+// 处理单首古诗
+function processPoem(
+  poem: {
+    author?: string;
+    paragraphs?: string[];
+    title?: string;
+    rhythmic?: string;
+    content?: string[]; // 诗经、楚辞使用 content
+    chapter?: string; // 诗经
+    section?: string; // 诗经、楚辞
+  },
+  dynasty: string,
+  dynastyEn: string,
+) {
   try {
-    const result = pinyin(text, { style: "tone" });
-    return result.map((arr) => arr[0]).join(" ");
-  } catch {
-    return "";
-  }
-}
-
-// 生成逐字拼音数组
-function getVersePinyins(verse: string): string[] {
-  try {
-    const result = pinyin(verse, { style: "tone" });
-    return result.map((arr) => arr[0]);
-  } catch {
-    return [];
-  }
-}
-
-// 生成标签
-function generateTags(dynasty: string, author: string): string[] {
-  const tags: string[] = [];
-  tags.push(dynasty + "诗");
-  // 可以根据作者添加更多标签
-  return tags;
-}
-
-// 导入汉字数据
-async function importCharacters() {
-  try {
-    console.log("导入汉字数据...");
-
-    const wordData = await fs.readFile(
-      path.join(process.cwd(), "data/chinese-xinhua/data/word.json"),
-      "utf-8",
+    const title = toSimplified(poem.title || "");
+    const author = toSimplified(poem.author || "");
+    // 诗经、楚辞使用 content 字段，其他使用 paragraphs
+    const paragraphs = (poem.paragraphs || poem.content || []).map((p) =>
+      toSimplified(p),
     );
-    const words = JSON.parse(wordData);
 
-    // 获取已存在的汉字
-    const existingChars = await prisma.character.findMany({
-      select: { word: true },
-    });
-    const existingWords = new Set(existingChars.map((c) => c.word));
-    console.log(`已有 ${existingWords.size} 个汉字，跳过...`);
-
-    let count = 0;
-    let skipCount = 0;
-    for (const word of words) {
-      if (existingWords.has(word.word)) {
-        skipCount++;
-        continue;
-      }
-      try {
-        await prisma.character.create({
-          data: {
-            word: word.word,
-            pinyin: word.pinyin,
-            radical: word.radicals,
-            strokes: word.strokes ? parseInt(word.strokes) : null,
-            structure: word.structure,
-            explanation: word.explanation,
-            words: word.words || [],
-          },
-        });
-        count++;
-        if (count % 100 === 0) {
-          console.log(`已导入 ${count} 个汉字...`);
-        }
-      } catch (err: any) {
-        if (err.code !== "P2002") {
-          console.error("导入汉字出错:", word.word, err.message);
-        }
-      }
+    if (paragraphs.length === 0) {
+      return null;
     }
-    console.log(`汉字数据导入完成，共导入 ${count} 个，跳过 ${skipCount} 个`);
-  } catch (err: any) {
-    console.error("导入汉字数据失败:", err.message);
+
+    const contentStr = paragraphs.join("\n");
+    const type = poem.rhythmic ? toSimplified(poem.rhythmic) : null;
+    // 诗经有 chapter/section
+    const chapter = poem.chapter ? toSimplified(poem.chapter) : null;
+    const section = poem.section ? toSimplified(poem.section) : null;
+    const finalTitle = type ? `${type}·${title}` : title;
+
+    const pinyinStr = getPinyin(paragraphs.join(" "));
+    const versePinyins = paragraphs.map((p) => getVersePinyins(p));
+    const difficulty = estimateDifficulty(paragraphs);
+    const tags = generateTags(dynasty, author);
+
+    return {
+      title: finalTitle,
+      author: author,
+      content: contentStr,
+      pinyin: pinyinStr,
+      difficulty: difficulty,
+      tags: tags,
+      dynasty: dynastyEn,
+      type: type || section || chapter, // 诗经用 section 作为 type
+      verses: paragraphs,
+      versePinyins: versePinyins,
+    };
+  } catch (err) {
+    return null;
   }
 }
 
-// 导入成语数据
-async function importIdioms() {
+// 批量插入
+async function batchInsert(poems: any[], batchSize = 500) {
+  for (let i = 0; i < poems.length; i += batchSize) {
+    const batch = poems.slice(i, i + batchSize);
+    try {
+      await prisma.poem.createMany({ data: batch, skipDuplicates: true });
+    } catch (err) {
+      // 逐条插入作为后备
+      for (const poem of batch) {
+        try {
+          await prisma.poem.create({ data: poem });
+        } catch {
+          // 忽略重复错误
+        }
+      }
+    }
+  }
+}
+
+// 导入单个分类
+async function importCategory(category: (typeof CATEGORIES)[0]) {
+  // 数据在 apps/server/data/ 目录下
+  const serverDir = path.join(__dirname, "..");
+  const categoryDir = path.join(
+    serverDir,
+    "data/chinese-poetry",
+    category.name,
+  );
+
+  // 检查目录是否存在
   try {
-    console.log("导入成语数据...");
-
-    const idiomData = await fs.readFile(
-      path.join(process.cwd(), "data/chinese-xinhua/data/idiom.json"),
-      "utf-8",
-    );
-    const idioms = JSON.parse(idiomData);
-
-    // 获取已存在的成语
-    const existingIdioms = await prisma.idiom.findMany({
-      select: { word: true },
-    });
-    const existingWords = new Set(existingIdioms.map((i) => i.word));
-    console.log(`已有 ${existingWords.size} 个成语，跳过...`);
-
-    let count = 0;
-    let skipCount = 0;
-    for (const idiom of idioms) {
-      if (existingWords.has(idiom.word)) {
-        skipCount++;
-        continue;
-      }
-      try {
-        await prisma.idiom.create({
-          data: {
-            word: idiom.word,
-            pinyin: idiom.pinyin,
-            derivation: idiom.derivation,
-            explanation: idiom.explanation,
-            example: idiom.example,
-            synonyms: idiom.synonyms || [],
-            antonyms: idiom.antonyms || [],
-          },
-        });
-        count++;
-        if (count % 100 === 0) {
-          console.log(`已导入 ${count} 个成语...`);
-        }
-      } catch (err: any) {
-        if (err.code !== "P2002") {
-          console.error("导入成语出错:", idiom.word, err.message);
-        }
-      }
-    }
-    console.log(`成语数据导入完成，共导入 ${count} 个，跳过 ${skipCount} 个`);
-  } catch (err: any) {
-    console.error("导入成语数据失败:", err.message);
+    await fs.access(categoryDir);
+  } catch {
+    console.log(`  目录不存在: ${category.name}, 跳过`);
+    return;
   }
+
+  // 获取数据文件
+  const files = await getDataFiles(categoryDir, category.prefix);
+  if (files.length === 0) {
+    console.log(`  没有找到数据文件: ${category.name}, 跳过`);
+    return;
+  }
+
+  // 统计数据条目数量
+  const dataCount = await countDataItems(categoryDir, files);
+  console.log(`  数据源数量: ${dataCount}`);
+
+  // 检查数据库已有数量
+  const dbCount = await getDbCount(category.dynastyEn);
+  console.log(`  数据库已有: ${dbCount}`);
+
+  // 如果数量一致，跳过
+  if (dbCount === dataCount) {
+    console.log(`  数量一致，跳过导入`);
+    return;
+  }
+
+  // 数量不一致，清空并重新导入
+  console.log(`  开始处理...`);
+  await clearCategory(category.dynastyEn);
+
+  // 先收集所有处理后的数据
+  const allPoems: any[] = [];
+  for (const file of files) {
+    try {
+      const content = await fs.readFile(path.join(categoryDir, file), "utf-8");
+      const poems = JSON.parse(content);
+
+      // 统一处理：无论单个对象还是数组都转为数组
+      const poemArray = Array.isArray(poems) ? poems : [poems];
+
+      for (const poem of poemArray) {
+        const processedPoem = processPoem(
+          poem,
+          category.dynasty,
+          category.dynastyEn,
+        );
+        if (processedPoem) {
+          allPoems.push(processedPoem);
+        }
+      }
+      console.log(`  处理文件: ${file} (累计 ${allPoems.length})`);
+    } catch (err) {
+      console.error(`  读取文件失败: ${file}`, err);
+    }
+  }
+
+  console.log(`  共处理 ${allPoems.length} 首，开始批量插入...`);
+
+  // 批量插入
+  await batchInsert(allPoems, 500);
+
+  console.log(`  ${category.name} 导入完成: ${allPoems.length} 首`);
 }
 
-// 导入古诗数据
-async function importPoems() {
-  try {
-    console.log("导入古诗数据...");
-
-    // 清空现有古诗数据（因为字段结构变了）
-    console.log("清空现有古诗数据...");
-    await prisma.poem.deleteMany();
-
-    let count = 0;
-
-    const poetryBaseDir = path.join(process.cwd(), "data/chinese-poetry");
-
-    // 定义要导入的目录及其朝代
-    const poetryDirs = [
-      { dir: "全唐诗", dynasty: "唐", dynastyEn: "tang", prefix: "poet.tang." },
-      { dir: "宋词", dynasty: "宋", dynastyEn: "song", prefix: "ci.song." },
-    ];
-
-    for (const poetryDirInfo of poetryDirs) {
-      const poetryDir = path.join(poetryBaseDir, poetryDirInfo.dir);
-
-      try {
-        const files = await fs.readdir(poetryDir);
-
-        for (const file of files) {
-          if (!file.startsWith(poetryDirInfo.prefix) || !file.endsWith(".json"))
-            continue;
-
-          try {
-            const content = await fs.readFile(
-              path.join(poetryDir, file),
-              "utf-8",
-            );
-            const poems = JSON.parse(content);
-
-            for (const poem of poems) {
-              try {
-                // 繁简转换
-                const title = toSimplified(poem.title || "");
-                const author = toSimplified(poem.author || "");
-                const paragraphs = (poem.paragraphs || []).map((p: string) =>
-                  toSimplified(p),
-                );
-
-                // 格式转换：数组 → 字符串，用换行符连接
-                const contentStr = paragraphs.join("\n");
-
-                // 宋词使用 rhythmic 字段作为词牌名
-                const type = poem.rhythmic ? toSimplified(poem.rhythmic) : null;
-                const finalTitle = type ? `${type}·${title}` : title;
-
-                // 生成拼音
-                const pinyinStr = getPinyin(paragraphs.join(" "));
-
-                // 生成逐句拼音
-                const versePinyins = paragraphs.map((p: string) =>
-                  getVersePinyins(p),
-                );
-
-                // 估算难度
-                const difficulty = estimateDifficulty(paragraphs);
-
-                // 生成标签
-                const tags = generateTags(poetryDirInfo.dynasty, author);
-
-                await prisma.poem.create({
-                  data: {
-                    title: finalTitle,
-                    author: author,
-                    content: contentStr,
-                    pinyin: pinyinStr,
-                    difficulty: difficulty,
-                    tags: tags,
-                    dynasty: poetryDirInfo.dynastyEn,
-                    type: type,
-                    verses: paragraphs,
-                    versePinyins: versePinyins as any,
-                  },
-                });
-                count++;
-                if (count % 100 === 0) {
-                  console.log(`已导入 ${count} 首古诗...`);
-                }
-              } catch (err: any) {
-                console.error("导入古诗出错:", poem.title, err.message);
-              }
-            }
-          } catch (err: any) {
-            console.error(`读取文件失败: ${file}`, err.message);
-          }
-        }
-      } catch (err: any) {
-        console.error(`读取目录失败: ${poetryDirInfo.dir}`, err.message);
-      }
-    }
-
-    console.log(`古诗数据导入完成，共导入 ${count} 首`);
-  } catch (err: any) {
-    console.error("导入古诗数据失败:", err.message);
-  }
-}
-
+// 主函数
 async function main() {
   try {
-    console.log("开始导入古诗数据...");
+    console.log("开始导入古诗数据...\n");
 
-    await importPoems();
+    for (const category of CATEGORIES) {
+      console.log(`\n处理分类: ${category.name}`);
+      await importCategory(category);
+    }
 
-    console.log("数据导入完成！");
+    console.log("\n=== 导入完成 ===");
+
+    // 输出统计
+    const total = await prisma.poem.count();
+    console.log(`总计: ${total} 首`);
+
+    const byDynasty = await prisma.poem.groupBy({
+      by: ["dynasty"],
+      _count: true,
+    });
+    byDynasty.forEach((d) => {
+      console.log(`  ${d.dynasty}: ${d._count}`);
+    });
   } catch (err) {
     console.error("导入过程出错:", err);
   } finally {

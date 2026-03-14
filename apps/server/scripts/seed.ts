@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import fs from "fs/promises";
 import path from "path";
-import { PrismaClient } from "@prisma/client";
+import { Prisma, PrismaClient } from "@prisma/client";
 import {
   toSimplified,
   estimateDifficulty,
@@ -11,6 +11,9 @@ import {
 } from "./utils";
 
 const prisma = new PrismaClient();
+
+// 定义古诗创建数据类型
+type PoemCreateInput = Prisma.PoemCreateInput;
 
 // 分类配置
 const CATEGORIES = [
@@ -27,6 +30,17 @@ const CATEGORIES = [
   { name: "楚辞", dynasty: "先秦", dynastyEn: "xianqin", prefix: "chuci" },
   { name: "论语", dynasty: "先秦", dynastyEn: "xianqin", prefix: "lunyu" },
 ];
+
+// 原始古诗数据类型
+interface RawPoem {
+  author?: string;
+  paragraphs?: string[];
+  title?: string;
+  rhythmic?: string;
+  content?: string[]; // 诗经、楚辞使用 content
+  chapter?: string; // 诗经
+  section?: string; // 诗经、楚辞
+}
 
 // 获取目录下的数据文件
 async function getDataFiles(
@@ -74,18 +88,10 @@ async function clearCategory(dynastyEn: string): Promise<void> {
 
 // 处理单首古诗
 function processPoem(
-  poem: {
-    author?: string;
-    paragraphs?: string[];
-    title?: string;
-    rhythmic?: string;
-    content?: string[]; // 诗经、楚辞使用 content
-    chapter?: string; // 诗经
-    section?: string; // 诗经、楚辞
-  },
+  poem: RawPoem,
   dynasty: string,
   dynastyEn: string,
-) {
+): PoemCreateInput | null {
   try {
     const title = toSimplified(poem.title || "");
     const author = toSimplified(poem.author || "");
@@ -123,27 +129,49 @@ function processPoem(
       versePinyins: versePinyins,
     };
   } catch (err) {
+    console.error(`处理古诗失败: ${poem.title}`, err);
     return null;
   }
 }
 
 // 批量插入
-async function batchInsert(poems: any[], batchSize = 500) {
+async function batchInsert(
+  poems: PoemCreateInput[],
+  batchSize = 500,
+): Promise<{ success: number; failed: number }> {
+  let success = 0;
+  let failed = 0;
+
   for (let i = 0; i < poems.length; i += batchSize) {
     const batch = poems.slice(i, i + batchSize);
     try {
-      await prisma.poem.createMany({ data: batch, skipDuplicates: true });
+      const result = await prisma.poem.createMany({
+        data: batch,
+        skipDuplicates: true,
+      });
+      success += result.count;
     } catch (err) {
+      console.error(`批量插入失败，尝试逐条插入:`, err);
       // 逐条插入作为后备
       for (const poem of batch) {
         try {
           await prisma.poem.create({ data: poem });
-        } catch {
-          // 忽略重复错误
+          success++;
+        } catch (insertErr) {
+          // 只记录非重复错误
+          if (
+            !(insertErr instanceof Prisma.PrismaClientKnownRequestError) ||
+            insertErr.code !== "P2002"
+          ) {
+            console.error(`插入失败 [${poem.title}]:`, insertErr);
+          }
+          failed++;
         }
       }
     }
   }
+
+  return { success, failed };
 }
 
 // 导入单个分类
@@ -190,14 +218,14 @@ async function importCategory(category: (typeof CATEGORIES)[0]) {
   await clearCategory(category.dynastyEn);
 
   // 先收集所有处理后的数据
-  const allPoems: any[] = [];
+  const allPoems: PoemCreateInput[] = [];
   for (const file of files) {
     try {
       const content = await fs.readFile(path.join(categoryDir, file), "utf-8");
       const poems = JSON.parse(content);
 
       // 统一处理：无论单个对象还是数组都转为数组
-      const poemArray = Array.isArray(poems) ? poems : [poems];
+      const poemArray: RawPoem[] = Array.isArray(poems) ? poems : [poems];
 
       for (const poem of poemArray) {
         const processedPoem = processPoem(
@@ -218,9 +246,11 @@ async function importCategory(category: (typeof CATEGORIES)[0]) {
   console.log(`  共处理 ${allPoems.length} 首，开始批量插入...`);
 
   // 批量插入
-  await batchInsert(allPoems, 500);
+  const result = await batchInsert(allPoems, 500);
 
-  console.log(`  ${category.name} 导入完成: ${allPoems.length} 首`);
+  console.log(
+    `  ${category.name} 导入完成: 成功 ${result.success}, 失败 ${result.failed}`,
+  );
 }
 
 // 主函数
@@ -248,6 +278,7 @@ async function main() {
     });
   } catch (err) {
     console.error("导入过程出错:", err);
+    process.exit(1);
   } finally {
     await prisma.$disconnect();
   }

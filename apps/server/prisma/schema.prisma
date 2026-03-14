@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Character {
+  id          String   @id @default(uuid())
+  word        String   @unique
+  pinyin     String?  
+  radical    String?  
+  strokes    Int?     
+  structure  String?  
+  explanation String? 
+  words      String[] 
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([word])
+}
+
+model Idiom {
+  id          String   @id @default(uuid())
+  word        String   @unique
+  pinyin     String?  
+  derivation  String?  
+  explanation String? 
+  example     String?  
+  synonyms    String[] 
+  antonyms    String[] 
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([word])
+}
+
+model Poem {
+  id          String   @id @default(uuid())
+  title       String   
+  author      String   
+  content     String[] 
+  dynasty     String?  
+  type        String?  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([title])
+  @@index([author])
+}

@@ -1,5 +1,5 @@
 import axios from 'axios'
-import type { CharacterVO, IdiomVO, PoemVO, PaginatedVO } from '@hanzi-learning/types/vo'
+import type { CharacterVO, IdiomVO, PoemVO, PaginatedVO } from '@hanzi-learning/types'
 
 // 统一响应类型
 export interface ApiResponse<T> {

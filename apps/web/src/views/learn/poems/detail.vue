@@ -1,20 +1,37 @@
 <script setup lang="ts">
-  import { useRoute, useRouter } from 'vue-router'
-  import { computed } from 'vue'
-  import { poems } from '@hanzi-learning/data'
-  import { DYNASTY_LABELS } from '@hanzi-learning/utils'
+import { ref, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import { getPoem, type Poem } from '@/services/api'
 
-  const route = useRoute()
-  const router = useRouter()
+const route = useRoute()
+const router = useRouter()
 
-  const poem = computed(() => {
+const loading = ref(true)
+const poem = ref<Poem | null>(null)
+
+async function fetchPoem() {
+  try {
+    loading.value = true
     const id = route.params.id as string
-    return poems.find((p) => p.id === id)
-  })
+    poem.value = await getPoem(id)
+  } catch (error) {
+    console.error('获取古诗详情失败:', error)
+  } finally {
+    loading.value = false
+  }
+}
+
+onMounted(() => {
+  fetchPoem()
+})
 </script>
 
 <template>
-  <div v-if="poem">
+  <div v-if="loading" class="flex items-center justify-center py-20">
+    <div class="text-gray-500">加载中...</div>
+  </div>
+
+  <div v-else-if="poem">
     <div class="flex items-center justify-between mb-6">
       <h1 class="text-2xl font-bold text-gray-900">
         {{ poem.title }}
@@ -30,13 +47,13 @@
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
           <div class="flex items-center gap-4 mb-4">
             <span class="px-2 py-1 bg-secondary-100 text-secondary-700 text-sm rounded">
-              {{ DYNASTY_LABELS[poem.dynasty] }}诗
+              {{ poem.dynasty }}
             </span>
             <span class="text-gray-600">{{ poem.author }}</span>
           </div>
 
           <!-- 原文 -->
-          <div class="space-y-6 mb-6">
+          <div class="space-y-4 mb-6">
             <div
               v-for="(verse, verseIdx) in poem.verses"
               :key="verseIdx"
@@ -55,54 +72,38 @@
             </div>
           </div>
 
-          <!-- 翻译 -->
-          <div class="border-t pt-4">
-            <h3 class="font-semibold text-gray-900 mb-2"> 译文 </h3>
-            <p class="text-gray-600 leading-relaxed">
-              {{ poem.translation }}
-            </p>
+          <!-- 标签 -->
+          <div v-if="poem.tags?.length" class="flex flex-wrap gap-2">
+            <span
+              v-for="tag in poem.tags"
+              :key="tag"
+              class="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded"
+            >
+              {{ tag }}
+            </span>
           </div>
-        </div>
-
-        <!-- 赏析 -->
-        <div
-          v-if="poem.appreciation"
-          class="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
-        >
-          <h3 class="font-semibold text-gray-900 mb-3"> 赏析 </h3>
-          <p class="text-gray-600 leading-relaxed">
-            {{ poem.appreciation }}
-          </p>
-        </div>
-
-        <!-- 创作背景 -->
-        <div
-          v-if="poem.background"
-          class="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
-        >
-          <h3 class="font-semibold text-gray-900 mb-3"> 创作背景 </h3>
-          <p class="text-gray-600 leading-relaxed">
-            {{ poem.background }}
-          </p>
         </div>
       </div>
 
-      <!-- 右侧：注释 -->
+      <!-- 右侧：信息 -->
       <div class="space-y-6">
         <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-          <h3 class="font-semibold text-gray-900 mb-4"> 注释 </h3>
-          <div v-if="poem.annotation" class="space-y-3">
-            <div v-for="(value, key) in poem.annotation" :key="key" class="flex gap-2">
-              <span class="text-primary-600 font-medium">{{ key }}</span>
-              <span class="text-gray-600">{{ value }}</span>
+          <h3 class="font-semibold text-gray-900 mb-4"> 信息 </h3>
+          <div class="space-y-3">
+            <div v-if="poem.type">
+              <span class="text-gray-500 text-sm">类型</span>
+              <p class="text-gray-900">{{ poem.type }}</p>
+            </div>
+            <div v-if="poem.difficulty">
+              <span class="text-gray-500 text-sm">难度</span>
+              <p class="text-gray-900">{{ poem.difficulty }} / 5</p>
             </div>
           </div>
-          <p v-else class="text-gray-400 text-sm"> 暂无注释 </p>
         </div>
 
         <!-- 背诵模式按钮 -->
         <button
-          class="w-full btn btn-secondary"
+          class="w-full px-4 py-2 bg-secondary-400 text-white rounded-lg hover:bg-secondary-500 transition-colors"
           @click="router.push(`/practice?type=poem&id=${poem.id}`)"
         >
           开始背诵
@@ -112,7 +113,7 @@
   </div>
 
   <div v-else class="text-center py-12">
-    <p class="text-gray-500"> 未找到该古诗 </p>
-    <RouterLink to="/learn/poems" class="text-secondary-500 hover:underline"> 返回列表 </RouterLink>
+    <p class="text-gray-500">未找到该古诗</p>
+    <RouterLink to="/learn/poems" class="text-secondary-500 hover:underline">返回列表</RouterLink>
   </div>
 </template>

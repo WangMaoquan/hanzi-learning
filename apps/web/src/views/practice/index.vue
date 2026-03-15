@@ -1,5 +1,26 @@
 <script setup lang="ts">
-import { characters, poems } from '@hanzi-learning/data'
+import { ref, onMounted } from 'vue'
+import { getCharacterCount, getPoemCount } from '@/services/api'
+
+const loading = ref(true)
+const characterCount = ref(0)
+const poemCount = ref(0)
+
+async function fetchCounts() {
+  try {
+    loading.value = true
+    const [chars, poems] = await Promise.all([
+      getCharacterCount(),
+      getPoemCount()
+    ])
+    characterCount.value = chars
+    poemCount.value = poems
+  } catch (error) {
+    console.error('获取统计数据失败:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const exercises = [
   {
@@ -31,6 +52,10 @@ const exercises = [
     available: true,
   },
 ]
+
+onMounted(() => {
+  fetchCounts()
+})
 </script>
 
 <template>
@@ -58,13 +83,14 @@ const exercises = [
     <!-- 学习统计 -->
     <div class="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
       <h2 class="text-lg font-semibold text-gray-900 mb-4">学习统计</h2>
-      <div class="grid grid-cols-3 gap-6 text-center">
+      <div v-if="loading" class="text-center text-gray-500 py-4">加载中...</div>
+      <div v-else class="grid grid-cols-3 gap-6 text-center">
         <div>
-          <div class="text-2xl font-bold text-primary-500">{{ characters.length }}</div>
+          <div class="text-2xl font-bold text-primary-500">{{ characterCount.toLocaleString() }}</div>
           <div class="text-gray-500 text-sm">已学汉字</div>
         </div>
         <div>
-          <div class="text-2xl font-bold text-secondary-500">{{ poems.length }}</div>
+          <div class="text-2xl font-bold text-secondary-500">{{ (poemCount / 1000).toFixed(0) }}k+</div>
           <div class="text-gray-500 text-sm">已学古诗</div>
         </div>
         <div>

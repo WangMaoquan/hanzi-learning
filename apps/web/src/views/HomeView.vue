@@ -1,5 +1,29 @@
 <script setup lang="ts">
-import { characters, poems } from '@hanzi-learning/data'
+import { ref, onMounted } from 'vue'
+import { getCharacterCount, getPoemCount, getIdiomCount } from '@/services/api'
+
+const loading = ref(true)
+const characterCount = ref(0)
+const poemCount = ref(0)
+const idiomCount = ref(0)
+
+async function fetchCounts() {
+  try {
+    loading.value = true
+    const [chars, poems, idioms] = await Promise.all([
+      getCharacterCount(),
+      getPoemCount(),
+      getIdiomCount()
+    ])
+    characterCount.value = chars
+    poemCount.value = poems
+    idiomCount.value = idioms
+  } catch (error) {
+    console.error('获取统计数据失败:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const features = [
   {
@@ -7,30 +31,34 @@ const features = [
     description: '笔顺动画、拼音注释、组词练习',
     icon: '✍️',
     path: '/learn/characters',
-    count: characters.length,
+    count: characterCount,
   },
   {
     title: '古诗词',
     description: '经典唐诗宋词，朗读背诵',
     icon: '📜',
     path: '/learn/poems',
-    count: poems.length,
+    count: poemCount,
   },
   {
     title: '文言文',
     description: '古今对译，理解经典',
     icon: '📖',
     path: '/learn/prose',
-    count: 0,
+    count: ref(0),
   },
   {
     title: '成语故事',
     description: '典故出处，活学活用',
     icon: '🏮',
     path: '/learn/idioms',
-    count: 0,
+    count: idiomCount,
   },
 ]
+
+onMounted(() => {
+  fetchCounts()
+})
 </script>
 
 <template>
@@ -75,7 +103,8 @@ const features = [
         <h2 class="text-2xl font-bold text-gray-900 text-center mb-12">
           学习内容
         </h2>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div v-if="loading" class="text-center text-gray-500 py-8">加载中...</div>
+        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <RouterLink
             v-for="feature in features"
             :key="feature.path"
@@ -88,7 +117,7 @@ const features = [
             </h3>
             <p class="text-gray-500 text-sm mb-3">{{ feature.description }}</p>
             <span class="text-primary-500 text-sm font-medium">
-              {{ feature.count }} 个内容
+              {{ feature.count.value }} 个内容
             </span>
           </RouterLink>
         </div>
@@ -100,15 +129,15 @@ const features = [
       <div class="max-w-4xl mx-auto px-4">
         <div class="grid grid-cols-3 gap-8 text-center">
           <div>
-            <div class="text-3xl font-bold text-primary-500">2500+</div>
+            <div class="text-3xl font-bold text-primary-500">{{ characterCount.toLocaleString() }}+</div>
             <div class="text-gray-500 mt-1">常用汉字</div>
           </div>
           <div>
-            <div class="text-3xl font-bold text-secondary-500">300+</div>
+            <div class="text-3xl font-bold text-secondary-500">{{ (poemCount / 1000).toFixed(0) }}k+</div>
             <div class="text-gray-500 mt-1">经典古诗</div>
           </div>
           <div>
-            <div class="text-3xl font-bold text-green-500">500+</div>
+            <div class="text-3xl font-bold text-green-500">{{ idiomCount.toLocaleString() }}+</div>
             <div class="text-gray-500 mt-1">成语故事</div>
           </div>
         </div>

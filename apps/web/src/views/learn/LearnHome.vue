@@ -1,12 +1,40 @@
 <script setup lang="ts">
-import { characters, poems } from '@hanzi-learning/data'
+import { ref, onMounted } from 'vue'
+import { getCharacterCount, getPoemCount, getIdiomCount } from '@/services/api'
+
+const loading = ref(true)
+const characterCount = ref(0)
+const poemCount = ref(0)
+const idiomCount = ref(0)
+
+async function fetchCounts() {
+  try {
+    loading.value = true
+    const [chars, poems, idioms] = await Promise.all([
+      getCharacterCount(),
+      getPoemCount(),
+      getIdiomCount()
+    ])
+    characterCount.value = chars
+    poemCount.value = poems
+    idiomCount.value = idioms
+  } catch (error) {
+    console.error('获取统计数据失败:', error)
+  } finally {
+    loading.value = false
+  }
+}
 
 const stats = [
-  { label: '汉字', value: characters.length, icon: '✍️', path: '/learn/characters' },
-  { label: '古诗', value: poems.length, icon: '📜', path: '/learn/poems' },
-  { label: '文言文', value: 0, icon: '📖', path: '/learn/prose' },
-  { label: '成语', value: 0, icon: '🏮', path: '/learn/idioms' },
+  { label: '汉字', value: characterCount, icon: '✍️', path: '/learn/characters' },
+  { label: '古诗', value: poemCount, icon: '📜', path: '/learn/poems' },
+  { label: '文言文', value: ref(0), icon: '📖', path: '/learn/prose' },
+  { label: '成语', value: idiomCount, icon: '🏮', path: '/learn/idioms' },
 ]
+
+onMounted(() => {
+  fetchCounts()
+})
 </script>
 
 <template>
@@ -14,7 +42,8 @@ const stats = [
     <h1 class="text-2xl font-bold text-gray-900 mb-6">选择学习内容</h1>
 
     <!-- Stats -->
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div v-if="loading" class="text-center text-gray-500 py-8">加载中...</div>
+    <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <RouterLink
         v-for="stat in stats"
         :key="stat.path"
@@ -22,7 +51,7 @@ const stats = [
         class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center"
       >
         <div class="text-3xl mb-2">{{ stat.icon }}</div>
-        <div class="text-2xl font-bold text-gray-900">{{ stat.value }}</div>
+        <div class="text-2xl font-bold text-gray-900">{{ stat.value.value.toLocaleString() }}</div>
         <div class="text-gray-500 text-sm">{{ stat.label }}</div>
       </RouterLink>
     </div>

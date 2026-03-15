@@ -10,12 +10,14 @@ datasource db {
 model Character {
   id          String   @id @default(uuid())
   word        String   @unique
-  pinyin     String?  
-  radical    String?  
-  strokes    Int?     
-  structure  String?  
-  explanation String? 
-  words      String[] 
+  pinyin     String?  // 主拼音，多音字用逗号分隔，如 "ai,shui"
+  pinyins    String?  // 多音字完整拼音列表，如 "ai,shui"
+  radical    String?
+  strokes    Int?     // 主笔画数
+  strokeMap  Json?    // 多音字对应的笔画数，如 {"ai": 10, "shui": 12}
+  structure  String?
+  explanation String?
+  words      String[]
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
@@ -25,12 +27,12 @@ model Character {
 model Idiom {
   id          String   @id @default(uuid())
   word        String   @unique
-  pinyin     String?  
-  derivation  String?  
-  explanation String? 
-  example     String?  
-  synonyms    String[] 
-  antonyms    String[] 
+  pinyin     String?
+  derivation  String?
+  explanation String?
+  example     String?
+  synonyms    String[]
+  antonyms    String[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 

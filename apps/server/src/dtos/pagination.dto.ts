@@ -29,6 +29,7 @@ export class PaginationQueryDto {
   @ApiPropertyOptional({ description: "搜索关键词" })
   @IsOptional()
   @IsString()
+  @Max(100)
   search?: string;
 }
 

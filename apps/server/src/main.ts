@@ -11,6 +11,14 @@ async function bootstrap() {
   // 全局路由前缀
   app.setGlobalPrefix("api/v1");
 
+  // CORS 配置
+  app.enableCors({
+    origin: process.env.ALLOWED_ORIGINS?.split(",") || [
+      "http://localhost:3000",
+    ],
+    credentials: true,
+  });
+
   // 全局验证管道 - 自动验证 DTO 并转换类型
   app.useGlobalPipes(
     new ValidationPipe({

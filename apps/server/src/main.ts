@@ -1,7 +1,6 @@
 import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
-import { ThrottlerModule } from "@nestjs/throttler";
 import { AppModule } from "./app.module";
 import { HttpExceptionFilter } from "./filters/http-exception.filter";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
@@ -11,27 +10,6 @@ async function bootstrap() {
 
   // 全局路由前缀
   app.setGlobalPrefix("api/v1");
-
-  // 速率限制配置
-  app.use(
-    ThrottlerModule.forRoot([
-      {
-        name: "short",
-        ttl: 1000, // 1秒
-        limit: 10, // 最多10个请求
-      },
-      {
-        name: "medium",
-        ttl: 10000, // 10秒
-        limit: 50, // 最多50个请求
-      },
-      {
-        name: "long",
-        ttl: 60000, // 1分钟
-        limit: 200, // 最多200个请求
-      },
-    ]),
-  );
 
   // CORS 配置
   app.enableCors({

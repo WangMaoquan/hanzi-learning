@@ -1,37 +1,39 @@
-import { Controller, Get, Param, Query } from "@nestjs/common";
+import { Controller, Get, Param, Query, ParseUUIDPipe } from "@nestjs/common";
+import { ApiTags, ApiOperation, ApiQuery } from "@nestjs/swagger";
 import { PoemsService } from "./poems.service";
+import { PoemQueryDto } from "../../dtos/poem-query.dto";
 
+@ApiTags("poems")
 @Controller("poems")
 export class PoemsController {
   constructor(private readonly poemsService: PoemsService) {}
 
   @Get()
-  findAll(
-    @Query("page") page?: string,
-    @Query("limit") limit?: string,
-    @Query("dynasty") dynasty?: string,
-    @Query("search") search?: string,
-  ) {
+  @ApiOperation({ summary: "获取古诗列表" })
+  findAll(@Query() query: PoemQueryDto) {
     return this.poemsService.findAll(
-      page ? parseInt(page) : 1,
-      limit ? parseInt(limit) : 20,
-      dynasty,
-      search,
+      query.page,
+      query.limit,
+      query.dynasty,
+      query.search,
     );
   }
 
   @Get("count")
+  @ApiOperation({ summary: "获取古诗总数" })
   count() {
     return this.poemsService.count();
   }
 
   @Get("random")
+  @ApiOperation({ summary: "随机获取一首古诗" })
   random() {
     return this.poemsService.findRandom();
   }
 
   @Get(":id")
-  findOne(@Param("id") id: string) {
+  @ApiOperation({ summary: "获取单首古诗详情" })
+  findOne(@Param("id", ParseUUIDPipe) id: string) {
     return this.poemsService.findOne(id);
   }
 }

@@ -15,6 +15,15 @@ export interface ApiError {
   timestamp: string
 }
 
+// 通用分页响应类型
+export interface PaginatedResponse<T> {
+  data: T[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
 // 创建 axios 实例
 const api = axios.create({
   baseURL: '/api/v1',
@@ -66,13 +75,7 @@ export interface CharacterListParams {
   search?: string
 }
 
-export interface CharacterListResponse {
-  data: Character[]
-  total: number
-  page: number
-  limit: number
-  totalPages: number
-}
+export type CharacterListResponse = PaginatedResponse<Character>
 
 export function getCharacters(params?: CharacterListParams) {
   return api.get<CharacterListResponse>('/characters', { params })
@@ -115,13 +118,7 @@ export interface IdiomListParams {
   search?: string
 }
 
-export interface IdiomListResponse {
-  data: Idiom[]
-  total: number
-  page: number
-  limit: number
-  totalPages: number
-}
+export type IdiomListResponse = PaginatedResponse<Idiom>
 
 export function getIdioms(params?: IdiomListParams) {
   return api.get<IdiomListResponse>('/idioms', { params })
@@ -168,13 +165,7 @@ export interface PoemListParams {
   search?: string
 }
 
-export interface PoemListResponse {
-  data: Poem[]
-  total: number
-  page: number
-  limit: number
-  totalPages: number
-}
+export type PoemListResponse = PaginatedResponse<Poem>
 
 export function getPoems(params?: PoemListParams) {
   return api.get<PoemListResponse>('/poems', { params })

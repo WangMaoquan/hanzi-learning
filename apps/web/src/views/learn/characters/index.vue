@@ -11,7 +11,7 @@
     try {
       loading.value = true
       const response = await getCharacters({ limit: 100 })
-      characters.value = response.data
+      characters.value = response.data.data
       if (characters.value.length > 0) {
         currentCharacter.value = characters.value[0]
       }

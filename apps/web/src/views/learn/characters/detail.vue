@@ -45,8 +45,8 @@
         getCharacters({ limit: 1000 }),
       ])
 
-      character.value = charRes
-      characters.value = listRes.data
+      character.value = charRes.data
+      characters.value = listRes.data.data
     } catch (error) {
       console.error('获取汉字详情失败:', error)
       toast.error('获取汉字详情失败')

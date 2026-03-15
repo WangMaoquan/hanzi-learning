@@ -17,7 +17,7 @@
       const id = route.params.id as string
       if (!id) return
 
-      poem.value = await getPoem(id)
+      poem.value = (await getPoem(id)).data
     } catch (error) {
       console.error('获取古诗详情失败:', error)
       toast.error('获取古诗详情失败')

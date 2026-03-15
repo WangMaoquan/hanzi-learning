@@ -1,13 +1,4 @@
-import axios, { type AxiosResponse } from 'axios'
-
-// 创建 axios 实例
-const api = axios.create({
-  baseURL: '/api/v1',
-  timeout: 10000,
-})
-
-// 添加通用请求头
-api.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+import axios from 'axios'
 
 // 统一响应类型
 export interface ApiResponse<T> {
@@ -24,12 +15,18 @@ export interface ApiError {
   timestamp: string
 }
 
-// 响应拦截器 - 处理统一返回格式
-// 提取 data 字段返回，axios 泛型会在使用时推断
+// 创建 axios 实例
+const api = axios.create({
+  baseURL: '/api/v1',
+  timeout: 10000,
+})
+
+// 添加通用请求头
+api.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+
+// 响应拦截器 - 只处理错误，成功直接返回 response
 api.interceptors.response.use(
-  <T>(response: { data: ApiResponse<T> }): T => {
-    return response.data.data
-  },
+  (response) => response,
   (error) => {
     if (error.response) {
       const { statusCode, message } = error.response.data
@@ -42,6 +39,8 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+export default api
 
 // ==================== 汉字 API ====================
 
@@ -76,25 +75,23 @@ export interface CharacterListResponse {
 }
 
 export function getCharacters(params?: CharacterListParams) {
-  return api.get<CharacterListResponse>('/characters', { params }).then((res) => res.data)
+  return api.get<CharacterListResponse>('/characters', { params })
 }
 
 export function getCharacter(id: string) {
-  return api.get<Character>(`/characters/${id}`).then((res) => res.data)
+  return api.get<Character>(`/characters/${id}`)
 }
 
 export function getCharacterCount() {
-  return api.get<number>('/characters/count').then((res) => res.data)
+  return api.get<number>('/characters/count')
 }
 
 export function getRandomCharacter() {
-  return api.get<Character>('/characters/random').then((res) => res.data)
+  return api.get<Character>('/characters/random')
 }
 
 export function searchCharacters(q: string) {
-  return api
-    .get<CharacterListResponse>('/characters/search', { params: { q } })
-    .then((res) => res.data)
+  return api.get<CharacterListResponse>('/characters/search', { params: { q } })
 }
 
 // ==================== 成语 API ====================
@@ -127,23 +124,23 @@ export interface IdiomListResponse {
 }
 
 export function getIdioms(params?: IdiomListParams) {
-  return api.get<IdiomListResponse>('/idioms', { params }).then((res) => res.data)
+  return api.get<IdiomListResponse>('/idioms', { params })
 }
 
 export function getIdiom(id: string) {
-  return api.get<Idiom>(`/idioms/${id}`).then((res) => res.data)
+  return api.get<Idiom>(`/idioms/${id}`)
 }
 
 export function getIdiomCount() {
-  return api.get<number>('/idioms/count').then((res) => res.data)
+  return api.get<number>('/idioms/count')
 }
 
 export function getRandomIdiom() {
-  return api.get<Idiom>('/idioms/random').then((res) => res.data)
+  return api.get<Idiom>('/idioms/random')
 }
 
 export function searchIdioms(q: string) {
-  return api.get<IdiomListResponse>('/idioms/search', { params: { q } }).then((res) => res.data)
+  return api.get<IdiomListResponse>('/idioms/search', { params: { q } })
 }
 
 // ==================== 古诗 API ====================
@@ -180,19 +177,17 @@ export interface PoemListResponse {
 }
 
 export function getPoems(params?: PoemListParams) {
-  return api.get<PoemListResponse>('/poems', { params }).then((res) => res.data)
+  return api.get<PoemListResponse>('/poems', { params })
 }
 
 export function getPoem(id: string) {
-  return api.get<Poem>(`/poems/${id}`).then((res) => res.data)
+  return api.get<Poem>(`/poems/${id}`)
 }
 
 export function getPoemCount() {
-  return api.get<number>('/poems/count').then((res) => res.data)
+  return api.get<number>('/poems/count')
 }
 
 export function getRandomPoem() {
   return api.get<Poem>('/poems/random')
 }
-
-export default api

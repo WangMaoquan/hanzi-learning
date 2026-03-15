@@ -1,26 +1,26 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { getPoems, type Poem } from '@/services/api'
-import { DYNASTY_LABELS } from '@hanzi-learning/utils'
+  import { ref, onMounted } from 'vue'
+  import { getPoems, type Poem } from '@/services/api'
+  import { DYNASTY_LABELS } from '@hanzi-learning/utils'
 
-const loading = ref(true)
-const poems = ref<Poem[]>([])
+  const loading = ref(true)
+  const poems = ref<Poem[]>([])
 
-async function fetchPoems() {
-  try {
-    loading.value = true
-    const response = await getPoems({ limit: 50 })
-    poems.value = response.data
-  } catch (error) {
-    console.error('获取古诗列表失败:', error)
-  } finally {
-    loading.value = false
+  async function fetchPoems() {
+    try {
+      loading.value = true
+      const response = await getPoems({ limit: 50 })
+      poems.value = response.data.data
+    } catch (error) {
+      console.error('获取古诗列表失败:', error)
+    } finally {
+      loading.value = false
+    }
   }
-}
 
-onMounted(() => {
-  fetchPoems()
-})
+  onMounted(() => {
+    fetchPoems()
+  })
 </script>
 
 <template>
@@ -29,7 +29,7 @@ onMounted(() => {
 
     <!-- 加载状态 -->
     <div v-if="loading" class="flex items-center justify-center py-20">
-      <div class="text-gray-500">加载中...</div>
+      <div class="text-gray-500"> 加载中... </div>
     </div>
 
     <!-- 古诗列表 -->

@@ -11,7 +11,7 @@
     try {
       loading.value = true
       const response = await getIdioms({ limit: 50 })
-      idioms.value = response.data
+      idioms.value = response.data.data
       if (idioms.value.length > 0) {
         currentIdiom.value = idioms.value[0]
       }

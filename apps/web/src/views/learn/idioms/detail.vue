@@ -17,7 +17,7 @@
       const id = route.params.id as string
       if (!id) return
 
-      idiom.value = await getIdiom(id)
+      idiom.value = (await getIdiom(id)).data
     } catch (error) {
       console.error('获取成语详情失败:', error)
       toast.error('获取成语详情失败')

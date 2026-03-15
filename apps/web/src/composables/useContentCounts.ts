@@ -19,15 +19,15 @@ export function useContentCounts() {
       loading.value = true
       error.value = null
 
-      const [chars, poems, idioms] = await Promise.all([
+      const [charsRes, poemsRes, idiomsRes] = await Promise.all([
         getCharacterCount(),
         getPoemCount(),
         getIdiomCount(),
       ])
 
-      characterCount.value = chars
-      poemCount.value = poems
-      idiomCount.value = idioms
+      characterCount.value = charsRes.data
+      poemCount.value = poemsRes.data
+      idiomCount.value = idiomsRes.data
     } catch (e) {
       error.value = '获取统计数据失败'
       console.error('获取统计数据失败:', e)

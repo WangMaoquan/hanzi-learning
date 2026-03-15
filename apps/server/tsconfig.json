@@ -8,10 +8,6 @@
     "baseUrl": ".",
     "noEmit": false,
     "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "paths": {
-      "@hanzi-learning/types/vo": ["../../packages/types/src/vo/index.ts"],
-      "@hanzi-learning/types/vo/*": ["../../packages/types/src/vo/*"]
-    }
+    "emitDecoratorMetadata": true
   }
 }

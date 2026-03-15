@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError, AxiosResponse } from 'axios'
 
 // 创建 axios 实例
 const api = axios.create({
@@ -6,11 +6,42 @@ const api = axios.create({
   timeout: 10000,
 })
 
-// 响应拦截器
+// 统一响应类型
+export interface ApiResponse<T> {
+  success: boolean
+  data: T
+  timestamp: string
+}
+
+export interface ApiError {
+  success: false
+  statusCode: number
+  message: string
+  error: string
+  timestamp: string
+}
+
+// 响应拦截器 - 处理统一返回格式
 api.interceptors.response.use(
-  (response) => response.data,
-  (error) => {
-    console.error('API Error:', error)
+  (response: AxiosResponse<ApiResponse<unknown>>) => {
+    const res = response.data
+    if (res.success) {
+      return res.data // 返回内层的 data 字段
+    }
+    // 理论上成功响应不会进入 error 处理，因为 success=true
+    return res.data
+  },
+  (error: AxiosError<ApiError>) => {
+    if (error.response) {
+      // 服务器返回了错误响应
+      const { statusCode, message } = error.response.data
+      console.error(`API Error ${statusCode}:`, message)
+    } else if (error.request) {
+      // 请求已发出但没有收到响应
+      console.error('API Error: 网络请求失败')
+    } else {
+      console.error('API Error:', error.message)
+    }
     return Promise.reject(error)
   }
 )

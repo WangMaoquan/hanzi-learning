@@ -56,7 +56,7 @@
       <!-- 成语标题 -->
       <div class="text-center mb-8">
         <h2 class="text-5xl font-bold text-gray-900 mb-2">
-          {{ idiom.word }}
+          {{ idiom.title }}
         </h2>
         <p class="text-xl text-gray-500">
           {{ idiom.pinyin }}
@@ -67,7 +67,7 @@
       <div class="mb-6">
         <h3 class="text-lg font-semibold text-gray-900 mb-2"> 释义 </h3>
         <p class="text-gray-700 leading-relaxed">
-          {{ idiom.explanation || '暂无释义' }}
+          {{ idiom.content || '暂无释义' }}
         </p>
       </div>
 

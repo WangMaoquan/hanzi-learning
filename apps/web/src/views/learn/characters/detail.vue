@@ -85,7 +85,7 @@
       <!-- 左侧：汉字展示 -->
       <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
         <div class="flex items-center justify-center h-64 bg-primary-50 rounded-xl mb-6">
-          <span class="text-9xl font-bold text-gray-900">{{ character.word }}</span>
+          <span class="text-9xl font-bold text-gray-900">{{ character.title }}</span>
         </div>
 
         <!-- 笔顺动画占位 -->
@@ -98,7 +98,7 @@
             class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
             @click="router.push(`/learn/characters/${prevCharacter.id}`)"
           >
-            ← {{ prevCharacter.word }}
+            ← {{ prevCharacter.title }}
           </button>
           <div v-else></div>
           <button
@@ -106,7 +106,7 @@
             class="px-4 py-2 bg-primary-400 text-gray-900 rounded-lg hover:bg-primary-500 transition-colors"
             @click="router.push(`/learn/characters/${nextCharacter.id}`)"
           >
-            {{ nextCharacter.word }} →
+            {{ nextCharacter.title }} →
           </button>
         </div>
       </div>
@@ -123,7 +123,7 @@
             </div>
             <div class="flex items-center gap-4">
               <span class="text-gray-500 w-12">释义</span>
-              <span class="text-gray-900">{{ character.explanation || '-' }}</span>
+              <span class="text-gray-900">{{ character.content || '-' }}</span>
             </div>
             <div class="flex items-center gap-4">
               <span class="text-gray-500 w-12">笔画</span>
@@ -137,20 +137,20 @@
             </div>
             <div class="flex items-center gap-4">
               <span class="text-gray-500 w-12">部首</span>
-              <span class="text-gray-900">{{ character.radical || '-' }}</span>
+              <span class="text-gray-900">{{ character.radicals || '-' }}</span>
             </div>
           </div>
         </div>
 
         <!-- 组词 -->
         <div
-          v-if="character.words?.length"
+          v-if="character.titles?.length"
           class="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
         >
           <h2 class="text-lg font-semibold text-gray-900 mb-4"> 组词 </h2>
           <div class="flex flex-wrap gap-2">
             <span
-              v-for="word in character.words"
+              v-for="word in character.titles"
               :key="word"
               class="px-3 py-1 bg-gray-100 rounded-full text-gray-700"
             >

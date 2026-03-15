@@ -31,16 +31,13 @@ api.interceptors.response.use(
     if (res.success) {
       return res.data // 返回内层的 data 字段
     }
-    // 理论上成功响应不会进入 error 处理，因为 success=true
     return res.data
   },
   (error: AxiosError<ApiError>) => {
     if (error.response) {
-      // 服务器返回了错误响应
       const { statusCode, message } = error.response.data
       console.error(`API Error ${statusCode}:`, message)
     } else if (error.request) {
-      // 请求已发出但没有收到响应
       console.error('API Error: 网络请求失败')
     } else {
       console.error('API Error:', error.message)
@@ -53,14 +50,15 @@ api.interceptors.response.use(
 
 export interface Character {
   id: string
-  word: string
+  title: string // word -> title
+  content: string // explanation -> content
   pinyin: string | null
   pinyins: string | null
-  radical: string | null
+  radicals: string | null // radical -> radicals
   strokes: number | null
-  strokeMap: Record<string, number> | null
-  structure: string | null
-  explanation: string | null
+  structure: '左右' | '上下' | '包围' | '独体' | '品字' | null
+  difficulty: number
+  tags: string[]
   words: string[]
   createdAt: string
   updatedAt: string
@@ -109,10 +107,10 @@ export function searchCharacters(q: string) {
 
 export interface Idiom {
   id: string
-  word: string
+  title: string // word -> title
+  content: string // explanation -> content
   pinyin: string | null
   derivation: string | null
-  explanation: string | null
   example: string | null
   synonyms: string[]
   antonyms: string[]
@@ -167,7 +165,7 @@ export interface Poem {
   author: string
   content: string
   pinyin: string | null
-  difficulty: number | null
+  difficulty: number
   tags: string[]
   dynasty: string
   type: string | null

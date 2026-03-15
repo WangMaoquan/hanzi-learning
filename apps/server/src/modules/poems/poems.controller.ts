@@ -10,14 +10,24 @@ export class PoemsController {
     @Query("page") page?: string,
     @Query("limit") limit?: string,
     @Query("dynasty") dynasty?: string,
-    @Query("author") author?: string,
+    @Query("search") search?: string,
   ) {
     return this.poemsService.findAll(
       page ? parseInt(page) : 1,
       limit ? parseInt(limit) : 20,
       dynasty,
-      author,
+      search,
     );
+  }
+
+  @Get("count")
+  count() {
+    return this.poemsService.count();
+  }
+
+  @Get("random")
+  random() {
+    return this.poemsService.findRandom();
   }
 
   @Get(":id")

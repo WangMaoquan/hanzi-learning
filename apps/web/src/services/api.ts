@@ -56,6 +56,21 @@ export function getCharacter(id: string) {
   return api.get<Character>(`/characters/${id}`)
 }
 
+// 汉字总数
+export function getCharacterCount() {
+  return api.get<number>('/characters/count')
+}
+
+// 随机汉字
+export function getRandomCharacter() {
+  return api.get<Character>('/characters/random')
+}
+
+// 搜索汉字
+export function searchCharacters(q: string) {
+  return api.get<CharacterListResponse>('/characters/search', { params: { q } })
+}
+
 // ==================== 成语 API ====================
 
 export interface Idiom {
@@ -93,6 +108,21 @@ export function getIdioms(params?: IdiomListParams) {
 // 成语详情
 export function getIdiom(id: string) {
   return api.get<Idiom>(`/idioms/${id}`)
+}
+
+// 成语总数
+export function getIdiomCount() {
+  return api.get<number>('/idioms/count')
+}
+
+// 随机成语
+export function getRandomIdiom() {
+  return api.get<Idiom>('/idioms/random')
+}
+
+// 搜索成语
+export function searchIdioms(q: string) {
+  return api.get<IdiomListResponse>('/idioms/search', { params: { q } })
 }
 
 // ==================== 古诗 API ====================
@@ -136,6 +166,16 @@ export function getPoems(params?: PoemListParams) {
 // 古诗详情
 export function getPoem(id: string) {
   return api.get<Poem>(`/poems/${id}`)
+}
+
+// 古诗总数
+export function getPoemCount() {
+  return api.get<number>('/poems/count')
+}
+
+// 随机古诗
+export function getRandomPoem() {
+  return api.get<Poem>('/poems/random')
 }
 
 export default api

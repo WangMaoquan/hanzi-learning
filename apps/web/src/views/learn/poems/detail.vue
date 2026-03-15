@@ -1,34 +1,47 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
-import { getPoem, type Poem } from '@/services/api'
+  import { ref, onMounted, watch } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
+  import { getPoem, type Poem } from '@/services/api'
+  import { useToast } from '@/composables'
 
-const route = useRoute()
-const router = useRouter()
+  const route = useRoute()
+  const router = useRouter()
+  const toast = useToast()
 
-const loading = ref(true)
-const poem = ref<Poem | null>(null)
+  const loading = ref(true)
+  const poem = ref<Poem | null>(null)
 
-async function fetchPoem() {
-  try {
-    loading.value = true
-    const id = route.params.id as string
-    poem.value = await getPoem(id)
-  } catch (error) {
-    console.error('获取古诗详情失败:', error)
-  } finally {
-    loading.value = false
+  async function fetchPoem() {
+    try {
+      loading.value = true
+      const id = route.params.id as string
+      if (!id) return
+
+      poem.value = await getPoem(id)
+    } catch (error) {
+      console.error('获取古诗详情失败:', error)
+      toast.error('获取古诗详情失败')
+    } finally {
+      loading.value = false
+    }
   }
-}
 
-onMounted(() => {
-  fetchPoem()
-})
+  // 监听路由参数变化
+  watch(
+    () => route.params.id,
+    () => {
+      fetchPoem()
+    }
+  )
+
+  onMounted(() => {
+    fetchPoem()
+  })
 </script>
 
 <template>
   <div v-if="loading" class="flex items-center justify-center py-20">
-    <div class="text-gray-500">加载中...</div>
+    <div class="text-gray-500"> 加载中... </div>
   </div>
 
   <div v-else-if="poem">
@@ -92,11 +105,13 @@ onMounted(() => {
           <div class="space-y-3">
             <div v-if="poem.type">
               <span class="text-gray-500 text-sm">类型</span>
-              <p class="text-gray-900">{{ poem.type }}</p>
+              <p class="text-gray-900">
+                {{ poem.type }}
+              </p>
             </div>
             <div v-if="poem.difficulty">
               <span class="text-gray-500 text-sm">难度</span>
-              <p class="text-gray-900">{{ poem.difficulty }} / 5</p>
+              <p class="text-gray-900"> {{ poem.difficulty }} / 5 </p>
             </div>
           </div>
         </div>
@@ -113,7 +128,7 @@ onMounted(() => {
   </div>
 
   <div v-else class="text-center py-12">
-    <p class="text-gray-500">未找到该古诗</p>
-    <RouterLink to="/learn/poems" class="text-secondary-500 hover:underline">返回列表</RouterLink>
+    <p class="text-gray-500"> 未找到该古诗 </p>
+    <RouterLink to="/learn/poems" class="text-secondary-500 hover:underline"> 返回列表 </RouterLink>
   </div>
 </template>

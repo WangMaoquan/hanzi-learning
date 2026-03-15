@@ -1,11 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
+import { IdiomTransformer } from "../../transformers";
+import { IdiomVO, PaginatedVO } from "../../transformers/vo";
 
 @Injectable()
 export class IdiomsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(page = 1, limit = 20, search?: string) {
+  async findAll(
+    page = 1,
+    limit = 20,
+    search?: string,
+  ): Promise<PaginatedVO<IdiomVO>> {
     const skip = (page - 1) * limit;
     const where = search
       ? {
@@ -27,38 +33,35 @@ export class IdiomsService {
       this.prisma.idiom.count({ where }),
     ]);
 
-    return {
-      data,
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
-    };
+    return IdiomTransformer.toPaginatedVO(data, total, page, limit);
   }
 
-  async count() {
+  async count(): Promise<number> {
     return this.prisma.idiom.count();
   }
 
-  async findOne(id: string) {
-    return this.prisma.idiom.findUnique({
+  async findOne(id: string): Promise<IdiomVO | null> {
+    const data = await this.prisma.idiom.findUnique({
       where: { id },
     });
+    return data ? IdiomTransformer.toVO(data) : null;
   }
 
-  async findByWord(word: string) {
-    return this.prisma.idiom.findUnique({
+  async findByWord(word: string): Promise<IdiomVO | null> {
+    const data = await this.prisma.idiom.findUnique({
       where: { word },
     });
+    return data ? IdiomTransformer.toVO(data) : null;
   }
 
-  async findRandom() {
+  async findRandom(): Promise<IdiomVO | null> {
     const count = await this.prisma.idiom.count();
     if (count === 0) return null;
     const random = Math.floor(Math.random() * count);
-    return this.prisma.idiom.findFirst({
+    const data = await this.prisma.idiom.findFirst({
       skip: random,
       take: 1,
     });
+    return data ? IdiomTransformer.toVO(data) : null;
   }
 }

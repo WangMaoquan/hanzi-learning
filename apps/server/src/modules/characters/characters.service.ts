@@ -1,11 +1,17 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
+import { CharacterTransformer } from "../../transformers";
+import { CharacterVO, PaginatedVO } from "../../transformers/vo";
 
 @Injectable()
 export class CharactersService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(page = 1, limit = 20, search?: string) {
+  async findAll(
+    page = 1,
+    limit = 20,
+    search?: string,
+  ): Promise<PaginatedVO<CharacterVO>> {
     const skip = (page - 1) * limit;
     const where = search
       ? {
@@ -27,38 +33,35 @@ export class CharactersService {
       this.prisma.character.count({ where }),
     ]);
 
-    return {
-      data,
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
-    };
+    return CharacterTransformer.toPaginatedVO(data, total, page, limit);
   }
 
-  async count() {
+  async count(): Promise<number> {
     return this.prisma.character.count();
   }
 
-  async findOne(id: string) {
-    return this.prisma.character.findUnique({
+  async findOne(id: string): Promise<CharacterVO | null> {
+    const data = await this.prisma.character.findUnique({
       where: { id },
     });
+    return data ? CharacterTransformer.toVO(data) : null;
   }
 
-  async findByWord(word: string) {
-    return this.prisma.character.findUnique({
+  async findByWord(word: string): Promise<CharacterVO | null> {
+    const data = await this.prisma.character.findUnique({
       where: { word },
     });
+    return data ? CharacterTransformer.toVO(data) : null;
   }
 
-  async findRandom() {
+  async findRandom(): Promise<CharacterVO | null> {
     const count = await this.prisma.character.count();
     if (count === 0) return null;
     const random = Math.floor(Math.random() * count);
-    return this.prisma.character.findFirst({
+    const data = await this.prisma.character.findFirst({
       skip: random,
       take: 1,
     });
+    return data ? CharacterTransformer.toVO(data) : null;
   }
 }

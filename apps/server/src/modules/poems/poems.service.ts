@@ -1,11 +1,18 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
+import { PoemTransformer } from "../../transformers";
+import { PoemVO, PaginatedVO } from "../../transformers/vo";
 
 @Injectable()
 export class PoemsService {
   constructor(private prisma: PrismaService) {}
 
-  async findAll(page = 1, limit = 20, dynasty?: string, search?: string) {
+  async findAll(
+    page = 1,
+    limit = 20,
+    dynasty?: string,
+    search?: string,
+  ): Promise<PaginatedVO<PoemVO>> {
     const skip = (page - 1) * limit;
     const where: any = {};
 
@@ -30,38 +37,35 @@ export class PoemsService {
       this.prisma.poem.count({ where }),
     ]);
 
-    return {
-      data,
-      total,
-      page,
-      limit,
-      totalPages: Math.ceil(total / limit),
-    };
+    return PoemTransformer.toPaginatedVO(data, total, page, limit);
   }
 
-  async count() {
+  async count(): Promise<number> {
     return this.prisma.poem.count();
   }
 
-  async findOne(id: string) {
-    return this.prisma.poem.findUnique({
+  async findOne(id: string): Promise<PoemVO | null> {
+    const data = await this.prisma.poem.findUnique({
       where: { id },
     });
+    return data ? PoemTransformer.toVO(data) : null;
   }
 
-  async findByTitle(title: string) {
-    return this.prisma.poem.findFirst({
+  async findByTitle(title: string): Promise<PoemVO | null> {
+    const data = await this.prisma.poem.findFirst({
       where: { title },
     });
+    return data ? PoemTransformer.toVO(data) : null;
   }
 
-  async findRandom() {
+  async findRandom(): Promise<PoemVO | null> {
     const count = await this.prisma.poem.count();
     if (count === 0) return null;
     const random = Math.floor(Math.random() * count);
-    return this.prisma.poem.findFirst({
+    const data = await this.prisma.poem.findFirst({
       skip: random,
       take: 1,
     });
+    return data ? PoemTransformer.toVO(data) : null;
   }
 }

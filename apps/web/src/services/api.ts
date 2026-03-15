@@ -6,6 +6,9 @@ const api = axios.create({
   timeout: 10000,
 })
 
+// 添加通用请求头
+api.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
+
 // 统一响应类型
 export interface ApiResponse<T> {
   success: boolean

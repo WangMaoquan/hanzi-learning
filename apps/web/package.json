@@ -16,6 +16,7 @@
     "@hanzi-learning/types": "workspace:*",
     "@hanzi-learning/ui": "workspace:*",
     "@hanzi-learning/utils": "workspace:*",
+    "axios": "^1.13.6",
     "pinia": "^2.2.4",
     "vue": "^3.5.12",
     "vue-router": "^4.4.5"

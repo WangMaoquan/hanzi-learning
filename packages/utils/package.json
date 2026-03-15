@@ -7,6 +7,9 @@
   "exports": {
     ".": "./src/index.ts"
   },
+  "dependencies": {
+    "@hanzi-learning/types": "workspace:*"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",

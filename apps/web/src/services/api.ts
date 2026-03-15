@@ -1,4 +1,5 @@
 import axios from 'axios'
+import type { CharacterVO, IdiomVO, PoemVO, PaginatedVO } from '@hanzi-learning/types/vo'
 
 // 统一响应类型
 export interface ApiResponse<T> {
@@ -15,14 +16,11 @@ export interface ApiError {
   timestamp: string
 }
 
-// 通用分页响应类型
-export interface PaginatedResponse<T> {
-  data: T[]
-  total: number
-  page: number
-  limit: number
-  totalPages: number
-}
+// 类型别名（兼容旧代码）
+export type Character = CharacterVO
+export type Idiom = IdiomVO
+export type Poem = PoemVO
+export type PaginatedResponse<T> = PaginatedVO<T>
 
 // 创建 axios 实例
 const api = axios.create({
@@ -53,21 +51,8 @@ export default api
 
 // ==================== 汉字 API ====================
 
-export interface Character {
-  id: string
-  title: string
-  content: string
-  pinyin: string | null
-  pinyins: string | null
-  radicals: string | null
-  strokes: number | null
-  structure: '左右' | '上下' | '包围' | '独体' | '品字' | null
-  difficulty: number
-  tags: string[]
-  words: string[]
-  createdAt: string
-  updatedAt: string
-}
+// 类型已在顶部从 @hanzi-learning/types/vo 导入
+// Character, Idiom, Poem, PaginatedResponse 均为类型别名
 
 export interface CharacterListParams {
   page?: number
@@ -99,18 +84,7 @@ export function searchCharacters(q: string) {
 
 // ==================== 成语 API ====================
 
-export interface Idiom {
-  id: string
-  title: string
-  content: string
-  pinyin: string | null
-  derivation: string | null
-  example: string | null
-  synonyms: string[]
-  antonyms: string[]
-  createdAt: string
-  updatedAt: string
-}
+// 类型已在顶部从 @hanzi-learning/types/vo 导入
 
 export interface IdiomListParams {
   page?: number
@@ -142,21 +116,7 @@ export function searchIdioms(q: string) {
 
 // ==================== 古诗 API ====================
 
-export interface Poem {
-  id: string
-  title: string
-  author: string
-  content: string
-  pinyin: string | null
-  difficulty: number
-  tags: string[]
-  dynasty: string
-  type: string | null
-  verses: string[]
-  versePinyins: string[][] | null
-  createdAt: string
-  updatedAt: string
-}
+// 类型已在顶部从 @hanzi-learning/types/vo 导入
 
 export interface PoemListParams {
   page?: number

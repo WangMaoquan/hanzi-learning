@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
 import { CharacterTransformer } from "../../transformers";
-import { CharacterVO, PaginatedVO } from "../../transformers/vo";
+import type { CharacterVO, PaginatedVO } from "../../transformers/vo";
 
 @Injectable()
 export class CharactersService {

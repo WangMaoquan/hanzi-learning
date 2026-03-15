@@ -1,5 +1,5 @@
 import { Character, Idiom, Poem } from "@prisma/client";
-import { CharacterVO, IdiomVO, PoemVO, PaginatedVO } from "./vo";
+import type { CharacterVO, IdiomVO, PoemVO, PaginatedVO } from "./vo";
 
 // 汉字转换
 export class CharacterTransformer {

@@ -48,6 +48,11 @@ const router = createRouter({
           name: 'learn-idioms',
           component: () => import('@/views/learn/idioms/index.vue'),
         },
+        {
+          path: 'idioms/:id',
+          name: 'idiom-detail',
+          component: () => import('@/views/learn/idioms/detail.vue'),
+        },
       ],
     },
     {

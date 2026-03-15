@@ -144,13 +144,13 @@
 
         <!-- 组词 -->
         <div
-          v-if="character.titles?.length"
+          v-if="character.words?.length"
           class="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
         >
           <h2 class="text-lg font-semibold text-gray-900 mb-4"> 组词 </h2>
           <div class="flex flex-wrap gap-2">
             <span
-              v-for="word in character.titles"
+              v-for="word in character.words"
               :key="word"
               class="px-3 py-1 bg-gray-100 rounded-full text-gray-700"
             >

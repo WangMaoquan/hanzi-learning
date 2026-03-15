@@ -1,4 +1,4 @@
-import { ref, computed } from 'vue'
+import { ref, type Ref } from 'vue'
 
 export type ToastType = 'success' | 'error' | 'warning' | 'info'
 
@@ -12,7 +12,15 @@ export interface Toast {
 const toasts = ref<Toast[]>([])
 let toastId = 0
 
-export function useToast() {
+export function useToast(): {
+  toasts: Ref<Toast[]>
+  show: (message: string, type?: ToastType, duration?: number) => void
+  success: (message: string, duration?: number) => void
+  error: (message: string, duration?: number) => void
+  warning: (message: string, duration?: number) => void
+  info: (message: string, duration?: number) => void
+  remove: (id: number) => void
+} {
   function show(message: string, type: ToastType = 'info', duration = 3000) {
     const id = ++toastId
     toasts.value.push({ id, message, type, duration })
@@ -48,7 +56,7 @@ export function useToast() {
   }
 
   return {
-    toasts: computed(() => toasts.value),
+    toasts,
     show,
     success,
     error,

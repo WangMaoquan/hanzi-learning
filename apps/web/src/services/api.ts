@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosResponse } from 'axios'
+import axios, { type AxiosResponse } from 'axios'
 
 // 创建 axios 实例
 const api = axios.create({
@@ -25,15 +25,12 @@ export interface ApiError {
 }
 
 // 响应拦截器 - 处理统一返回格式
+// 提取 data 字段返回，axios 泛型会在使用时推断
 api.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse<unknown>>) => {
-    const res = response.data
-    if (res.success) {
-      return res.data // 返回内层的 data 字段
-    }
-    return res.data
+  <T>(response: { data: ApiResponse<T> }): T => {
+    return response.data.data
   },
-  (error: AxiosError<ApiError>) => {
+  (error) => {
     if (error.response) {
       const { statusCode, message } = error.response.data
       console.error(`API Error ${statusCode}:`, message)
@@ -50,11 +47,11 @@ api.interceptors.response.use(
 
 export interface Character {
   id: string
-  title: string // word -> title
-  content: string // explanation -> content
+  title: string
+  content: string
   pinyin: string | null
   pinyins: string | null
-  radicals: string | null // radical -> radicals
+  radicals: string | null
   strokes: number | null
   structure: '左右' | '上下' | '包围' | '独体' | '品字' | null
   difficulty: number
@@ -78,37 +75,34 @@ export interface CharacterListResponse {
   totalPages: number
 }
 
-// 汉字列表
 export function getCharacters(params?: CharacterListParams) {
-  return api.get<CharacterListResponse>('/characters', { params })
+  return api.get<CharacterListResponse>('/characters', { params }).then((res) => res.data)
 }
 
-// 汉字详情
 export function getCharacter(id: string) {
-  return api.get<Character>(`/characters/${id}`)
+  return api.get<Character>(`/characters/${id}`).then((res) => res.data)
 }
 
-// 汉字总数
 export function getCharacterCount() {
-  return api.get<number>('/characters/count')
+  return api.get<number>('/characters/count').then((res) => res.data)
 }
 
-// 随机汉字
 export function getRandomCharacter() {
-  return api.get<Character>('/characters/random')
+  return api.get<Character>('/characters/random').then((res) => res.data)
 }
 
-// 搜索汉字
 export function searchCharacters(q: string) {
-  return api.get<CharacterListResponse>('/characters/search', { params: { q } })
+  return api
+    .get<CharacterListResponse>('/characters/search', { params: { q } })
+    .then((res) => res.data)
 }
 
 // ==================== 成语 API ====================
 
 export interface Idiom {
   id: string
-  title: string // word -> title
-  content: string // explanation -> content
+  title: string
+  content: string
   pinyin: string | null
   derivation: string | null
   example: string | null
@@ -132,29 +126,24 @@ export interface IdiomListResponse {
   totalPages: number
 }
 
-// 成语列表
 export function getIdioms(params?: IdiomListParams) {
-  return api.get<IdiomListResponse>('/idioms', { params })
+  return api.get<IdiomListResponse>('/idioms', { params }).then((res) => res.data)
 }
 
-// 成语详情
 export function getIdiom(id: string) {
-  return api.get<Idiom>(`/idioms/${id}`)
+  return api.get<Idiom>(`/idioms/${id}`).then((res) => res.data)
 }
 
-// 成语总数
 export function getIdiomCount() {
-  return api.get<number>('/idioms/count')
+  return api.get<number>('/idioms/count').then((res) => res.data)
 }
 
-// 随机成语
 export function getRandomIdiom() {
-  return api.get<Idiom>('/idioms/random')
+  return api.get<Idiom>('/idioms/random').then((res) => res.data)
 }
 
-// 搜索成语
 export function searchIdioms(q: string) {
-  return api.get<IdiomListResponse>('/idioms/search', { params: { q } })
+  return api.get<IdiomListResponse>('/idioms/search', { params: { q } }).then((res) => res.data)
 }
 
 // ==================== 古诗 API ====================
@@ -190,22 +179,18 @@ export interface PoemListResponse {
   totalPages: number
 }
 
-// 古诗列表
 export function getPoems(params?: PoemListParams) {
-  return api.get<PoemListResponse>('/poems', { params })
+  return api.get<PoemListResponse>('/poems', { params }).then((res) => res.data)
 }
 
-// 古诗详情
 export function getPoem(id: string) {
-  return api.get<Poem>(`/poems/${id}`)
+  return api.get<Poem>(`/poems/${id}`).then((res) => res.data)
 }
 
-// 古诗总数
 export function getPoemCount() {
-  return api.get<number>('/poems/count')
+  return api.get<number>('/poems/count').then((res) => res.data)
 }
 
-// 随机古诗
 export function getRandomPoem() {
   return api.get<Poem>('/poems/random')
 }

@@ -1,8 +1,8 @@
 <script setup lang="ts">
-  import { useToast, type ToastType } from './useToast'
+  import { useToast, type Toast, type ToastType } from '@/composables/useToast'
 
   defineProps<{
-    toasts: ReturnType<typeof useToast>['toasts']
+    toasts: Toast[]
   }>()
 
   const { remove } = useToast()

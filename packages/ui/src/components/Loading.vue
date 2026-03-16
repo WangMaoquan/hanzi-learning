@@ -8,7 +8,10 @@ defineProps<{
 </script>
 
 <template>
-  <div class="flex items-center justify-center py-8" :class="size === 'sm' ? 'py-4' : size === 'lg' ? 'py-12' : 'py-8'">
+  <div
+    class="flex items-center justify-center py-8"
+    :class="size === 'sm' ? 'py-4' : size === 'lg' ? 'py-12' : 'py-8'"
+  >
     <div class="flex items-center gap-3">
       <!-- spinner -->
       <svg

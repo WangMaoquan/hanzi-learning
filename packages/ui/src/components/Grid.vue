@@ -6,7 +6,10 @@ defineProps<{
 </script>
 
 <template>
-  <div class="grid gap-3" :style="gap ? { gap } : {}">
-    <slot />
+  <div
+    class="grid gap-3"
+    :style="gap ? { gap } : {}"
+  >
+    <slot></slot>
   </div>
 </template>

@@ -57,8 +57,14 @@ function goTo(page: number) {
     </button>
 
     <!-- 页码 -->
-    <template v-for="(page, index) in pages" :key="index">
-      <span v-if="page === '...'" class="px-2 text-gray-400">...</span>
+    <template
+      v-for="(page, index) in pages"
+      :key="index"
+    >
+      <span
+        v-if="page === '...'"
+        class="px-2 text-gray-400"
+      >...</span>
       <button
         v-else
         class="min-w-[36px] h-8 px-2 rounded-lg text-sm font-medium transition-colors"
@@ -81,7 +87,10 @@ function goTo(page: number) {
     </button>
 
     <!-- 页码跳转 -->
-    <div v-if="showJumper" class="flex items-center gap-1 ml-2">
+    <div
+      v-if="showJumper"
+      class="flex items-center gap-1 ml-2"
+    >
       <span class="text-sm text-gray-500">跳至</span>
       <input
         type="number"
@@ -89,7 +98,7 @@ function goTo(page: number) {
         :max="totalPages"
         class="w-14 h-8 px-2 border border-gray-300 rounded-lg text-sm text-center focus:outline-none focus:border-primary-500"
         @keyup.enter="goTo(Number(($event.target as HTMLInputElement).value))"
-      >
+      />
       <span class="text-sm text-gray-500">页</span>
     </div>
   </div>

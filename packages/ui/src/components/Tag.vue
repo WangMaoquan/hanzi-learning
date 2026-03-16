@@ -28,6 +28,6 @@ defineProps<{
       },
     ]"
   >
-    <slot />
+    <slot></slot>
   </span>
 </template>

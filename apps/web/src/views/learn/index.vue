@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { RouterView, useRoute } from 'vue-router'
+  import { RouterView, useRoute } from 'vue-router'
 
-const route = useRoute()
+  const route = useRoute()
 
-const tabs = [
-  { name: '首页', path: '/learn', icon: '🏠' },
-  { name: '汉字', path: '/learn/characters', icon: '✍️' },
-  { name: '古诗', path: '/learn/poems', icon: '📜' },
-  { name: '文言文', path: '/learn/prose', icon: '📖' },
-  { name: '成语', path: '/learn/idioms', icon: '🏮' },
-]
+  const tabs = [
+    { name: '首页', path: '/learn', icon: '🏠' },
+    { name: '汉字', path: '/learn/characters', icon: '✍️' },
+    { name: '古诗', path: '/learn/poems', icon: '📜' },
+    { name: '文言文', path: '/learn/prose', icon: '📖' },
+    { name: '成语', path: '/learn/idioms', icon: '🏮' },
+  ]
 </script>
 
 <template>

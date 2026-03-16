@@ -10,7 +10,10 @@ defineProps<{
 <template>
   <div class="flex flex-col items-center justify-center py-12 text-center">
     <!-- 默认图标 -->
-    <div v-if="showIcon !== false" class="mb-4 text-gray-300">
+    <div
+      v-if="showIcon !== false"
+      class="mb-4 text-gray-300"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         class="w-16 h-16"

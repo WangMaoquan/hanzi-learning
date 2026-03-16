@@ -17,6 +17,6 @@ defineProps<{
       'cursor-pointer active:scale-[0.99]': clickable,
     }"
   >
-    <slot />
+    <slot></slot>
   </div>
 </template>

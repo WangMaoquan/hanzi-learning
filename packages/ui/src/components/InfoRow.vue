@@ -11,7 +11,7 @@ defineProps<{
   <div class="mb-4 last:mb-0">
     <span class="text-gray-500 text-sm block mb-1">{{ label }}</span>
     <p :class="prominent ? 'text-xl font-semibold text-gray-900' : 'text-gray-900'">
-      <slot />
+      <slot></slot>
     </p>
   </div>
 </template>

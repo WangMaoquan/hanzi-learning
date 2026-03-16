@@ -5,6 +5,46 @@
   const { characterCount, poemCount, idiomCount, loading, error, fetchCounts } = useContentCounts()
   const toast = useToast()
 
+  // 功能色配置 - 对应不同内容类型
+  const featureColors = {
+    characters: {
+      bg: 'bg-primary-50',
+      bgHover: 'hover:bg-primary-100',
+      text: 'text-primary-500',
+      textHover: 'group-hover:text-primary-600',
+      border: 'border-primary-200',
+      borderHover: 'hover:border-primary-400',
+      icon: 'text-primary-400',
+    },
+    poems: {
+      bg: 'bg-secondary-50',
+      bgHover: 'hover:bg-secondary-100',
+      text: 'text-secondary-500',
+      textHover: 'group-hover:text-secondary-600',
+      border: 'border-secondary-200',
+      borderHover: 'hover:border-secondary-400',
+      icon: 'text-secondary-400',
+    },
+    idioms: {
+      bg: 'bg-orange-50',
+      bgHover: 'hover:bg-orange-100',
+      text: 'text-orange-500',
+      textHover: 'group-hover:text-orange-600',
+      border: 'border-orange-200',
+      borderHover: 'hover:border-orange-400',
+      icon: 'text-orange-400',
+    },
+    prose: {
+      bg: 'bg-purple-50',
+      bgHover: 'hover:bg-purple-100',
+      text: 'text-purple-500',
+      textHover: 'group-hover:text-purple-600',
+      border: 'border-purple-200',
+      borderHover: 'hover:border-purple-400',
+      icon: 'text-purple-400',
+    },
+  }
+
   const features = [
     {
       title: '汉字学习',
@@ -12,6 +52,7 @@
       icon: '✍️',
       path: '/learn/characters',
       count: characterCount,
+      type: 'characters',
     },
     {
       title: '古诗词',
@@ -19,6 +60,7 @@
       icon: '📜',
       path: '/learn/poems',
       count: poemCount,
+      type: 'poems',
     },
     {
       title: '文言文',
@@ -26,6 +68,7 @@
       icon: '📖',
       path: '/learn/prose',
       count: ref(0),
+      type: 'prose',
     },
     {
       title: '成语故事',
@@ -33,8 +76,13 @@
       icon: '🏮',
       path: '/learn/idioms',
       count: idiomCount,
+      type: 'idioms',
     },
   ]
+
+  function getFeatureColors(type: string) {
+    return featureColors[type as keyof typeof featureColors] || featureColors.characters
+  }
 
   onMounted(async () => {
     await fetchCounts()
@@ -54,77 +102,130 @@
           <span class="text-xl font-bold text-gray-900">汉字学习平台</span>
         </div>
         <nav class="flex gap-6">
-          <RouterLink to="/" class="text-gray-600 hover:text-primary-500"> 首页 </RouterLink>
-          <RouterLink to="/learn" class="text-gray-600 hover:text-primary-500"> 学习 </RouterLink>
-          <RouterLink to="/practice" class="text-gray-600 hover:text-primary-500">
+          <RouterLink to="/" class="text-gray-600 hover:text-primary-500 transition-colors">
+            首页
+          </RouterLink>
+          <RouterLink to="/learn" class="text-gray-600 hover:text-primary-500 transition-colors">
+            学习
+          </RouterLink>
+          <RouterLink to="/practice" class="text-gray-600 hover:text-primary-500 transition-colors">
             练习
           </RouterLink>
-          <RouterLink to="/about" class="text-gray-600 hover:text-primary-500"> 关于 </RouterLink>
+          <RouterLink to="/about" class="text-gray-600 hover:text-primary-500 transition-colors">
+            关于
+          </RouterLink>
         </nav>
       </div>
     </header>
 
     <!-- Hero -->
-    <section class="bg-gradient-to-br from-primary-50 to-primary-100 py-16">
+    <section class="bg-gradient-to-br from-primary-50 via-primary-100 to-yellow-100 py-20">
       <div class="max-w-4xl mx-auto px-4 text-center">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4"> 趣味学习，轻松掌握中华文化 </h1>
-        <p class="text-lg text-gray-600 mb-8">
+        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+          趣味学习，轻松掌握中华文化
+        </h1>
+        <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
           笔画顺序动画、古诗朗读背诵、成语故事讲解，让学习变得有趣
         </p>
-        <RouterLink to="/learn" class="btn btn-primary text-lg px-8 py-3"> 开始学习 </RouterLink>
+        <RouterLink
+          to="/learn"
+          class="btn btn-primary text-lg px-10 py-4 shadow-lg hover:shadow-xl transition-all hover:-translate-y-0.5"
+        >
+          开始学习
+        </RouterLink>
       </div>
     </section>
 
     <!-- Features -->
-    <section class="py-16">
+    <section class="py-20 bg-gray-50">
       <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-2xl font-bold text-gray-900 text-center mb-12"> 学习内容 </h2>
-        <div v-if="loading" class="text-center text-gray-500 py-8"> 加载中... </div>
+        <h2 class="text-3xl font-bold text-gray-900 text-center mb-4"> 学习内容 </h2>
+        <p class="text-gray-500 text-center mb-12 max-w-xl mx-auto">
+          多种学习方式，轻松掌握中华文化精髓
+        </p>
+
+        <div v-if="loading" class="text-center text-gray-500 py-12"> 加载中... </div>
+
         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <RouterLink
             v-for="feature in features"
             :key="feature.path"
             :to="feature.path"
-            class="card hover:shadow-lg transition-shadow"
+            class="group"
           >
-            <div class="text-4xl mb-4">
-              {{ feature.icon }}
+            <div
+              :class="[
+                'bg-white rounded-2xl p-6 border-2 border-transparent transition-all duration-300',
+                'hover:shadow-xl hover:-translate-y-1',
+                getFeatureColors(feature.type).borderHover,
+              ]"
+            >
+              <!-- 图标区域 -->
+              <div
+                :class="[
+                  'w-14 h-14 rounded-xl flex items-center justify-center mb-5 text-2xl',
+                  getFeatureColors(feature.type).bg,
+                ]"
+              >
+                {{ feature.icon }}
+              </div>
+
+              <!-- 标题 -->
+              <h3
+                :class="[
+                  'text-xl font-bold mb-2 transition-colors',
+                  getFeatureColors(feature.type).text,
+                  getFeatureColors(feature.type).textHover,
+                ]"
+              >
+                {{ feature.title }}
+              </h3>
+
+              <!-- 描述 -->
+              <p class="text-gray-500 text-sm mb-4 leading-relaxed">
+                {{ feature.description }}
+              </p>
+
+              <!-- 数量 -->
+              <div class="flex items-center gap-2">
+                <span :class="['text-sm font-semibold', getFeatureColors(feature.type).text]">
+                  {{ feature.count.value }}
+                </span>
+                <span class="text-gray-400 text-sm">个内容</span>
+              </div>
             </div>
-            <h3 class="text-lg font-semibold text-gray-900 mb-2">
-              {{ feature.title }}
-            </h3>
-            <p class="text-gray-500 text-sm mb-3">
-              {{ feature.description }}
-            </p>
-            <span class="text-primary-500 text-sm font-medium">
-              {{ feature.count.value }} 个内容
-            </span>
           </RouterLink>
         </div>
       </div>
     </section>
 
     <!-- Stats -->
-    <section class="bg-white py-12">
+    <section class="bg-white py-16">
       <div class="max-w-4xl mx-auto px-4">
-        <div class="grid grid-cols-3 gap-8 text-center">
-          <div>
-            <div class="text-3xl font-bold text-primary-500">
+        <div class="grid grid-cols-3 gap-8 md:gap-12 text-center">
+          <div class="py-6">
+            <div
+              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent"
+            >
               {{ characterCount.toLocaleString() }}+
             </div>
-            <div class="text-gray-500 mt-1"> 常用汉字 </div>
+            <div class="text-gray-500 mt-3 font-medium"> 常用汉字 </div>
           </div>
-          <div>
-            <div class="text-3xl font-bold text-secondary-500">
+          <div class="py-6">
+            <div
+              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-secondary-400 to-secondary-600 bg-clip-text text-transparent"
+            >
               {{ (poemCount / 1000).toFixed(0) }}k+
             </div>
-            <div class="text-gray-500 mt-1"> 经典古诗 </div>
+            <div class="text-gray-500 mt-3 font-medium"> 经典古诗 </div>
           </div>
-          <div>
-            <div class="text-3xl font-bold text-green-500">
+          <div class="py-6">
+            <div
+              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent"
+            >
               {{ idiomCount.toLocaleString() }}+
             </div>
-            <div class="text-gray-500 mt-1"> 成语故事 </div>
+            <div class="text-gray-500 mt-3 font-medium"> 成语故事 </div>
           </div>
         </div>
       </div>

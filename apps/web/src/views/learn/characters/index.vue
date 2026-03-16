@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import { getCharacters, type Character } from '@/services/api'
+  import { Card, Loading, Empty } from '@hanzi-learning/ui'
 
   const loading = ref(true)
   const characters = ref<Character[]>([])
@@ -32,16 +33,11 @@
     <h1 class="text-2xl font-bold text-gray-900 mb-6"> 汉字学习 </h1>
 
     <!-- 加载状态 -->
-    <div v-if="loading" class="flex items-center justify-center py-20">
-      <div class="text-gray-500"> 加载中... </div>
-    </div>
+    <Loading v-if="loading" text="加载中..." />
 
     <template v-else>
       <!-- 当前学习 -->
-      <div
-        v-if="currentCharacter"
-        class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6"
-      >
+      <Card v-if="currentCharacter" class="mb-6">
         <h2 class="text-lg font-semibold text-gray-900 mb-4"> 正在学习 </h2>
         <div class="flex items-center gap-8">
           <div class="w-40 h-40 flex items-center justify-center bg-primary-50 rounded-xl">
@@ -82,12 +78,10 @@
             </div>
           </div>
         </div>
-      </div>
+      </Card>
 
       <!-- 空状态 -->
-      <div v-else class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 mb-6">
-        <p class="text-gray-500"> 暂无汉字数据 </p>
-      </div>
+      <Empty v-else description="暂无汉字数据" class="mb-6" />
 
       <!-- 字表 -->
       <div>

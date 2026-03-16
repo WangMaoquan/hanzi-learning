@@ -2,6 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { getPoems, type Poem } from '@/services/api'
   import { DYNASTY_LABELS } from '@hanzi-learning/utils'
+  import { Loading, Empty } from '@hanzi-learning/ui'
 
   const loading = ref(true)
   const poems = ref<Poem[]>([])
@@ -28,9 +29,10 @@
     <h1 class="text-2xl font-bold text-gray-900 mb-6"> 古诗词学习 </h1>
 
     <!-- 加载状态 -->
-    <div v-if="loading" class="flex items-center justify-center py-20">
-      <div class="text-gray-500"> 加载中... </div>
-    </div>
+    <Loading v-if="loading" text="加载中..." />
+
+    <!-- 空状态 -->
+    <Empty v-else-if="!poems.length" description="暂无古诗数据" />
 
     <!-- 古诗列表 -->
     <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">

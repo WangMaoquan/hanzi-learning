@@ -4,6 +4,7 @@
   import { getCharacters, getCharacter, type Character } from '@/services/api'
   import { useToast } from '@/composables'
   import { useHanziWriter } from '@hanzi-learning/hanzi-vue'
+  import { Card, Loading, Empty } from '@hanzi-learning/ui'
 
   const route = useRoute()
   const router = useRouter()
@@ -81,9 +82,7 @@
 </script>
 
 <template>
-  <div v-if="loading" class="flex items-center justify-center py-20">
-    <div class="text-gray-500"> 加载中... </div>
-  </div>
+  <Loading v-if="loading" text="加载中..." />
 
   <div v-else-if="character">
     <div class="flex items-center justify-between mb-6">
@@ -95,7 +94,7 @@
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
       <!-- 左侧：汉字展示 -->
-      <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+      <Card>
         <div class="flex items-center justify-center h-64 bg-primary-50 rounded-xl mb-6">
           <span class="text-9xl font-bold text-gray-900">{{ character.title }}</span>
         </div>
@@ -137,12 +136,12 @@
             {{ nextCharacter.title }} →
           </button>
         </div>
-      </div>
+      </Card>
 
       <!-- 右侧：信息 -->
       <div class="space-y-6">
         <!-- 基本信息 -->
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+        <Card>
           <h2 class="text-lg font-semibold text-gray-900 mb-4"> 基本信息 </h2>
           <div class="space-y-3">
             <div class="flex items-center gap-4">
@@ -168,13 +167,10 @@
               <span class="text-gray-900">{{ character.radicals || '-' }}</span>
             </div>
           </div>
-        </div>
+        </Card>
 
         <!-- 组词 -->
-        <div
-          v-if="character.words?.length"
-          class="bg-white rounded-xl p-6 shadow-sm border border-gray-100"
-        >
+        <Card v-if="character.words?.length">
           <h2 class="text-lg font-semibold text-gray-900 mb-4"> 组词 </h2>
           <div class="flex flex-wrap gap-2">
             <span
@@ -185,15 +181,14 @@
               {{ word }}
             </span>
           </div>
-        </div>
+        </Card>
       </div>
     </div>
   </div>
 
-  <div v-else class="text-center py-12">
-    <p class="text-gray-500"> 未找到该汉字 </p>
+  <Empty v-else description="未找到该汉字">
     <RouterLink to="/learn/characters" class="text-primary-500 hover:underline">
       返回字表
     </RouterLink>
-  </div>
+  </Empty>
 </template>

@@ -50,14 +50,12 @@
   <Loading v-if="loading" text="加载中..." />
 
   <div v-else-if="poem" class="min-h-screen bg-gray-50 pb-12">
-    <!-- 页面头部 -->
-    <div class="bg-gradient-to-r from-secondary-50 to-secondary-100 py-6 mb-6">
-      <div class="max-w-6xl mx-auto px-4">
+    <div class="max-w-6xl mx-auto px-4 pt-6">
+      <!-- 返回链接 -->
+      <div class="mb-6">
         <BackLink to="/learn/poems" text="返回列表" />
       </div>
-    </div>
 
-    <div class="max-w-6xl mx-auto px-4">
       <!-- 标题区域 -->
       <div class="mb-8">
         <h1 class="text-4xl font-bold text-gray-900 mb-4">

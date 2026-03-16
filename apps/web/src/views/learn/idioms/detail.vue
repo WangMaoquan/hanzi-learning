@@ -50,14 +50,12 @@
   <Loading v-if="loading" text="加载中..." />
 
   <div v-else-if="idiom" class="min-h-screen bg-gray-50 pb-12">
-    <!-- 页面头部 -->
-    <div class="bg-gradient-to-r from-orange-50 to-orange-100 py-6 mb-6">
-      <div class="max-w-4xl mx-auto px-4">
+    <div class="max-w-4xl mx-auto px-4 pt-6">
+      <!-- 返回链接 -->
+      <div class="mb-6">
         <BackLink to="/learn/idioms" text="返回列表" />
       </div>
-    </div>
 
-    <div class="max-w-4xl mx-auto px-4">
       <Card hoverable class="border-2 border-orange-200">
         <!-- 成语标题区域 -->
         <div class="text-center mb-8 pb-8 border-b border-orange-100">

@@ -64,13 +64,17 @@
 
   <div v-else-if="character" class="min-h-screen bg-gray-50 pb-12">
     <!-- 页面头部 -->
-    <div class="bg-gradient-to-r from-primary-50 to-primary-100 py-6 mb-6">
+    <div class="bg-gradient-to-r from-primary-50 to-primary-100 py-8 mb-6">
       <div class="max-w-6xl mx-auto px-4">
-        <BackLink to="/learn/characters" text="返回字表" />
+        <h1 class="text-4xl font-bold text-gray-900 text-center"> 汉字学习 </h1>
       </div>
     </div>
 
     <div class="max-w-6xl mx-auto px-4">
+      <!-- 返回链接 -->
+      <div class="mb-4">
+        <BackLink to="/learn/characters" text="返回字表" />
+      </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- 左侧：汉字展示 -->
         <Card hoverable class="border-2 border-primary-200">

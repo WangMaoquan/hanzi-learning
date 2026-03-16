@@ -26,6 +26,15 @@
     writerContainer
   )
 
+  // 刷新笔顺动画
+  function retryWriter() {
+    // 强制刷新组件
+    const key = character.value?.id
+    if (key) {
+      fetchData()
+    }
+  }
+
   // 获取数据
   async function fetchData() {
     try {
@@ -92,10 +101,18 @@
               笔顺动画
             </h3>
             <div v-if="writerLoading" class="text-center py-8 bg-gray-50 rounded-xl">
-              <div class="text-gray-500"> 笔顺动画加载中... </div>
+              <div class="animate-pulse text-gray-500"> 笔顺动画加载中... </div>
             </div>
             <div v-else-if="writerError" class="text-center py-8 bg-gray-50 rounded-xl">
-              <div class="text-red-500"> 笔顺动画加载失败 </div>
+              <div class="text-red-500 mb-3">
+                {{ writerError.message || '笔顺动画加载失败' }}
+              </div>
+              <button
+                class="px-4 py-2 bg-primary-400 text-gray-900 font-medium rounded-lg hover:bg-primary-500 transition-colors"
+                @click="retryWriter"
+              >
+                重试
+              </button>
             </div>
             <div v-else ref="writerContainer" class="bg-gray-50 rounded-xl p-4"></div>
           </div>

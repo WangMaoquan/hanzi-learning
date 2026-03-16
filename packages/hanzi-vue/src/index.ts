@@ -19,6 +19,8 @@ export interface HanziWriterOptions {
   showHintAfterMisses?: number;
   highlightOnComplete?: boolean;
   highlightCompleteColor?: string;
+  /** 自定义数据源 URL */
+  dataUrl?: string;
 }
 
 export interface HanziWriterInstance {
@@ -58,6 +60,7 @@ export function useHanziWriter(
   const writer = ref<HanziWriterInstance | null>(null);
   const isLoading = ref(true);
   const error = ref<Error | null>(null);
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
 
   const defaultOptions: HanziWriterOptions = {
     width: 150,
@@ -78,9 +81,22 @@ export function useHanziWriter(
   const initWriter = (char: string) => {
     if (!containerRef.value) return;
 
+    // 清理之前的 writer
+    if (writer.value) {
+      writer.value = null;
+    }
+
     try {
       isLoading.value = true;
       error.value = null;
+
+      // 设置超时（10秒）
+      timeoutId = setTimeout(() => {
+        if (isLoading.value) {
+          isLoading.value = false;
+          error.value = new Error("笔顺数据加载超时，请检查网络连接");
+        }
+      }, 10000);
 
       writer.value = HanziWriter.create(
         containerRef.value,
@@ -88,9 +104,36 @@ export function useHanziWriter(
         defaultOptions,
       ) as any;
 
+      // 监听加载完成
+      writer.value?.onLoadDataSuccess = () => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+        isLoading.value = false;
+      };
+
+      writer.value?.onLoadDataError = (err: any) => {
+        if (timeoutId) {
+          clearTimeout(timeoutId);
+          timeoutId = null;
+        }
+        error.value = new Error(err?.message || "笔顺数据加载失败");
+        isLoading.value = false;
+      };
+
+      // 开始动画
       writer.value?.animateCharacter();
-      isLoading.value = false;
+
+      // 如果已经有数据，立即设置加载完成
+      if (writer.value?.getCharacter()) {
+        isLoading.value = false;
+      }
     } catch (e) {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+        timeoutId = null;
+      }
       error.value = e as Error;
       isLoading.value = false;
     }
@@ -113,6 +156,10 @@ export function useHanziWriter(
   );
 
   onUnmounted(() => {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+      timeoutId = null;
+    }
     writer.value = null;
   });
 

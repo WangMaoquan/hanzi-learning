@@ -3,6 +3,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import { getCharacters, getCharacter, type Character } from '@/services/api'
   import { useToast } from '@/composables'
+  import { useHanziWriter } from '@hanzi-learning/hanzi-vue'
 
   const route = useRoute()
   const router = useRouter()
@@ -11,6 +12,17 @@
   const loading = ref(true)
   const character = ref<Character | null>(null)
   const characters = ref<Character[]>([])
+  const writerContainer = ref<HTMLElement | null>(null)
+
+  // 笔顺动画
+  const {
+    isLoading: writerLoading,
+    error: writerError,
+    animateCharacter,
+  } = useHanziWriter(
+    computed(() => character.value?.title || ''),
+    writerContainer
+  )
 
   // 计算当前汉字在列表中的索引
   const currentIndex = computed(() => {
@@ -88,8 +100,24 @@
           <span class="text-9xl font-bold text-gray-900">{{ character.title }}</span>
         </div>
 
-        <!-- 笔顺动画占位 -->
-        <div class="text-center text-gray-500 text-sm mb-4"> 笔顺动画（需要 Hanzi Writer） </div>
+        <!-- 笔顺动画 -->
+        <div v-if="writerLoading" class="text-center text-gray-500 text-sm mb-4">
+          笔顺动画加载中...
+        </div>
+        <div v-else-if="writerError" class="text-center text-gray-500 text-sm mb-4">
+          笔顺动画加载失败
+        </div>
+        <div v-else ref="writerContainer" class="mb-4"></div>
+
+        <!-- 动画控制 -->
+        <div v-if="!writerLoading && !writerError" class="flex justify-center gap-2 mb-4">
+          <button
+            class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
+            @click="animateCharacter()"
+          >
+            重新播放
+          </button>
+        </div>
 
         <!-- 导航 -->
         <div class="flex justify-between">

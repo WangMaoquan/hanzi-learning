@@ -142,7 +142,8 @@
                 class="flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-orange-300 hover:bg-orange-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3"
               >
                 <span
-                  class="text-lg font-bold text-gray-700 group-hover:text-orange-600 transition-colors"
+                  class="font-bold text-gray-700 group-hover:text-orange-600 transition-colors"
+                  :class="idiom.title.length <= 4 ? 'text-lg' : 'text-sm'"
                 >
                   {{ idiom.title }}
                 </span>

@@ -131,7 +131,7 @@
             <span class="text-gray-500 text-sm">共 {{ total }} 个成语</span>
           </div>
 
-          <div class="flex flex-wrap gap-3 mb-8">
+          <div class="flex flex-wrap justify-center gap-3 mb-8">
             <RouterLink
               v-for="idiom in idioms"
               :key="idiom.id"

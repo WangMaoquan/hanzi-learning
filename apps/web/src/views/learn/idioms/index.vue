@@ -131,21 +131,20 @@
             <span class="text-gray-500 text-sm">共 {{ total }} 个成语</span>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 mb-8">
+          <div class="flex flex-wrap gap-3 mb-8">
             <RouterLink
               v-for="idiom in idioms"
               :key="idiom.id"
               :to="`/learn/idioms/${idiom.id}`"
               class="group"
-              :title="idiom.title.length > 4 ? idiom.title : undefined"
             >
               <div
-                class="flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-orange-300 hover:bg-orange-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-2 min-w-0"
+                class="flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-orange-300 hover:bg-orange-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-4"
               >
                 <span
-                  class="font-bold text-gray-700 group-hover:text-orange-600 transition-colors text-lg block w-full text-center"
+                  class="font-bold text-gray-700 group-hover:text-orange-600 transition-colors text-lg"
                 >
-                  {{ idiom.title.length > 4 ? idiom.title.slice(0, 4) : idiom.title }}
+                  {{ idiom.title }}
                 </span>
               </div>
             </RouterLink>

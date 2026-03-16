@@ -93,8 +93,13 @@ export function useHanziWriter(
       // 设置超时（10秒）
       timeoutId = setTimeout(() => {
         if (isLoading.value) {
-          isLoading.value = false;
-          error.value = new Error("笔顺数据加载超时，请检查网络连接");
+          // 检查是否已经有数据加载成功
+          if (writer.value?.getCharacter()) {
+            isLoading.value = false;
+          } else {
+            error.value = new Error("笔顺数据加载超时，请检查网络连接");
+            isLoading.value = false;
+          }
         }
       }, 10000);
 
@@ -104,31 +109,20 @@ export function useHanziWriter(
         defaultOptions,
       ) as any;
 
-      // 监听加载完成
-      writer.value?.onLoadDataSuccess = () => {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-          timeoutId = null;
-        }
-        isLoading.value = false;
-      };
-
-      writer.value?.onLoadDataError = (err: any) => {
-        if (timeoutId) {
-          clearTimeout(timeoutId);
-          timeoutId = null;
-        }
-        error.value = new Error(err?.message || "笔顺数据加载失败");
-        isLoading.value = false;
-      };
-
-      // 开始动画
+      // 尝试开始动画，如果数据已加载会自动播放
       writer.value?.animateCharacter();
 
-      // 如果已经有数据，立即设置加载完成
-      if (writer.value?.getCharacter()) {
-        isLoading.value = false;
-      }
+      // 检查是否已经有数据，如果有则立即设置加载完成
+      // 由于 HanziWriter 是异步加载数据的，我们需要等待一下
+      setTimeout(() => {
+        if (writer.value?.getCharacter()) {
+          if (timeoutId) {
+            clearTimeout(timeoutId);
+            timeoutId = null;
+          }
+          isLoading.value = false;
+        }
+      }, 500);
     } catch (e) {
       if (timeoutId) {
         clearTimeout(timeoutId);

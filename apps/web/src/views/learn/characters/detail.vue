@@ -16,11 +16,11 @@
   const nextCharacter = ref<Character | null>(null)
   const writerContainer = ref<HTMLElement | null>(null)
 
-  // 笔顺动画
-  const { animateCharacter } = useHanziWriter(
-    computed(() => character.value?.title || ''),
-    writerContainer
-  )
+  // 只有当 character 有值时才初始化笔顺动画
+  const writerComputed = computed(() => character.value?.title || '')
+  const shouldShowWriter = computed(() => !!character.value?.title)
+
+  const { animateCharacter } = useHanziWriter(writerComputed, writerContainer)
 
   // 获取数据
   async function fetchData() {
@@ -87,11 +87,15 @@
               <span class="w-2 h-2 bg-primary-400 rounded-full"></span>
               笔顺动画
             </h3>
-            <div ref="writerContainer" class="bg-gray-50 rounded-xl p-4"></div>
+            <div
+              v-show="shouldShowWriter"
+              ref="writerContainer"
+              class="bg-gray-50 rounded-xl p-4"
+            ></div>
           </div>
 
           <!-- 动画控制 -->
-          <div v-if="!writerLoading && !writerError" class="flex justify-center mb-6">
+          <div class="flex justify-center mb-6">
             <button
               class="px-6 py-2.5 bg-primary-400 text-gray-900 font-medium rounded-xl hover:bg-primary-500 transition-colors shadow-sm hover:shadow"
               @click="animateCharacter()"

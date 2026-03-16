@@ -38,4 +38,10 @@ export class IdiomsController {
   findOne(@Param("id", ParseUUIDPipe) id: string) {
     return this.idiomsService.findOne(id);
   }
+
+  @Get(":id/neighbors")
+  @ApiOperation({ summary: "获取上一个和下一个成语" })
+  neighbors(@Param("id", ParseUUIDPipe) id: string) {
+    return this.idiomsService.findNeighbors(id);
+  }
 }

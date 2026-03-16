@@ -68,4 +68,27 @@ export class PoemsService {
     });
     return data ? PoemTransformer.toVO(data) : null;
   }
+
+  async findNeighbors(
+    id: string,
+  ): Promise<{ prev: PoemVO | null; next: PoemVO | null }> {
+    const current = await this.prisma.poem.findUnique({ where: { id } });
+    if (!current) {
+      return { prev: null, next: null };
+    }
+
+    const prev = await this.prisma.poem.findFirst({
+      where: { title: { lt: current.title } },
+      orderBy: { title: "desc" },
+    });
+    const next = await this.prisma.poem.findFirst({
+      where: { title: { gt: current.title } },
+      orderBy: { title: "asc" },
+    });
+
+    return {
+      prev: prev ? PoemTransformer.toVO(prev) : null,
+      next: next ? PoemTransformer.toVO(next) : null,
+    };
+  }
 }

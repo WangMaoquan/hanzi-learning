@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
-  import { getPoem, type Poem } from '@/services/api'
+  import { getPoem, getPoemNeighbors, type Poem } from '@/services/api'
   import { useToast } from '@/composables'
   import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
 
@@ -11,6 +11,10 @@
 
   const loading = ref(true)
   const poem = ref<Poem | null>(null)
+  const neighbors = ref<{ prev: Poem | null; next: Poem | null }>({
+    prev: null,
+    next: null,
+  })
 
   async function fetchPoem() {
     try {
@@ -18,7 +22,9 @@
       const id = route.params.id as string
       if (!id) return
 
-      poem.value = (await getPoem(id)).data
+      const [poemRes, neighborsRes] = await Promise.all([getPoem(id), getPoemNeighbors(id)])
+      poem.value = poemRes.data
+      neighbors.value = neighborsRes.data
     } catch (error) {
       console.error('获取古诗详情失败:', error)
       toast.error('获取古诗详情失败')
@@ -159,6 +165,65 @@
             点击按钮开始背诵模式，系统将随机展示诗句让你背诵
           </p>
         </div>
+      </div>
+
+      <!-- 上一首/下一首导航 -->
+      <div class="mt-8 flex items-center justify-between">
+        <RouterLink
+          v-if="neighbors.prev"
+          :to="`/learn/poems/${neighbors.prev.id}`"
+          class="group flex items-center gap-3 px-6 py-4 bg-white rounded-xl border-2 border-transparent hover:border-secondary-200 hover:shadow-lg transition-all"
+        >
+          <span
+            class="w-10 h-10 flex items-center justify-center bg-secondary-100 text-secondary-500 rounded-full group-hover:bg-secondary-200 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </span>
+          <div class="text-left">
+            <div class="text-xs text-gray-400"> 上一首 </div>
+            <div
+              class="text-base font-semibold text-gray-700 group-hover:text-secondary-600 transition-colors"
+            >
+              {{ neighbors.prev.title }}
+            </div>
+          </div>
+        </RouterLink>
+        <div v-else></div>
+
+        <RouterLink
+          v-if="neighbors.next"
+          :to="`/learn/poems/${neighbors.next.id}`"
+          class="group flex items-center gap-3 px-6 py-4 bg-white rounded-xl border-2 border-transparent hover:border-secondary-200 hover:shadow-lg transition-all"
+        >
+          <div class="text-right">
+            <div class="text-xs text-gray-400"> 下一首 </div>
+            <div
+              class="text-base font-semibold text-gray-700 group-hover:text-secondary-600 transition-colors"
+            >
+              {{ neighbors.next.title }}
+            </div>
+          </div>
+          <span
+            class="w-10 h-10 flex items-center justify-center bg-secondary-100 text-secondary-500 rounded-full group-hover:bg-secondary-200 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </span>
+        </RouterLink>
+        <div v-else></div>
       </div>
     </div>
   </div>

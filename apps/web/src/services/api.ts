@@ -114,6 +114,10 @@ export function getRandomIdiom() {
   return api.get<Idiom>('/idioms/random')
 }
 
+export function getIdiomNeighbors(id: string) {
+  return api.get<{ prev: Idiom | null; next: Idiom | null }>(`/idioms/${id}/neighbors`)
+}
+
 export function searchIdioms(q: string) {
   return api.get<IdiomListResponse>('/idioms/search', { params: { q } })
 }
@@ -145,4 +149,8 @@ export function getPoemCount() {
 
 export function getRandomPoem() {
   return api.get<Poem>('/poems/random')
+}
+
+export function getPoemNeighbors(id: string) {
+  return api.get<{ prev: Poem | null; next: Poem | null }>(`/poems/${id}/neighbors`)
 }

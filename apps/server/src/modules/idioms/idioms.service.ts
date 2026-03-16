@@ -64,4 +64,27 @@ export class IdiomsService {
     });
     return data ? IdiomTransformer.toVO(data) : null;
   }
+
+  async findNeighbors(
+    id: string,
+  ): Promise<{ prev: IdiomVO | null; next: IdiomVO | null }> {
+    const current = await this.prisma.idiom.findUnique({ where: { id } });
+    if (!current) {
+      return { prev: null, next: null };
+    }
+
+    const prev = await this.prisma.idiom.findFirst({
+      where: { word: { lt: current.word } },
+      orderBy: { word: "desc" },
+    });
+    const next = await this.prisma.idiom.findFirst({
+      where: { word: { gt: current.word } },
+      orderBy: { word: "asc" },
+    });
+
+    return {
+      prev: prev ? IdiomTransformer.toVO(prev) : null,
+      next: next ? IdiomTransformer.toVO(next) : null,
+    };
+  }
 }

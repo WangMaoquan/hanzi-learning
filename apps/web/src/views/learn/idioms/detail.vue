@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
-  import { getIdioms, getIdiom, type Idiom } from '@/services/api'
+  import { getIdiom, getIdiomNeighbors, type Idiom } from '@/services/api'
   import { useToast } from '@/composables'
   import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
 
@@ -10,6 +10,10 @@
 
   const loading = ref(true)
   const idiom = ref<Idiom | null>(null)
+  const neighbors = ref<{ prev: Idiom | null; next: Idiom | null }>({
+    prev: null,
+    next: null,
+  })
 
   // 获取成语详情
   async function fetchIdiom() {
@@ -18,7 +22,9 @@
       const id = route.params.id as string
       if (!id) return
 
-      idiom.value = (await getIdiom(id)).data
+      const [idiomRes, neighborsRes] = await Promise.all([getIdiom(id), getIdiomNeighbors(id)])
+      idiom.value = idiomRes.data
+      neighbors.value = neighborsRes.data
     } catch (error) {
       console.error('获取成语详情失败:', error)
       toast.error('获取成语详情失败')
@@ -134,6 +140,65 @@
           </div>
         </div>
       </Card>
+
+      <!-- 上一个/下一个导航 -->
+      <div class="mt-8 flex items-center justify-between">
+        <RouterLink
+          v-if="neighbors.prev"
+          :to="`/learn/idioms/${neighbors.prev.id}`"
+          class="group flex items-center gap-3 px-6 py-4 bg-white rounded-xl border-2 border-transparent hover:border-orange-200 hover:shadow-lg transition-all"
+        >
+          <span
+            class="w-10 h-10 flex items-center justify-center bg-orange-100 text-orange-500 rounded-full group-hover:bg-orange-200 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 19l-7-7 7-7"
+              />
+            </svg>
+          </span>
+          <div class="text-left">
+            <div class="text-xs text-gray-400"> 上一个 </div>
+            <div
+              class="text-base font-semibold text-gray-700 group-hover:text-orange-600 transition-colors"
+            >
+              {{ neighbors.prev.title }}
+            </div>
+          </div>
+        </RouterLink>
+        <div v-else></div>
+
+        <RouterLink
+          v-if="neighbors.next"
+          :to="`/learn/idioms/${neighbors.next.id}`"
+          class="group flex items-center gap-3 px-6 py-4 bg-white rounded-xl border-2 border-transparent hover:border-orange-200 hover:shadow-lg transition-all"
+        >
+          <div class="text-right">
+            <div class="text-xs text-gray-400"> 下一个 </div>
+            <div
+              class="text-base font-semibold text-gray-700 group-hover:text-orange-600 transition-colors"
+            >
+              {{ neighbors.next.title }}
+            </div>
+          </div>
+          <span
+            class="w-10 h-10 flex items-center justify-center bg-orange-100 text-orange-500 rounded-full group-hover:bg-orange-200 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M9 5l7 7-7 7"
+              />
+            </svg>
+          </span>
+        </RouterLink>
+        <div v-else></div>
+      </div>
     </div>
   </div>
 

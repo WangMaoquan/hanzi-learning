@@ -36,4 +36,10 @@ export class PoemsController {
   findOne(@Param("id", ParseUUIDPipe) id: string) {
     return this.poemsService.findOne(id);
   }
+
+  @Get(":id/neighbors")
+  @ApiOperation({ summary: "获取上一首和下一首古诗" })
+  neighbors(@Param("id", ParseUUIDPipe) id: string) {
+    return this.poemsService.findNeighbors(id);
+  }
 }

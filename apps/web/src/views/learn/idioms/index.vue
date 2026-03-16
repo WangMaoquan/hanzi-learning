@@ -37,6 +37,12 @@
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  function handleSizeChange(newSize: number) {
+    pageSize.value = newSize
+    currentPage.value = 1
+    fetchIdioms()
+  }
+
   onMounted(() => {
     fetchIdioms()
   })
@@ -148,7 +154,11 @@
               v-model="currentPage"
               :total="total"
               :limit="pageSize"
+              color="orange"
+              show-size-changer
+              :page-sizes="[20, 40, 60, 80]"
               @update:model-value="handlePageChange"
+              @update:limit="handleSizeChange"
             />
           </div>
         </div>

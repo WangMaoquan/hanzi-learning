@@ -32,6 +32,12 @@
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  function handleSizeChange(newSize: number) {
+    pageSize.value = newSize
+    currentPage.value = 1
+    fetchPoems()
+  }
+
   onMounted(() => {
     fetchPoems()
   })
@@ -119,7 +125,11 @@
             v-model="currentPage"
             :total="total"
             :limit="pageSize"
+            color="secondary"
+            show-size-changer
+            :page-sizes="[12, 24, 36, 48]"
             @update:model-value="handlePageChange"
+            @update:limit="handleSizeChange"
           />
         </div>
       </div>

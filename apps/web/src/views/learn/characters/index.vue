@@ -39,6 +39,13 @@
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  // 每页条数变化
+  function handleSizeChange(newSize: number) {
+    pageSize.value = newSize
+    currentPage.value = 1
+    fetchCharacters()
+  }
+
   onMounted(() => {
     fetchCharacters()
   })
@@ -152,7 +159,11 @@
               v-model="currentPage"
               :total="total"
               :limit="pageSize"
+              color="primary"
+              show-size-changer
+              :page-sizes="[20, 40, 60, 80]"
               @update:model-value="handlePageChange"
+              @update:limit="handleSizeChange"
             />
           </div>
         </div>

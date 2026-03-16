@@ -103,10 +103,13 @@ export function useHanziWriter(
     }
   });
 
-  watch(
-    () => (typeof character === "string" ? character : character.value),
-    (newChar) => {
-      if (newChar && containerRef.value) {
+  watch<[string, HTMLElement | null]>(
+    () => [
+      typeof character === "string" ? character : character.value,
+      containerRef.value,
+    ],
+    ([newChar, newContainer]) => {
+      if (newChar && newContainer) {
         initWriter(newChar);
       }
     },

@@ -30,6 +30,12 @@ export class CharactersController {
     return this.charactersService.findRandom();
   }
 
+  @Get(":id/neighbors")
+  @ApiOperation({ summary: "获取相邻汉字（上一个和下一个）" })
+  neighbors(@Param("id", ParseUUIDPipe) id: string) {
+    return this.charactersService.findNeighbors(id);
+  }
+
   @Get("search")
   @ApiOperation({ summary: "搜索汉字" })
   @ApiQuery({ name: "q", description: "搜索关键词", required: true })

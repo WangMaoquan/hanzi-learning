@@ -33,7 +33,7 @@ api.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest'
 
 // 响应拦截器 - 只处理错误，成功直接返回 response
 api.interceptors.response.use(
-  (response) => response,
+  (response) => response.data,
   (error) => {
     if (error.response) {
       const { statusCode, message } = error.response.data
@@ -76,6 +76,10 @@ export function getCharacterCount() {
 
 export function getRandomCharacter() {
   return api.get<Character>('/characters/random')
+}
+
+export function getCharacterNeighbors(id: string) {
+  return api.get<{ prev: Character | null; next: Character | null }>(`/characters/${id}/neighbors`)
 }
 
 export function searchCharacters(q: string) {

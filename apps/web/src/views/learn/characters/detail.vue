@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, computed, onMounted, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
-  import { getCharacters, getCharacter, type Character } from '@/services/api'
+  import { getCharacter, getCharacterNeighbors, type Character } from '@/services/api'
   import { useToast } from '@/composables'
   import { useHanziWriter } from '@hanzi-learning/hanzi-vue'
   import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
@@ -12,7 +12,8 @@
 
   const loading = ref(true)
   const character = ref<Character | null>(null)
-  const characters = ref<Character[]>([])
+  const prevCharacter = ref<Character | null>(null)
+  const nextCharacter = ref<Character | null>(null)
   const writerContainer = ref<HTMLElement | null>(null)
 
   // 笔顺动画
@@ -25,26 +26,6 @@
     writerContainer
   )
 
-  // 计算当前汉字在列表中的索引
-  const currentIndex = computed(() => {
-    if (!character.value) return -1
-    return characters.value.findIndex((c) => c.id === character.value!.id)
-  })
-
-  const nextCharacter = computed(() => {
-    if (currentIndex.value < 0 || currentIndex.value >= characters.value.length - 1) {
-      return null
-    }
-    return characters.value[currentIndex.value + 1]
-  })
-
-  const prevCharacter = computed(() => {
-    if (currentIndex.value <= 0) {
-      return null
-    }
-    return characters.value[currentIndex.value - 1]
-  })
-
   // 获取数据
   async function fetchData() {
     try {
@@ -52,14 +33,15 @@
       const id = route.params.id as string
       if (!id) return
 
-      // 并行请求详情和列表
-      const [charRes, listRes] = await Promise.all([
+      // 并行请求详情和相邻汉字
+      const [charRes, neighborsRes] = await Promise.all([
         getCharacter(id),
-        getCharacters({ limit: 1000 }),
+        getCharacterNeighbors(id),
       ])
 
       character.value = charRes.data
-      characters.value = listRes.data.data
+      prevCharacter.value = neighborsRes.data.prev
+      nextCharacter.value = neighborsRes.data.next
     } catch (error) {
       console.error('获取汉字详情失败:', error)
       toast.error('获取汉字详情失败')

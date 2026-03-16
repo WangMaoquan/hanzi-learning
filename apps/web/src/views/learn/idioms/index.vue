@@ -68,9 +68,11 @@
           <div class="flex items-start gap-8">
             <!-- 成语展示 -->
             <div
-              class="w-36 h-36 flex items-center justify-center bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl shadow-inner shrink-0"
+              class="flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl px-6 py-4 shadow-inner shrink-0"
             >
-              <span class="text-5xl font-bold text-gray-900">{{ currentIdiom.title }}</span>
+              <span class="text-4xl font-bold text-gray-900 tracking-widest">{{
+                currentIdiom.title
+              }}</span>
             </div>
 
             <!-- 信息区域 -->
@@ -137,10 +139,10 @@
               class="group"
             >
               <div
-                class="aspect-square flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-orange-300 hover:bg-orange-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+                class="flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-orange-300 hover:bg-orange-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3"
               >
                 <span
-                  class="text-xl font-bold text-gray-700 group-hover:text-orange-600 transition-colors"
+                  class="text-lg font-bold text-gray-700 group-hover:text-orange-600 transition-colors"
                 >
                   {{ idiom.title }}
                 </span>

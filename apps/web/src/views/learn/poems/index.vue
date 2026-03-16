@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { getPoems, type Poem } from '@/services/api'
   import { DYNASTY_LABELS } from '@hanzi-learning/utils'
-  import { Loading, Empty } from '@hanzi-learning/ui'
+  import { Card, Loading, Empty } from '@hanzi-learning/ui'
 
   const loading = ref(true)
   const poems = ref<Poem[]>([])
@@ -25,38 +25,81 @@
 </script>
 
 <template>
-  <div>
-    <h1 class="text-2xl font-bold text-gray-900 mb-6"> 古诗词学习 </h1>
+  <div class="min-h-screen bg-gray-50">
+    <!-- 页面头部 -->
+    <div class="bg-gradient-to-r from-secondary-50 to-secondary-100 py-8 mb-6">
+      <div class="max-w-6xl mx-auto px-4">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2"> 古诗词 </h1>
+        <p class="text-gray-600"> 品味经典唐诗宋词，感受诗词之美 </p>
+      </div>
+    </div>
 
-    <!-- 加载状态 -->
-    <Loading v-if="loading" text="加载中..." />
+    <div class="max-w-6xl mx-auto px-4 pb-8">
+      <!-- 加载状态 -->
+      <Loading v-if="loading" text="加载中..." />
 
-    <!-- 空状态 -->
-    <Empty v-else-if="!poems.length" description="暂无古诗数据" />
+      <!-- 空状态 -->
+      <Empty v-else-if="!poems.length" description="暂无古诗数据" />
 
-    <!-- 古诗列表 -->
-    <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-      <RouterLink
-        v-for="poem in poems"
-        :key="poem.id"
-        :to="`/learn/poems/${poem.id}`"
-        class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md hover:border-secondary-200 transition-all"
-      >
-        <div class="flex items-start justify-between mb-3">
-          <h3 class="text-lg font-semibold text-gray-900">
-            {{ poem.title }}
-          </h3>
-          <span class="px-2 py-0.5 bg-secondary-100 text-secondary-700 text-xs rounded">
-            {{ DYNASTY_LABELS[poem.dynasty] || poem.dynasty }}诗
-          </span>
+      <!-- 古诗列表 -->
+      <div v-else>
+        <div class="flex items-center justify-between mb-6">
+          <h2 class="text-xl font-bold text-gray-900"> 诗词列表 </h2>
+          <span class="text-gray-500 text-sm">共 {{ poems.length }} 首古诗</span>
         </div>
-        <p class="text-sm text-gray-500 mb-2">
-          {{ poem.author }}
-        </p>
-        <p class="text-gray-600 line-clamp-2 text-sm">
-          {{ poem.content }}
-        </p>
-      </RouterLink>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <RouterLink
+            v-for="poem in poems"
+            :key="poem.id"
+            :to="`/learn/poems/${poem.id}`"
+            class="group"
+          >
+            <Card
+              hoverable
+              class="h-full border-2 border-transparent hover:border-secondary-200 transition-all duration-200"
+            >
+              <!-- 头部 -->
+              <div class="flex items-start justify-between mb-4">
+                <h3
+                  class="text-lg font-bold text-gray-900 group-hover:text-secondary-600 transition-colors"
+                >
+                  {{ poem.title }}
+                </h3>
+                <span
+                  class="px-3 py-1 bg-secondary-100 text-secondary-600 text-xs font-medium rounded-full"
+                >
+                  {{ DYNASTY_LABELS[poem.dynasty] || poem.dynasty }}
+                </span>
+              </div>
+
+              <!-- 作者 -->
+              <p class="text-gray-500 text-sm mb-3 flex items-center gap-2">
+                <span
+                  class="w-5 h-5 flex items-center justify-center bg-secondary-50 rounded-full text-secondary-400 text-xs"
+                >
+                  ✍️
+                </span>
+                {{ poem.author }}
+              </p>
+
+              <!-- 诗句预览 -->
+              <p class="text-gray-600 text-sm leading-relaxed line-clamp-3 mb-4">
+                {{ poem.content }}
+              </p>
+
+              <!-- 底部 -->
+              <div class="flex items-center justify-end text-sm">
+                <span
+                  class="text-secondary-500 font-medium group-hover:translate-x-1 transition-transform"
+                >
+                  查看全文 →
+                </span>
+              </div>
+            </Card>
+          </RouterLink>
+        </div>
+      </div>
     </div>
   </div>
 </template>

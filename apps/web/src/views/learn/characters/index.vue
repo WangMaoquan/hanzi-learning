@@ -29,74 +29,108 @@
 </script>
 
 <template>
-  <div>
-    <h1 class="text-2xl font-bold text-gray-900 mb-6"> 汉字学习 </h1>
-
-    <!-- 加载状态 -->
-    <Loading v-if="loading" text="加载中..." />
-
-    <template v-else>
-      <!-- 当前学习 -->
-      <Card v-if="currentCharacter" class="mb-6">
-        <h2 class="text-lg font-semibold text-gray-900 mb-4"> 正在学习 </h2>
-        <div class="flex items-center gap-8">
-          <div class="w-40 h-40 flex items-center justify-center bg-primary-50 rounded-xl">
-            <span class="text-8xl font-bold text-gray-900">{{ currentCharacter.title }}</span>
-          </div>
-          <div class="flex-1">
-            <div class="mb-4">
-              <span class="text-gray-500 text-sm">拼音</span>
-              <p class="text-xl text-gray-900">
-                {{ currentCharacter.pinyin || '-' }}
-              </p>
-            </div>
-            <div class="mb-4">
-              <span class="text-gray-500 text-sm">释义</span>
-              <p class="text-gray-900">
-                {{ currentCharacter.content || '-' }}
-              </p>
-            </div>
-            <div class="flex gap-4">
-              <div>
-                <span class="text-gray-500 text-sm">笔画</span>
-                <p class="text-gray-900">
-                  {{ currentCharacter.strokes ? `${currentCharacter.strokes} 画` : '-' }}
-                </p>
-              </div>
-              <div>
-                <span class="text-gray-500 text-sm">结构</span>
-                <p class="text-gray-900">
-                  {{ currentCharacter.structure || '-' }}
-                </p>
-              </div>
-              <div>
-                <span class="text-gray-500 text-sm">部首</span>
-                <p class="text-gray-900">
-                  {{ currentCharacter.radicals || '-' }}
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Card>
-
-      <!-- 空状态 -->
-      <Empty v-else description="暂无汉字数据" class="mb-6" />
-
-      <!-- 字表 -->
-      <div>
-        <h2 class="text-lg font-semibold text-gray-900 mb-4"> 字表 ({{ characters.length }}) </h2>
-        <div class="grid grid-cols-5 md:grid-cols-8 lg:grid-cols-10 gap-3">
-          <RouterLink
-            v-for="char in characters"
-            :key="char.id"
-            :to="`/learn/characters/${char.id}`"
-            class="aspect-square flex items-center justify-center bg-white rounded-lg shadow-sm border border-gray-100 hover:shadow-md hover:border-primary-200 transition-all"
-          >
-            <span class="text-2xl font-bold text-gray-900">{{ char.title }}</span>
-          </RouterLink>
-        </div>
+  <div class="min-h-screen bg-gray-50">
+    <!-- 页面头部 -->
+    <div class="bg-gradient-to-r from-primary-50 to-primary-100 py-8 mb-6">
+      <div class="max-w-6xl mx-auto px-4">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2"> 汉字学习 </h1>
+        <p class="text-gray-600"> 掌握汉字笔画顺序，轻松学会常用汉字 </p>
       </div>
-    </template>
+    </div>
+
+    <div class="max-w-6xl mx-auto px-4 pb-8">
+      <!-- 加载状态 -->
+      <Loading v-if="loading" text="加载中..." />
+
+      <template v-else>
+        <!-- 当前学习 - 特色卡片 -->
+        <Card v-if="currentCharacter" hoverable class="mb-8 border-2 border-primary-200">
+          <div class="flex items-center gap-8">
+            <!-- 汉字展示 -->
+            <div
+              class="w-36 h-36 flex items-center justify-center bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl shadow-inner"
+            >
+              <span class="text-7xl font-bold text-gray-900">{{ currentCharacter.title }}</span>
+            </div>
+
+            <!-- 信息区域 -->
+            <div class="flex-1">
+              <div class="flex items-center gap-3 mb-4">
+                <span
+                  class="px-3 py-1 bg-primary-100 text-primary-600 text-sm font-semibold rounded-full"
+                >
+                  正在学习
+                </span>
+                <span class="text-gray-400 text-sm">点击下方汉字继续学习</span>
+              </div>
+
+              <!-- 拼音 -->
+              <div class="mb-4">
+                <span class="text-gray-500 text-sm">拼音</span>
+                <p class="text-2xl font-semibold text-gray-900">
+                  {{ currentCharacter.pinyin || '-' }}
+                </p>
+              </div>
+
+              <!-- 释义 -->
+              <div class="mb-5">
+                <span class="text-gray-500 text-sm">释义</span>
+                <p class="text-gray-800 leading-relaxed">
+                  {{ currentCharacter.content || '-' }}
+                </p>
+              </div>
+
+              <!-- 属性标签 -->
+              <div class="flex flex-wrap gap-3">
+                <span
+                  v-if="currentCharacter.strokes"
+                  class="px-3 py-1.5 bg-gray-100 text-gray-600 text-sm rounded-lg"
+                >
+                  {{ currentCharacter.strokes }} 画
+                </span>
+                <span
+                  v-if="currentCharacter.structure"
+                  class="px-3 py-1.5 bg-gray-100 text-gray-600 text-sm rounded-lg"
+                >
+                  {{ currentCharacter.structure }}
+                </span>
+                <span
+                  v-if="currentCharacter.radicals"
+                  class="px-3 py-1.5 bg-gray-100 text-gray-600 text-sm rounded-lg"
+                >
+                  部首：{{ currentCharacter.radicals }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </Card>
+
+        <!-- 空状态 -->
+        <Empty v-else description="暂无汉字数据" class="mb-6" />
+
+        <!-- 字表 -->
+        <div>
+          <div class="flex items-center justify-between mb-4">
+            <h2 class="text-xl font-bold text-gray-900"> 字表 </h2>
+            <span class="text-gray-500 text-sm">共 {{ characters.length }} 个汉字</span>
+          </div>
+
+          <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3">
+            <RouterLink
+              v-for="char in characters"
+              :key="char.id"
+              :to="`/learn/characters/${char.id}`"
+              class="group aspect-square flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-primary-300 hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+            >
+              <span
+                class="text-2xl font-bold text-gray-700 group-hover:text-primary-600 transition-colors"
+              >
+                {{ char.title }}
+              </span>
+            </RouterLink>
+          </div>
+        </div>
+      </template>
+    </div>
   </div>
 </template>

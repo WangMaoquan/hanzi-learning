@@ -6,8 +6,13 @@
   --color-secondary: #06b6d4;
 }
 
-/* 自定义颜色变量 */
+/* ========================================
+   视觉层次设计规范
+   ======================================== */
+
+/* ---------- 1. 色彩层次系统 ---------- */
 @theme {
+  /* 主色 - 黄色系 (温暖、活泼、儿童友好) */
   --color-primary-50: #fefce8;
   --color-primary-100: #fef9c3;
   --color-primary-200: #fef08a;
@@ -19,6 +24,7 @@
   --color-primary-800: #854d0e;
   --color-primary-900: #713f12;
 
+  /* 辅助色 - 青色系 (清新、专业) */
   --color-secondary-50: #ecfeff;
   --color-secondary-100: #cffafe;
   --color-secondary-200: #a5f3fc;
@@ -29,7 +35,74 @@
   --color-secondary-700: #0e7490;
   --color-secondary-800: #155e75;
   --color-secondary-900: #164e63;
+
+  /* 强调色 - 用于关键操作和警示 */
+  --color-accent-red: #ef4444;
+  --color-accent-green: #22c55e;
+  --color-accent-purple: #a855f7;
+  --color-accent-orange: #f97316;
 }
+
+/* 色彩使用规范 */
+:root {
+  /* 主色调：用于主要按钮、强调文字、活跃状态 */
+  --color-brand-primary: var(--color-primary-400);
+  --color-brand-secondary: var(--color-secondary-500);
+
+  /* 功能色：区分不同类型的内容 */
+  --color-content-character: var(--color-primary-500);
+  --color-content-poem: var(--color-secondary-500);
+  --color-content-idiom: var(--color-accent-orange);
+  --color-content-prose: var(--color-accent-purple);
+}
+
+/* ---------- 2. 文字层次系统 ---------- */
+/*
+  标题层级:
+  - h1: 页面主标题，text-4xl/font-bold，文字 #111827
+  - h2: 区块标题，text-2xl/font-semibold，文字 #1f2937
+  - h3: 卡片/小节标题，text-lg/font-semibold，文字 #374151
+
+  正文字层级:
+  - body-large: 主要正文，text-base/leading-relaxed，文字 #4b5563
+  - body: 默认正文，text-sm/leading-relaxed，文字 #6b7280
+  - body-small: 辅助说明，text-xs/leading-normal，文字 #9ca3af
+*/
+
+/* ---------- 3. 间距层次系统 ---------- */
+/*
+  间距层级 (从大到小):
+  - section: 页面区块之间，py-16 或 py-20
+  - container: 容器内部，gap-8 或 gap-6
+  - component: 组件内部，gap-4 或 gap-3
+  - inline: 元素之间，gap-2 或 gap-1
+
+  内边距层次:
+  - section-padding: 页面区块，px-4 py-8 ~ py-16
+  - card-padding: 卡片内部，p-4 ~ p-6
+  - button-padding: 按钮内部，px-4 py-2
+*/
+
+/* ---------- 4. 圆角层次系统 ---------- */
+/*
+  圆角使用规范:
+  - rounded-sm: 小元素、标签 (4px)
+  - rounded: 输入框、按钮 (6px)
+  - rounded-md: 中等卡片 (8px)
+  - rounded-lg: 大卡片、模态框 (12px)
+  - rounded-xl: 主卡片、特色区块 (16px)
+  - rounded-2xl/rounded-3xl: 大面积装饰 (24px+)
+*/
+
+/* ---------- 5. 阴影层次系统 ---------- */
+/*
+  阴影层级:
+  - shadow-sm: 轻微浮动，卡片默认
+  - shadow: 中等阴影，hover 状态
+  - shadow-md: 强调浮动
+  - shadow-lg: 模态框、重要卡片
+  - shadow-xl: 弹出层
+*/
 
 /* 基础样式 */
 html {

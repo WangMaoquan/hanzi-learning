@@ -4,7 +4,7 @@
   import { getCharacters, getCharacter, type Character } from '@/services/api'
   import { useToast } from '@/composables'
   import { useHanziWriter } from '@hanzi-learning/hanzi-vue'
-  import { Card, Loading, Empty } from '@hanzi-learning/ui'
+  import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
 
   const route = useRoute()
   const router = useRouter()
@@ -84,104 +84,136 @@
 <template>
   <Loading v-if="loading" text="加载中..." />
 
-  <div v-else-if="character">
-    <div class="flex items-center justify-between mb-6">
-      <h1 class="text-2xl font-bold text-gray-900"> 汉字详情 </h1>
-      <RouterLink to="/learn/characters" class="text-gray-500 hover:text-gray-700">
-        ← 返回字表
-      </RouterLink>
+  <div v-else-if="character" class="min-h-screen bg-gray-50 pb-12">
+    <!-- 页面头部 -->
+    <div class="bg-gradient-to-r from-primary-50 to-primary-100 py-6 mb-6">
+      <div class="max-w-6xl mx-auto px-4">
+        <BackLink to="/learn/characters" text="返回字表" />
+      </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      <!-- 左侧：汉字展示 -->
-      <Card>
-        <div class="flex items-center justify-center h-64 bg-primary-50 rounded-xl mb-6">
-          <span class="text-9xl font-bold text-gray-900">{{ character.title }}</span>
-        </div>
-
-        <!-- 笔顺动画 -->
-        <div v-if="writerLoading" class="text-center text-gray-500 text-sm mb-4">
-          笔顺动画加载中...
-        </div>
-        <div v-else-if="writerError" class="text-center text-gray-500 text-sm mb-4">
-          笔顺动画加载失败
-        </div>
-        <div v-else ref="writerContainer" class="mb-4"></div>
-
-        <!-- 动画控制 -->
-        <div v-if="!writerLoading && !writerError" class="flex justify-center gap-2 mb-4">
-          <button
-            class="px-3 py-1 text-sm bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-            @click="animateCharacter()"
+    <div class="max-w-6xl mx-auto px-4">
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- 左侧：汉字展示 -->
+        <Card hoverable class="border-2 border-primary-200">
+          <!-- 汉字大字展示 -->
+          <div
+            class="flex items-center justify-center h-48 bg-gradient-to-br from-primary-50 to-primary-100 rounded-xl mb-6"
           >
-            重新播放
-          </button>
-        </div>
-
-        <!-- 导航 -->
-        <div class="flex justify-between">
-          <button
-            v-if="prevCharacter"
-            class="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors"
-            @click="router.push(`/learn/characters/${prevCharacter.id}`)"
-          >
-            ← {{ prevCharacter.title }}
-          </button>
-          <div v-else></div>
-          <button
-            v-if="nextCharacter"
-            class="px-4 py-2 bg-primary-400 text-gray-900 rounded-lg hover:bg-primary-500 transition-colors"
-            @click="router.push(`/learn/characters/${nextCharacter.id}`)"
-          >
-            {{ nextCharacter.title }} →
-          </button>
-        </div>
-      </Card>
-
-      <!-- 右侧：信息 -->
-      <div class="space-y-6">
-        <!-- 基本信息 -->
-        <Card>
-          <h2 class="text-lg font-semibold text-gray-900 mb-4"> 基本信息 </h2>
-          <div class="space-y-3">
-            <div class="flex items-center gap-4">
-              <span class="text-gray-500 w-12">拼音</span>
-              <span class="text-xl text-gray-900">{{ character.pinyin || '-' }}</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="text-gray-500 w-12">释义</span>
-              <span class="text-gray-900">{{ character.content || '-' }}</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="text-gray-500 w-12">笔画</span>
-              <span class="text-gray-900">{{
-                character.strokes ? `${character.strokes} 画` : '-'
-              }}</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="text-gray-500 w-12">结构</span>
-              <span class="text-gray-900">{{ character.structure || '-' }}</span>
-            </div>
-            <div class="flex items-center gap-4">
-              <span class="text-gray-500 w-12">部首</span>
-              <span class="text-gray-900">{{ character.radicals || '-' }}</span>
-            </div>
+            <span class="text-9xl font-bold text-gray-900">{{ character.title }}</span>
           </div>
-        </Card>
 
-        <!-- 组词 -->
-        <Card v-if="character.words?.length">
-          <h2 class="text-lg font-semibold text-gray-900 mb-4"> 组词 </h2>
-          <div class="flex flex-wrap gap-2">
-            <span
-              v-for="word in character.words"
-              :key="word"
-              class="px-3 py-1 bg-gray-100 rounded-full text-gray-700"
+          <!-- 笔顺动画 -->
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+              <span class="w-2 h-2 bg-primary-400 rounded-full"></span>
+              笔顺动画
+            </h3>
+            <div v-if="writerLoading" class="text-center py-8 bg-gray-50 rounded-xl">
+              <div class="text-gray-500"> 笔顺动画加载中... </div>
+            </div>
+            <div v-else-if="writerError" class="text-center py-8 bg-gray-50 rounded-xl">
+              <div class="text-red-500"> 笔顺动画加载失败 </div>
+            </div>
+            <div v-else ref="writerContainer" class="bg-gray-50 rounded-xl p-4"></div>
+          </div>
+
+          <!-- 动画控制 -->
+          <div v-if="!writerLoading && !writerError" class="flex justify-center mb-6">
+            <button
+              class="px-6 py-2.5 bg-primary-400 text-gray-900 font-medium rounded-xl hover:bg-primary-500 transition-colors shadow-sm hover:shadow"
+              @click="animateCharacter()"
             >
-              {{ word }}
-            </span>
+              重新播放笔顺
+            </button>
+          </div>
+
+          <!-- 导航 -->
+          <div class="flex justify-between pt-4 border-t border-gray-100">
+            <button
+              v-if="prevCharacter"
+              class="px-4 py-2.5 bg-white text-gray-700 rounded-xl border border-gray-200 hover:border-primary-300 hover:bg-primary-50 transition-all flex items-center gap-2"
+              @click="router.push(`/learn/characters/${prevCharacter.id}`)"
+            >
+              <span class="text-gray-400">←</span>
+              <span class="font-medium">{{ prevCharacter.title }}</span>
+            </button>
+            <div v-else></div>
+            <button
+              v-if="nextCharacter"
+              class="px-4 py-2.5 bg-primary-400 text-gray-900 font-medium rounded-xl hover:bg-primary-500 transition-all flex items-center gap-2 shadow-sm hover:shadow"
+              @click="router.push(`/learn/characters/${nextCharacter.id}`)"
+            >
+              <span class="font-medium">{{ nextCharacter.title }}</span>
+              <span class="text-gray-700">→</span>
+            </button>
           </div>
         </Card>
+
+        <!-- 右侧：信息 -->
+        <div class="space-y-6">
+          <!-- 基本信息 -->
+          <Card>
+            <h2 class="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+              <span class="w-1.5 h-6 bg-primary-400 rounded-full"></span>
+              基本信息
+            </h2>
+            <div class="space-y-4">
+              <!-- 拼音 -->
+              <div class="flex items-start gap-4">
+                <span class="text-gray-400 w-12 shrink-0">拼音</span>
+                <span class="text-2xl font-semibold text-gray-900">
+                  {{ character.pinyin || '-' }}
+                </span>
+              </div>
+              <!-- 释义 -->
+              <div class="flex items-start gap-4">
+                <span class="text-gray-400 w-12 shrink-0">释义</span>
+                <span class="text-gray-800 leading-relaxed">
+                  {{ character.content || '-' }}
+                </span>
+              </div>
+              <!-- 属性标签 -->
+              <div class="flex flex-wrap gap-3 pt-2">
+                <span
+                  v-if="character.strokes"
+                  class="px-4 py-2 bg-primary-100 text-primary-700 font-medium rounded-lg"
+                >
+                  {{ character.strokes }} 画
+                </span>
+                <span
+                  v-if="character.structure"
+                  class="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg"
+                >
+                  {{ character.structure }}
+                </span>
+                <span
+                  v-if="character.radicals"
+                  class="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg"
+                >
+                  部首：{{ character.radicals }}
+                </span>
+              </div>
+            </div>
+          </Card>
+
+          <!-- 组词 -->
+          <Card v-if="character.words?.length">
+            <h2 class="text-xl font-bold text-gray-900 mb-5 flex items-center gap-2">
+              <span class="w-1.5 h-6 bg-primary-400 rounded-full"></span>
+              组词
+            </h2>
+            <div class="flex flex-wrap gap-3">
+              <span
+                v-for="word in character.words"
+                :key="word"
+                class="px-4 py-2 bg-gray-100 text-gray-700 font-medium rounded-lg hover:bg-primary-100 hover:text-primary-700 transition-colors cursor-pointer"
+              >
+                {{ word }}
+              </span>
+            </div>
+          </Card>
+        </div>
       </div>
     </div>
   </div>

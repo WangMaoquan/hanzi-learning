@@ -1,18 +1,26 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { getIdioms, type Idiom } from '@/services/api'
-  import { Card, Loading, Empty } from '@hanzi-learning/ui'
+  import { getIdioms, getIdiomCount, type Idiom } from '@/services/api'
+  import { Card, Loading, Empty, Pagination } from '@hanzi-learning/ui'
 
   const loading = ref(true)
   const idioms = ref<Idiom[]>([])
   const currentIdiom = ref<Idiom | null>(null)
+  const currentPage = ref(1)
+  const pageSize = ref(40)
+  const total = ref(0)
 
   // 获取成语列表
   async function fetchIdioms() {
     try {
       loading.value = true
-      const response = await getIdioms({ limit: 50 })
-      idioms.value = response.data.data
+      const [countRes, listRes] = await Promise.all([
+        getIdiomCount(),
+        getIdioms({ page: currentPage.value, limit: pageSize.value }),
+      ])
+      total.value = countRes.data
+      idioms.value = listRes.data.data
+      // 设置当前页第一个为当前学习
       if (idioms.value.length > 0) {
         currentIdiom.value = idioms.value[0]
       }
@@ -21,6 +29,12 @@
     } finally {
       loading.value = false
     }
+  }
+
+  function handlePageChange(page: number) {
+    currentPage.value = page
+    fetchIdioms()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   onMounted(() => {
@@ -106,10 +120,10 @@
         <div>
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-bold text-gray-900"> 成语列表 </h2>
-            <span class="text-gray-500 text-sm">共 {{ idioms.length }} 个成语</span>
+            <span class="text-gray-500 text-sm">共 {{ total }} 个成语</span>
           </div>
 
-          <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+          <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3 mb-8">
             <RouterLink
               v-for="idiom in idioms"
               :key="idiom.id"
@@ -126,6 +140,16 @@
                 </span>
               </div>
             </RouterLink>
+          </div>
+
+          <!-- 分页 -->
+          <div class="flex justify-center">
+            <Pagination
+              v-model="currentPage"
+              :total="total"
+              :limit="pageSize"
+              @update:model-value="handlePageChange"
+            />
           </div>
         </div>
       </template>

@@ -1,22 +1,35 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
-  import { getPoems, type Poem } from '@/services/api'
+  import { getPoems, getPoemCount, type Poem } from '@/services/api'
   import { DYNASTY_LABELS } from '@hanzi-learning/utils'
-  import { Card, Loading, Empty } from '@hanzi-learning/ui'
+  import { Card, Loading, Empty, Pagination } from '@hanzi-learning/ui'
 
   const loading = ref(true)
   const poems = ref<Poem[]>([])
+  const currentPage = ref(1)
+  const pageSize = ref(12)
+  const total = ref(0)
 
   async function fetchPoems() {
     try {
       loading.value = true
-      const response = await getPoems({ limit: 50 })
-      poems.value = response.data.data
+      const [countRes, listRes] = await Promise.all([
+        getPoemCount(),
+        getPoems({ page: currentPage.value, limit: pageSize.value }),
+      ])
+      total.value = countRes.data
+      poems.value = listRes.data.data
     } catch (error) {
       console.error('获取古诗列表失败:', error)
     } finally {
       loading.value = false
     }
+  }
+
+  function handlePageChange(page: number) {
+    currentPage.value = page
+    fetchPoems()
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   onMounted(() => {
@@ -45,10 +58,10 @@
       <div v-else>
         <div class="flex items-center justify-between mb-6">
           <h2 class="text-xl font-bold text-gray-900"> 诗词列表 </h2>
-          <span class="text-gray-500 text-sm">共 {{ poems.length }} 首古诗</span>
+          <span class="text-gray-500 text-sm">共 {{ total }} 首古诗</span>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
           <RouterLink
             v-for="poem in poems"
             :key="poem.id"
@@ -98,6 +111,16 @@
               </div>
             </Card>
           </RouterLink>
+        </div>
+
+        <!-- 分页 -->
+        <div class="flex justify-center">
+          <Pagination
+            v-model="currentPage"
+            :total="total"
+            :limit="pageSize"
+            @update:model-value="handlePageChange"
+          />
         </div>
       </div>
     </div>

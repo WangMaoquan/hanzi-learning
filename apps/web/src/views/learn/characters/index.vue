@@ -1,18 +1,26 @@
 <script setup lang="ts">
-  import { ref, onMounted } from 'vue'
-  import { getCharacters, type Character } from '@/services/api'
-  import { Card, Loading, Empty } from '@hanzi-learning/ui'
+  import { ref, onMounted, watch } from 'vue'
+  import { getCharacters, getCharacterCount, type Character } from '@/services/api'
+  import { Card, Loading, Empty, Pagination } from '@hanzi-learning/ui'
 
   const loading = ref(true)
   const characters = ref<Character[]>([])
   const currentCharacter = ref<Character | null>(null)
+  const currentPage = ref(1)
+  const pageSize = ref(40)
+  const total = ref(0)
 
   // 获取汉字列表
   async function fetchCharacters() {
     try {
       loading.value = true
-      const response = await getCharacters({ limit: 100 })
-      characters.value = response.data.data
+      const [countRes, listRes] = await Promise.all([
+        getCharacterCount(),
+        getCharacters({ page: currentPage.value, limit: pageSize.value }),
+      ])
+      total.value = countRes.data
+      characters.value = listRes.data.data
+      // 设置当前页第一个汉字为当前学习
       if (characters.value.length > 0) {
         currentCharacter.value = characters.value[0]
       }
@@ -21,6 +29,14 @@
     } finally {
       loading.value = false
     }
+  }
+
+  // 页码变化
+  function handlePageChange(page: number) {
+    currentPage.value = page
+    fetchCharacters()
+    // 滚动到顶部
+    window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
   onMounted(() => {
@@ -112,10 +128,10 @@
         <div>
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-bold text-gray-900"> 字表 </h2>
-            <span class="text-gray-500 text-sm">共 {{ characters.length }} 个汉字</span>
+            <span class="text-gray-500 text-sm">共 {{ total }} 个汉字</span>
           </div>
 
-          <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3">
+          <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3 mb-8">
             <RouterLink
               v-for="char in characters"
               :key="char.id"
@@ -128,6 +144,16 @@
                 {{ char.title }}
               </span>
             </RouterLink>
+          </div>
+
+          <!-- 分页 -->
+          <div class="flex justify-center">
+            <Pagination
+              v-model="currentPage"
+              :total="total"
+              :limit="pageSize"
+              @update:model-value="handlePageChange"
+            />
           </div>
         </div>
       </template>

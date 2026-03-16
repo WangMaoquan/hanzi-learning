@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import { RouterView } from 'vue-router'
-  import ToastContainer from '@/components/ToastContainer.vue'
+  import { ToastContainer } from '@hanzi-learning/ui'
   import { useToast } from '@/composables'
 
   const { toasts } = useToast()

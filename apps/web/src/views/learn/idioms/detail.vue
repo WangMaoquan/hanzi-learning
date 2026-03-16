@@ -60,9 +60,9 @@
         <!-- 成语标题区域 -->
         <div class="text-center mb-8 pb-8 border-b border-orange-100">
           <div
-            class="inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-orange-100 to-orange-200 rounded-2xl mb-4 shadow-inner"
+            class="inline-flex items-center justify-center bg-gradient-to-br from-orange-50 to-orange-100 rounded-xl px-8 py-4 mb-4 shadow-inner"
           >
-            <span class="text-6xl font-bold text-gray-900">{{ idiom.title }}</span>
+            <span class="text-5xl font-bold text-gray-900 tracking-widest">{{ idiom.title }}</span>
           </div>
           <p class="text-2xl font-semibold text-gray-600">
             {{ idiom.pinyin }}

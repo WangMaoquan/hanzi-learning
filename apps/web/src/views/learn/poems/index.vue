@@ -3,6 +3,7 @@
   import { getPoems, getPoemCount, type Poem } from '@/services/api'
   import { DYNASTY_LABELS } from '@hanzi-learning/utils'
   import { Card, Loading, Empty, Pagination } from '@hanzi-learning/ui'
+  import PageHeader from '@/components/PageHeader.vue'
 
   const loading = ref(true)
   const poems = ref<Poem[]>([])
@@ -45,17 +46,8 @@
 
 <template>
   <div class="min-h-screen bg-[var(--color-secondary-50)]">
-    <!-- 页面头部 - 现代简约中国风 -->
-    <div
-      class="py-8 mb-6 border-b bg-[var(--color-secondary-100)] border-[var(--color-secondary-200)]"
-    >
-      <div class="max-w-6xl mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-2 text-[var(--color-secondary-900)] font-serif">
-          古诗词
-        </h1>
-        <p class="text-[var(--color-secondary-600)] mt-1"> 品味经典唐诗宋词，感受诗词之美 </p>
-      </div>
-    </div>
+    <!-- 页面头部 -->
+    <PageHeader title="古诗词" description="品味经典唐诗宋词，感受诗词之美" />
 
     <div class="max-w-6xl mx-auto px-4 pb-8">
       <!-- 加载状态 -->

@@ -2,6 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { getIdioms, getIdiomCount, type Idiom } from '@/services/api'
   import { Card, Loading, Empty, Pagination } from '@hanzi-learning/ui'
+  import PageHeader from '@/components/PageHeader.vue'
 
   const loading = ref(true)
   const idioms = ref<Idiom[]>([])
@@ -50,17 +51,8 @@
 
 <template>
   <div class="min-h-screen bg-[var(--color-secondary-50)]">
-    <!-- 页面头部 - 现代简约中国风 -->
-    <div
-      class="py-8 mb-6 border-b border-[var(--color-secondary-200)] bg-[var(--color-accent-50)] shadow-inner"
-    >
-      <div class="max-w-6xl mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-2 text-[var(--color-secondary-900)] font-serif">
-          成语故事
-        </h1>
-        <p class="text-[var(--color-secondary-600)] mt-1"> 学习成语典故，了解传统文化 </p>
-      </div>
-    </div>
+    <!-- 页面头部 -->
+    <PageHeader title="成语故事" description="学习成语典故，了解传统文化" />
 
     <div class="max-w-6xl mx-auto px-4 pb-8">
       <!-- 加载状态 -->

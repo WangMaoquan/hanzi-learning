@@ -2,6 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { getCharacters, getCharacterCount, type Character } from '@/services/api'
   import { Card, Loading, Empty, Pagination } from '@hanzi-learning/ui'
+  import PageHeader from '@/components/PageHeader.vue'
 
   const loading = ref(true)
   const characters = ref<Character[]>([])
@@ -53,15 +54,8 @@
 
 <template>
   <div class="min-h-screen bg-[var(--color-secondary-50)]">
-    <!-- 页面头部 - 现代简约中国风 -->
-    <div
-      class="bg-[var(--color-secondary-50)] py-8 mb-6 border-b border-[var(--color-secondary-200)]"
-    >
-      <div class="max-w-6xl mx-auto px-4">
-        <h1 class="text-3xl font-bold text-[var(--color-secondary-900)] font-serif"> 汉字学习 </h1>
-        <p class="text-[var(--color-secondary-600)] mt-1"> 掌握汉字笔画顺序，轻松学会常用汉字 </p>
-      </div>
-    </div>
+    <!-- 页面头部 -->
+    <PageHeader title="汉字学习" description="掌握汉字笔画顺序，轻松学会常用汉字" />
 
     <div class="max-w-6xl mx-auto px-4 pb-8">
       <!-- 加载状态 -->

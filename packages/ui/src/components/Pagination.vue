@@ -109,7 +109,6 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
         <span class="text-[var(--color-secondary-700)] font-medium">{{ startNum }}</span>
         <span class="mx-1">-</span>
         <span class="text-[var(--color-secondary-700)] font-medium">{{ endNum }}</span>
-        <span class="ml-1">共 {{ total }} 条</span>
       </span>
 
       <select

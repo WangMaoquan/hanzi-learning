@@ -129,7 +129,7 @@
         <Empty v-else description="暂无成语数据" class="mb-6" />
 
         <!-- 成语列表 -->
-        <div>
+        <div class="mt-8">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif">
               成语列表

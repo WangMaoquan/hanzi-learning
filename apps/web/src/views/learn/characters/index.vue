@@ -140,7 +140,7 @@
         <Empty v-else description="暂无汉字数据" class="mb-6" />
 
         <!-- 字表 -->
-        <div>
+        <div class="mt-8">
           <div class="flex items-center justify-between mb-4">
             <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif"> 字表 </h2>
             <span class="text-[var(--color-secondary-500)] text-sm">共 {{ total }} 个汉字</span>

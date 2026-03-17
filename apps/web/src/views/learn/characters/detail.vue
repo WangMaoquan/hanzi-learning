@@ -62,7 +62,7 @@
 <template>
   <Loading v-if="loading" text="加载中..." />
 
-  <div v-else-if="character" class="min-h-screen pb-12" style="background-color: #f5f5f0">
+  <div v-else-if="character" class="min-h-screen pb-12 bg-secondary-50">
     <div class="max-w-6xl mx-auto px-4 pt-6">
       <!-- 返回链接 -->
       <div class="mb-6">
@@ -70,37 +70,33 @@
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- 左侧：汉字展示 -->
-        <Card hoverable class="border-2" style="border-color: #c41e3a">
+        <Card hoverable class="border-2 border-primary-700">
           <!-- 汉字大字展示 -->
           <div
-            class="flex items-center justify-center h-48 rounded-xl mb-6"
-            style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)"
+            class="flex items-center justify-center h-48 rounded-xl mb-6 bg-[linear-gradient(135deg,#fef2f2_0%,#fee2e2_100%)]"
           >
-            <span class="text-9xl font-bold" style="color: #1a1a2e">{{ character.title }}</span>
+            <span class="text-9xl font-bold text-secondary-950">{{ character.title }}</span>
           </div>
 
           <!-- 笔顺动画 -->
           <div class="mb-6">
             <h3
-              class="text-lg font-semibold mb-4 flex items-center gap-2"
-              style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+              class="text-lg font-semibold mb-4 flex items-center gap-2 text-secondary-950 font-serif"
             >
-              <span class="w-2 h-2 rounded-full" style="background-color: #c41e3a"></span>
+              <span class="w-2 h-2 rounded-full bg-primary-700"></span>
               笔顺动画
             </h3>
             <div
               v-show="shouldShowWriter"
               ref="writerContainer"
-              class="rounded-xl p-4"
-              style="background-color: #f5f5f0"
+              class="rounded-xl p-4 bg-secondary-50"
             ></div>
           </div>
 
           <!-- 动画控制 -->
           <div class="flex justify-center mb-6">
             <button
-              class="px-6 py-2.5 font-medium rounded-xl transition-colors shadow-sm hover:shadow"
-              style="background-color: #c41e3a; color: white"
+              class="px-6 py-2.5 font-medium rounded-xl transition-colors shadow-sm hover:shadow bg-primary-700 text-white"
               @click="animateCharacter()"
             >
               重新播放笔顺
@@ -108,21 +104,19 @@
           </div>
 
           <!-- 导航 -->
-          <div class="flex justify-between pt-4 border-t" style="border-color: #e5e7eb">
+          <div class="flex justify-between pt-4 border-t border-gray-200">
             <button
               v-if="prevCharacter"
-              class="px-4 py-2.5 bg-white rounded-xl border transition-all flex items-center gap-2 hover:border-primary-300"
-              style="border-color: #e5e7eb; color: #374151"
+              class="px-4 py-2.5 bg-white rounded-xl border border-gray-200 transition-all flex items-center gap-2 hover:border-primary-300 text-gray-700"
               @click="router.push(`/learn/characters/${prevCharacter.id}`)"
             >
-              <span style="color: #9ca3af">←</span>
+              <span class="text-gray-400">←</span>
               <span class="font-medium">{{ prevCharacter.title }}</span>
             </button>
             <div v-else></div>
             <button
               v-if="nextCharacter"
-              class="px-4 py-2.5 font-medium rounded-xl transition-all flex items-center gap-2 shadow-sm hover:shadow"
-              style="background-color: #c41e3a; color: white"
+              class="px-4 py-2.5 font-medium rounded-xl transition-all flex items-center gap-2 shadow-sm hover:shadow bg-primary-700 text-white"
               @click="router.push(`/learn/characters/${nextCharacter.id}`)"
             >
               <span class="font-medium">{{ nextCharacter.title }}</span>
@@ -136,24 +130,23 @@
           <!-- 基本信息 -->
           <Card>
             <h2
-              class="text-xl font-bold mb-5 flex items-center gap-2"
-              style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+              class="text-xl font-bold mb-5 flex items-center gap-2 text-secondary-950 font-serif"
             >
-              <span class="w-1.5 h-6 rounded-full" style="background-color: #c41e3a"></span>
+              <span class="w-1.5 h-6 rounded-full bg-primary-700"></span>
               基本信息
             </h2>
             <div class="space-y-4">
               <!-- 拼音 -->
               <div class="flex items-start gap-4">
-                <span class="w-12 shrink-0" style="color: #9ca3af">拼音</span>
-                <span class="text-2xl font-semibold" style="color: #1a1a2e">
+                <span class="w-12 shrink-0 text-gray-400">拼音</span>
+                <span class="text-2xl font-semibold text-secondary-950">
                   {{ character.pinyin || '-' }}
                 </span>
               </div>
               <!-- 释义 -->
               <div class="flex items-start gap-4">
-                <span class="w-12 shrink-0" style="color: #9ca3af">释义</span>
-                <span class="leading-relaxed" style="color: #374151">
+                <span class="w-12 shrink-0 text-gray-400">释义</span>
+                <span class="leading-relaxed text-gray-700">
                   {{ character.content || '-' }}
                 </span>
               </div>
@@ -161,22 +154,19 @@
               <div class="flex flex-wrap gap-3 pt-2">
                 <span
                   v-if="character.strokes"
-                  class="px-4 py-2 font-medium rounded-lg"
-                  style="background-color: #fef2f2; color: #c41e3a"
+                  class="px-4 py-2 font-medium rounded-lg bg-primary-50 text-primary-700"
                 >
                   {{ character.strokes }} 画
                 </span>
                 <span
                   v-if="character.structure"
-                  class="px-4 py-2 font-medium rounded-lg"
-                  style="background-color: #f5f5f0; color: #6b7280"
+                  class="px-4 py-2 font-medium rounded-lg bg-secondary-50 text-secondary-500"
                 >
                   {{ character.structure }}
                 </span>
                 <span
                   v-if="character.radicals"
-                  class="px-4 py-2 font-medium rounded-lg"
-                  style="background-color: #f5f5f0; color: #6b7280"
+                  class="px-4 py-2 font-medium rounded-lg bg-secondary-50 text-secondary-500"
                 >
                   部首：{{ character.radicals }}
                 </span>
@@ -187,18 +177,16 @@
           <!-- 组词 -->
           <Card v-if="character.words?.length">
             <h2
-              class="text-xl font-bold mb-5 flex items-center gap-2"
-              style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+              class="text-xl font-bold mb-5 flex items-center gap-2 text-secondary-950 font-serif"
             >
-              <span class="w-1.5 h-6 rounded-full" style="background-color: #c41e3a"></span>
+              <span class="w-1.5 h-6 rounded-full bg-primary-700"></span>
               组词
             </h2>
             <div class="flex flex-wrap gap-3">
               <span
                 v-for="word in character.words"
                 :key="word"
-                class="px-4 py-2 font-medium rounded-lg transition-colors cursor-pointer"
-                style="background-color: #f5f5f0; color: #374151"
+                class="px-4 py-2 font-medium rounded-lg transition-colors cursor-pointer bg-secondary-50 text-gray-700"
               >
                 {{ word }}
               </span>
@@ -210,6 +198,6 @@
   </div>
 
   <Empty v-else description="未找到该汉字">
-    <RouterLink to="/learn/characters" style="color: #c41e3a"> 返回字表 </RouterLink>
+    <RouterLink to="/learn/characters" class="text-primary-700"> 返回字表 </RouterLink>
   </Empty>
 </template>

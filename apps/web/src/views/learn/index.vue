@@ -13,13 +13,13 @@
 </script>
 
 <template>
-  <div class="min-h-screen" style="background-color: #f5f5f0">
-    <header class="bg-white shadow-sm sticky top-0 z-50 border-b" style="border-color: #e5e7eb">
+  <div class="min-h-screen bg-secondary-50">
+    <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200">
       <div class="max-w-6xl mx-auto px-4 py-3">
         <div class="flex items-center justify-between">
           <RouterLink to="/" class="flex items-center gap-2">
             <img src="/favicon.svg" alt="logo" class="w-6 h-6" />
-            <span class="font-bold" style="color: #1a1a2e">汉字学习</span>
+            <span class="font-bold text-secondary-950">汉字学习</span>
           </RouterLink>
           <nav class="flex gap-1">
             <RouterLink

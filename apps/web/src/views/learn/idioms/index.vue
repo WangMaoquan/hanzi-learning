@@ -49,19 +49,13 @@
 </script>
 
 <template>
-  <div class="min-h-screen" style="background-color: #f5f5f0">
+  <div class="min-h-screen bg-secondary-50">
     <!-- 页面头部 - 现代简约中国风 -->
     <div
-      class="py-8 mb-6 border-b"
-      style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%); border-color: #e5e7eb"
+      class="py-8 mb-6 border-b border-gray-200 bg-yellow-50 flex items-center justify-center rounded-xl px-6 py-4 shadow-inner bg-[linear-gradient(135deg,#fffbeb_0%,#fef3c7_100%)]"
     >
       <div class="max-w-6xl mx-auto px-4">
-        <h1
-          class="text-3xl font-bold mb-2"
-          style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
-        >
-          成语故事
-        </h1>
+        <h1 class="text-3xl font-bold mb-2 text-secondary-950 font-serif"> 成语故事 </h1>
         <p class="text-secondary-600 mt-1"> 学习成语典故，了解传统文化 </p>
       </div>
     </div>
@@ -72,14 +66,13 @@
 
       <template v-else>
         <!-- 当前学习 - 特色卡片 -->
-        <Card v-if="currentIdiom" hoverable class="mb-8 border-2" style="border-color: #d4af37">
+        <Card v-if="currentIdiom" hoverable class="mb-8 border-2 border-yellow-500">
           <div class="flex items-start gap-8">
             <!-- 成语展示 -->
             <div
-              class="flex items-center justify-center rounded-xl px-6 py-4 shadow-inner shrink-0"
-              style="background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%)"
+              class="flex items-center justify-center rounded-xl px-6 py-4 shadow-inner shrink-0 bg-[linear-gradient(135deg,#fffbeb_0%,#fef3c7_100%)]"
             >
-              <span class="text-4xl font-bold tracking-widest" style="color: #1a1a2e">{{
+              <span class="text-4xl font-bold tracking-widest text-secondary-950">{{
                 currentIdiom.title
               }}</span>
             </div>
@@ -87,10 +80,7 @@
             <!-- 信息区域 -->
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-4">
-                <span
-                  class="px-3 py-1 text-sm font-semibold rounded-full"
-                  style="background-color: #d4af37; color: white"
-                >
+                <span class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-500 text-white">
                   正在学习
                 </span>
                 <span class="text-secondary-400 text-sm">点击下方成语继续学习</span>
@@ -99,7 +89,7 @@
               <!-- 拼音 -->
               <div class="mb-4">
                 <span class="text-secondary-500 text-sm">拼音</span>
-                <p class="text-xl font-semibold" style="color: #1a1a2e">
+                <p class="text-xl font-semibold text-secondary-950">
                   {{ currentIdiom.pinyin || '-' }}
                 </p>
               </div>
@@ -137,12 +127,7 @@
         <!-- 成语列表 -->
         <div>
           <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-xl font-bold"
-              style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
-            >
-              成语列表
-            </h2>
+            <h2 class="text-xl font-bold text-secondary-950 font-serif"> 成语列表 </h2>
             <span class="text-secondary-500 text-sm">共 {{ total }} 个成语</span>
           </div>
 
@@ -156,7 +141,7 @@
               <div
                 class="flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-yellow-300 hover:bg-yellow-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-4"
               >
-                <span class="font-bold transition-colors text-lg" style="color: #374151">
+                <span class="font-bold transition-colors text-lg text-gray-700">
                   {{ idiom.title }}
                 </span>
               </div>

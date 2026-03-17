@@ -52,16 +52,11 @@
 </script>
 
 <template>
-  <div class="min-h-screen" style="background-color: #f5f5f0">
+  <div class="min-h-screen bg-secondary-50">
     <!-- 页面头部 - 现代简约中国风 -->
-    <div
-      class="bg-gradient-to-r from-secondary-50 to-white py-8 mb-6 border-b"
-      style="border-color: #e5e7eb"
-    >
+    <div class="bg-gradient-to-r from-secondary-50 to-white py-8 mb-6 border-b border-gray-200">
       <div class="max-w-6xl mx-auto px-4">
-        <h1 class="text-3xl font-bold" style="color: #1a1a2e; font-family: 'Noto Serif SC', serif">
-          汉字学习
-        </h1>
+        <h1 class="text-3xl font-bold text-secondary-950 font-serif"> 汉字学习 </h1>
         <p class="text-secondary-600 mt-1"> 掌握汉字笔画顺序，轻松学会常用汉字 </p>
       </div>
     </div>
@@ -72,14 +67,13 @@
 
       <template v-else>
         <!-- 当前学习 - 特色卡片 -->
-        <Card v-if="currentCharacter" hoverable class="mb-8 border-2" style="border-color: #c41e3a">
+        <Card v-if="currentCharacter" hoverable class="mb-8 border-2 border-primary-700">
           <div class="flex items-center gap-8">
             <!-- 汉字展示 -->
             <div
-              class="w-36 h-36 flex items-center justify-center rounded-xl shadow-inner"
-              style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)"
+              class="w-36 h-36 flex items-center justify-center rounded-xl shadow-inner bg-[linear-gradient(135deg,#fef2f2_0%,#fee2e2_100%)]"
             >
-              <span class="text-7xl font-bold" style="color: #1a1a2e">{{
+              <span class="text-7xl font-bold text-secondary-950">{{
                 currentCharacter.title
               }}</span>
             </div>
@@ -88,8 +82,7 @@
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-4">
                 <span
-                  class="px-3 py-1 text-sm font-semibold rounded-full"
-                  style="background-color: #c41e3a; color: white"
+                  class="px-3 py-1 text-sm font-semibold rounded-full bg-primary-700 text-white"
                 >
                   正在学习
                 </span>
@@ -99,7 +92,7 @@
               <!-- 拼音 -->
               <div class="mb-4">
                 <span class="text-secondary-500 text-sm">拼音</span>
-                <p class="text-2xl font-semibold" style="color: #1a1a2e">
+                <p class="text-2xl font-semibold text-secondary-950">
                   {{ currentCharacter.pinyin || '-' }}
                 </p>
               </div>
@@ -116,22 +109,19 @@
               <div class="flex flex-wrap gap-3">
                 <span
                   v-if="currentCharacter.strokes"
-                  class="px-3 py-1.5 text-sm rounded-lg"
-                  style="background-color: #f5f5f0; color: #6b7280"
+                  class="px-3 py-1.5 text-sm rounded-lg bg-secondary-50 text-secondary-500"
                 >
                   {{ currentCharacter.strokes }} 画
                 </span>
                 <span
                   v-if="currentCharacter.structure"
-                  class="px-3 py-1.5 text-sm rounded-lg"
-                  style="background-color: #f5f5f0; color: #6b7280"
+                  class="px-3 py-1.5 text-sm rounded-lg bg-secondary-50 text-secondary-500"
                 >
                   {{ currentCharacter.structure }}
                 </span>
                 <span
                   v-if="currentCharacter.radicals"
-                  class="px-3 py-1.5 text-sm rounded-lg"
-                  style="background-color: #f5f5f0; color: #6b7280"
+                  class="px-3 py-1.5 text-sm rounded-lg bg-secondary-50 text-secondary-500"
                 >
                   部首：{{ currentCharacter.radicals }}
                 </span>
@@ -146,12 +136,7 @@
         <!-- 字表 -->
         <div>
           <div class="flex items-center justify-between mb-4">
-            <h2
-              class="text-xl font-bold"
-              style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
-            >
-              字表
-            </h2>
+            <h2 class="text-xl font-bold text-secondary-950 font-serif"> 字表 </h2>
             <span class="text-secondary-500 text-sm">共 {{ total }} 个汉字</span>
           </div>
 
@@ -162,7 +147,7 @@
               :to="`/learn/characters/${char.id}`"
               class="group aspect-square flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-primary-300 hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
             >
-              <span class="text-2xl font-bold transition-colors" style="color: #374151">
+              <span class="text-2xl font-bold transition-colors text-gray-700">
                 {{ char.title }}
               </span>
             </RouterLink>

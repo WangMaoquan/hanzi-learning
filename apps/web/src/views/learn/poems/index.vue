@@ -44,19 +44,13 @@
 </script>
 
 <template>
-  <div class="min-h-screen" style="background-color: #f5f5f0">
+  <div class="min-h-screen bg-secondary-50">
     <!-- 页面头部 - 现代简约中国风 -->
     <div
-      class="py-8 mb-6 border-b"
-      style="background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%); border-color: #e5e7eb"
+      class="py-8 mb-6 border-b bg-gradient-to-r from-secondary-100 to-secondary-200 border-gray-200"
     >
       <div class="max-w-6xl mx-auto px-4">
-        <h1
-          class="text-3xl font-bold mb-2"
-          style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
-        >
-          古诗词
-        </h1>
+        <h1 class="text-3xl font-bold mb-2 text-secondary-950 font-serif"> 古诗词 </h1>
         <p class="text-secondary-600 mt-1"> 品味经典唐诗宋词，感受诗词之美 </p>
       </div>
     </div>
@@ -71,9 +65,7 @@
       <!-- 古诗列表 -->
       <div v-else>
         <div class="flex items-center justify-between mb-6">
-          <h2 class="text-xl font-bold" style="color: #1a1a2e; font-family: 'Noto Serif SC', serif">
-            诗词列表
-          </h2>
+          <h2 class="text-xl font-bold text-secondary-950 font-serif"> 诗词列表 </h2>
           <span class="text-secondary-500 text-sm">共 {{ total }} 首古诗</span>
         </div>
 
@@ -91,14 +83,12 @@
               <!-- 头部 -->
               <div class="flex items-start justify-between mb-4">
                 <h3
-                  class="text-lg font-bold group-hover:text-secondary-700 transition-colors"
-                  style="color: #1a1a2e"
+                  class="text-lg font-bold group-hover:text-secondary-700 transition-colors text-secondary-950"
                 >
                   {{ poem.title }}
                 </h3>
                 <span
-                  class="px-3 py-1 text-xs font-medium rounded-full"
-                  style="background-color: #f1f5f9; color: #475569"
+                  class="px-3 py-1 text-xs font-medium rounded-full bg-secondary-100 text-secondary-600"
                 >
                   {{ DYNASTY_LABELS[poem.dynasty] || poem.dynasty }}
                 </span>
@@ -107,8 +97,7 @@
               <!-- 作者 -->
               <p class="text-secondary-500 text-sm mb-3 flex items-center gap-2">
                 <span
-                  class="w-5 h-5 flex items-center justify-center rounded-full text-xs"
-                  style="background-color: #f1f5f9; color: #64748b"
+                  class="w-5 h-5 flex items-center justify-center rounded-full text-xs bg-secondary-100 text-secondary-500"
                 >
                   ✍️
                 </span>
@@ -123,8 +112,7 @@
               <!-- 底部 -->
               <div class="flex items-center justify-end text-sm">
                 <span
-                  class="font-medium group-hover:translate-x-1 transition-transform"
-                  style="color: #c41e3a"
+                  class="font-medium group-hover:translate-x-1 transition-transform text-primary-700"
                 >
                   查看全文 →
                 </span>

@@ -51,10 +51,10 @@
       gradient: 'from-secondary-50 to-secondary-100',
     },
     orange: {
-      bg: 'bg-orange-50',
-      text: 'text-orange-600',
-      border: 'border-orange-200',
-      gradient: 'from-orange-50 to-orange-100',
+      bg: 'bg-yellow-50',
+      text: 'text-yellow-600',
+      border: 'border-yellow-200',
+      gradient: 'from-yellow-50 to-yellow-100',
     },
     purple: {
       bg: 'bg-purple-50',
@@ -66,20 +66,12 @@
 </script>
 
 <template>
-  <div class="min-h-screen" style="background-color: #f5f5f0">
+  <div class="min-h-screen bg-secondary-50">
     <!-- 页面头部 - 现代简约中国风 -->
-    <div
-      class="py-12 mb-8 border-b"
-      style="background: linear-gradient(135deg, #fef2f2 0%, #fffbeb 100%); border-color: #e5e7eb"
-    >
+    <div class="py-12 mb-8 border-b bg-gradient-to-r from-primary-50 to-yellow-50 border-gray-200">
       <div class="max-w-4xl mx-auto px-4 text-center">
-        <h1
-          class="text-4xl font-bold mb-4"
-          style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
-        >
-          关于汉字学习平台
-        </h1>
-        <p class="text-lg max-w-2xl mx-auto" style="color: #6b7280">
+        <h1 class="text-4xl font-bold mb-4 text-secondary-950 font-serif"> 关于汉字学习平台 </h1>
+        <p class="text-lg max-w-2xl mx-auto text-secondary-500">
           趣味学习中华文化的在线平台，帮助孩子掌握汉字、古诗、文言文和成语
         </p>
       </div>
@@ -90,19 +82,13 @@
       <Card hoverable class="mb-8">
         <div class="flex items-start gap-6">
           <div
-            class="w-16 h-16 rounded-xl flex items-center justify-center shrink-0"
-            style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)"
+            class="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 bg-[linear-gradient(135deg,#fef2f2_0%,#fee2e2_100%)]"
           >
             <span class="text-3xl">🏫</span>
           </div>
           <div>
-            <h2
-              class="text-xl font-bold mb-2"
-              style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
-            >
-              平台简介
-            </h2>
-            <p class="leading-relaxed" style="color: #6b7280">
+            <h2 class="text-xl font-bold mb-2 text-secondary-950 font-serif"> 平台简介 </h2>
+            <p class="leading-relaxed text-secondary-500">
               汉字学习平台是一个专注于中华文化学习的在线教育工具。我们致力于通过趣味互动的学习方式，帮助用户轻松掌握汉字书写、古诗背诵、成语理解和文言文阅读能力。
             </p>
           </div>
@@ -111,10 +97,7 @@
 
       <!-- 学习路线 -->
       <div class="mb-8">
-        <h2
-          class="text-2xl font-bold mb-6 text-center"
-          style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
-        >
+        <h2 class="text-2xl font-bold mb-6 text-center text-secondary-950 font-serif">
           学习路线
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -138,7 +121,7 @@
                   <h3 :class="['font-bold mb-1', colorMap[feature.color].text]">
                     {{ feature.title }}
                   </h3>
-                  <p class="text-sm" style="color: #6b7280">
+                  <p class="text-sm text-secondary-500">
                     {{ feature.description }}
                   </p>
                 </div>
@@ -150,26 +133,20 @@
 
       <!-- 技术栈 -->
       <div class="mb-8">
-        <h2
-          class="text-2xl font-bold mb-6 text-center"
-          style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
-        >
-          技术栈
-        </h2>
+        <h2 class="text-2xl font-bold mb-6 text-center text-secondary-950 font-serif"> 技术栈 </h2>
         <Card>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div
               v-for="tech in techStack"
               :key="tech.name"
-              class="flex items-center gap-3 p-3 rounded-xl transition-colors"
-              style="background-color: #f5f5f0"
+              class="flex items-center gap-3 p-3 rounded-xl transition-colors bg-secondary-50"
             >
               <span class="text-2xl">{{ tech.icon }}</span>
               <div>
-                <div class="text-xs" style="color: #6b7280">
+                <div class="text-xs text-secondary-500">
                   {{ tech.name }}
                 </div>
-                <div class="text-sm font-medium" style="color: #1a1a2e">
+                <div class="text-sm font-medium text-secondary-950">
                   {{ tech.value }}
                 </div>
               </div>
@@ -179,9 +156,9 @@
       </div>
 
       <!-- 底部 -->
-      <div class="text-center pt-8 border-t" style="border-color: #e5e7eb">
-        <p class="mb-2" style="color: #6b7280"> 让我们一起探索中华文化的魅力！ </p>
-        <p class="text-sm" style="color: #9ca3af"> 汉字学习平台 · 让学习变得更有趣 </p>
+      <div class="text-center pt-8 border-t border-gray-200">
+        <p class="mb-2 text-secondary-500"> 让我们一起探索中华文化的魅力！ </p>
+        <p class="text-sm text-gray-400"> 汉字学习平台 · 让学习变得更有趣 </p>
       </div>
     </div>
   </div>

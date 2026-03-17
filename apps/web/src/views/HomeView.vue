@@ -121,10 +121,7 @@
     <!-- Hero - 现代简约中国风 -->
     <section class="bg-gradient-to-br from-secondary-50 via-white to-primary-50 py-20">
       <div class="max-w-4xl mx-auto px-4 text-center">
-        <h1
-          class="text-4xl md:text-5xl font-bold text-secondary-900 mb-6"
-          style="font-family: 'Noto Serif SC', serif"
-        >
+        <h1 class="text-4xl md:text-5xl font-bold text-secondary-900 mb-6 font-serif">
           趣味学习，轻松掌握中华文化
         </h1>
         <p class="text-lg md:text-xl text-secondary-600 mb-10 max-w-2xl mx-auto leading-relaxed">

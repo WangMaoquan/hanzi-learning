@@ -13,13 +13,13 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <header class="bg-white shadow-sm sticky top-0 z-50">
+  <div class="min-h-screen" style="background-color: #f5f5f0">
+    <header class="bg-white shadow-sm sticky top-0 z-50 border-b" style="border-color: #e5e7eb">
       <div class="max-w-6xl mx-auto px-4 py-3">
         <div class="flex items-center justify-between">
           <RouterLink to="/" class="flex items-center gap-2">
             <img src="/favicon.svg" alt="logo" class="w-6 h-6" />
-            <span class="font-bold text-gray-900">汉字学习</span>
+            <span class="font-bold" style="color: #1a1a2e">汉字学习</span>
           </RouterLink>
           <nav class="flex gap-1">
             <RouterLink
@@ -29,8 +29,8 @@
               class="px-3 py-1.5 rounded-lg text-sm transition-colors"
               :class="[
                 route.path === tab.path || route.path.startsWith(tab.path + '/')
-                  ? 'bg-primary-100 text-primary-700'
-                  : 'text-gray-600 hover:bg-gray-100',
+                  ? 'bg-primary-100 text-primary-700 font-medium'
+                  : 'text-secondary-600 hover:bg-secondary-50',
               ]"
             >
               {{ tab.icon }} {{ tab.name }}

@@ -5,43 +5,43 @@
   const { characterCount, poemCount, idiomCount, loading, error, fetchCounts } = useContentCounts()
   const toast = useToast()
 
-  // 功能色配置 - 对应不同内容类型
+  // 功能色配置 - 现代简约中国风
   const featureColors = {
     characters: {
       bg: 'bg-primary-50',
       bgHover: 'hover:bg-primary-100',
-      text: 'text-primary-500',
-      textHover: 'group-hover:text-primary-600',
+      text: 'text-primary-700',
+      textHover: 'group-hover:text-primary-800',
       border: 'border-primary-200',
-      borderHover: 'hover:border-primary-400',
-      icon: 'text-primary-400',
+      borderHover: 'hover:border-primary-500',
+      icon: 'text-primary-600',
     },
     poems: {
       bg: 'bg-secondary-50',
       bgHover: 'hover:bg-secondary-100',
-      text: 'text-secondary-500',
-      textHover: 'group-hover:text-secondary-600',
+      text: 'text-secondary-700',
+      textHover: 'group-hover:text-secondary-800',
       border: 'border-secondary-200',
-      borderHover: 'hover:border-secondary-400',
-      icon: 'text-secondary-400',
+      borderHover: 'hover:border-secondary-500',
+      icon: 'text-secondary-600',
     },
     idioms: {
-      bg: 'bg-orange-50',
-      bgHover: 'hover:bg-orange-100',
-      text: 'text-orange-500',
-      textHover: 'group-hover:text-orange-600',
-      border: 'border-orange-200',
-      borderHover: 'hover:border-orange-400',
-      icon: 'text-orange-400',
+      bg: 'bg-yellow-50',
+      bgHover: 'hover:bg-yellow-100',
+      text: 'text-yellow-700',
+      textHover: 'group-hover:text-yellow-800',
+      border: 'border-yellow-200',
+      borderHover: 'hover:border-yellow-500',
+      icon: 'text-yellow-600',
     },
     prose: {
-      bg: 'bg-purple-50',
-      bgHover: 'hover:bg-purple-100',
-      text: 'text-purple-500',
-      textHover: 'group-hover:text-purple-600',
-      border: 'border-purple-200',
-      borderHover: 'hover:border-purple-400',
-      icon: 'text-purple-400',
+      bg: 'bg-secondary-50',
+      bgHover: 'hover:bg-secondary-100',
+      text: 'text-secondary-600',
+      textHover: 'group-hover:text-secondary-700',
+      border: 'border-secondary-200',
+      borderHover: 'hover:border-secondary-400',
+      icon: 'text-secondary-500',
     },
   }
 
@@ -118,13 +118,16 @@
       </div>
     </header>
 
-    <!-- Hero -->
-    <section class="bg-gradient-to-br from-primary-50 via-primary-100 to-yellow-100 py-20">
+    <!-- Hero - 现代简约中国风 -->
+    <section class="bg-gradient-to-br from-secondary-50 via-white to-primary-50 py-20">
       <div class="max-w-4xl mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
+        <h1
+          class="text-4xl md:text-5xl font-bold text-secondary-900 mb-6"
+          style="font-family: 'Noto Serif SC', serif"
+        >
           趣味学习，轻松掌握中华文化
         </h1>
-        <p class="text-lg md:text-xl text-gray-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p class="text-lg md:text-xl text-secondary-600 mb-10 max-w-2xl mx-auto leading-relaxed">
           笔画顺序动画、古诗朗读背诵、成语故事讲解，让学习变得有趣
         </p>
         <RouterLink
@@ -199,33 +202,33 @@
       </div>
     </section>
 
-    <!-- Stats -->
+    <!-- Stats - 现代简约中国风 -->
     <section class="bg-white py-16">
       <div class="max-w-4xl mx-auto px-4">
         <div class="grid grid-cols-3 gap-8 md:gap-12 text-center">
           <div class="py-6">
             <div
-              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-400 to-primary-600 bg-clip-text text-transparent"
+              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent"
             >
               {{ characterCount.toLocaleString() }}+
             </div>
-            <div class="text-gray-500 mt-3 font-medium"> 常用汉字 </div>
+            <div class="text-secondary-600 mt-3 font-medium"> 常用汉字 </div>
           </div>
           <div class="py-6">
             <div
-              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-secondary-400 to-secondary-600 bg-clip-text text-transparent"
+              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-secondary-600 to-secondary-800 bg-clip-text text-transparent"
             >
               {{ (poemCount / 1000).toFixed(0) }}k+
             </div>
-            <div class="text-gray-500 mt-3 font-medium"> 经典古诗 </div>
+            <div class="text-secondary-600 mt-3 font-medium"> 经典古诗 </div>
           </div>
           <div class="py-6">
             <div
-              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-orange-400 to-orange-600 bg-clip-text text-transparent"
+              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-700 bg-clip-text text-transparent"
             >
               {{ idiomCount.toLocaleString() }}+
             </div>
-            <div class="text-gray-500 mt-3 font-medium"> 成语故事 </div>
+            <div class="text-secondary-600 mt-3 font-medium"> 成语故事 </div>
           </div>
         </div>
       </div>

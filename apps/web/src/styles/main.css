@@ -1,59 +1,82 @@
 @import "tailwindcss";
 
+/* Google Fonts - 中国风字体 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+
 :root {
-  --color-primary: #facc15;
-  --color-primary-dark: #eab308;
-  --color-secondary: #06b6d4;
+  /* 经典中国红 */
+  --color-primary: #C41E3A;
+  --color-primary-dark: #8B2332;
+  --color-primary-light: #E85A71;
+  /* 金色点缀 */
+  --color-gold: #D4AF37;
+  --color-gold-light: #F4D03F;
+  /* 淡雅灰白背景 */
+  --color-bg: #F5F5F0;
+  --color-surface: #FFFFFF;
+  /* 深靛蓝 */
+  --color-secondary: #1A1A2E;
 }
 
 /* ========================================
-   视觉层次设计规范
+   视觉层次设计规范 - 现代简约中国风
    ======================================== */
 
 /* ---------- 1. 色彩层次系统 ---------- */
 @theme {
-  /* 主色 - 黄色系 (温暖、活泼、儿童友好) */
-  --color-primary-50: #fefce8;
-  --color-primary-100: #fef9c3;
-  --color-primary-200: #fef08a;
-  --color-primary-300: #fde047;
-  --color-primary-400: #facc15;
-  --color-primary-500: #eab308;
-  --color-primary-600: #ca8a04;
-  --color-primary-700: #a16207;
-  --color-primary-800: #854d0e;
-  --color-primary-900: #713f12;
+  /* 主色 - 中国红系 (传统、喜庆) */
+  --color-primary-50: #FEF2F2;
+  --color-primary-100: #FEE2E2;
+  --color-primary-200: #FECACA;
+  --color-primary-300: #FCA5A5;
+  --color-primary-400: #F87171;
+  --color-primary-500: #EF4444;
+  --color-primary-600: #DC2626;
+  --color-primary-700: #C41E3A;
+  --color-primary-800: #9B2C2C;
+  --color-primary-900: #7F1D1D;
 
-  /* 辅助色 - 青色系 (清新、专业) */
-  --color-secondary-50: #ecfeff;
-  --color-secondary-100: #cffafe;
-  --color-secondary-200: #a5f3fc;
-  --color-secondary-300: #67e8f9;
-  --color-secondary-400: #22d3ee;
-  --color-secondary-500: #06b6d4;
-  --color-secondary-600: #0891b2;
-  --color-secondary-700: #0e7490;
-  --color-secondary-800: #155e75;
-  --color-secondary-900: #164e63;
+  /* 辅助色 - 深靛蓝 (沉稳、雅致) */
+  --color-secondary-50: #F8FAFC;
+  --color-secondary-100: #F1F5F9;
+  --color-secondary-200: #E2E8F0;
+  --color-secondary-300: #CBD5E1;
+  --color-secondary-400: #94A3B8;
+  --color-secondary-500: #64748B;
+  --color-secondary-600: #475569;
+  --color-secondary-700: #334155;
+  --color-secondary-800: #1E293B;
+  --color-secondary-900: #0F172A;
+  --color-secondary-950: #1A1A2E;
 
-  /* 强调色 - 用于关键操作和警示 */
-  --color-accent-red: #ef4444;
-  --color-accent-green: #22c55e;
-  --color-accent-purple: #a855f7;
-  --color-accent-orange: #f97316;
+  /* 金色点缀 */
+  --color-gold-50: #FFFBEB;
+  --color-gold-100: #FEF3C7;
+  --color-gold-200: #FDE68A;
+  --color-gold-300: #FCD34D;
+  --color-gold-400: #FBBF24;
+  --color-gold-500: #D4AF37;
+  --color-gold-600: #B4941F;
+  --color-gold-700: #977B14;
+  --color-gold-800: #74550A;
+
+  /* 强调色 */
+  --color-accent-red: #EF4444;
+  --color-accent-green: #10B981;
+  --color-accent-orange: #F59E0B;
 }
 
 /* 色彩使用规范 */
 :root {
-  /* 主色调：用于主要按钮、强调文字、活跃状态 */
-  --color-brand-primary: var(--color-primary-400);
-  --color-brand-secondary: var(--color-secondary-500);
+  /* 主色调：中国红 + 深靛蓝 */
+  --color-brand-primary: var(--color-primary-700);
+  --color-brand-secondary: var(--color-secondary-900);
 
-  /* 功能色：区分不同类型的内容 */
-  --color-content-character: var(--color-primary-500);
-  --color-content-poem: var(--color-secondary-500);
-  --color-content-idiom: var(--color-accent-orange);
-  --color-content-prose: var(--color-accent-purple);
+  /* 功能色 */
+  --color-content-character: var(--color-primary-700);
+  --color-content-poem: var(--color-secondary-700);
+  --color-content-idiom: var(--color-gold-600);
+  --color-content-prose: var(--color-secondary-600);
 }
 
 /* ---------- 2. 文字层次系统 ---------- */
@@ -104,25 +127,31 @@
   - shadow-xl: 弹出层
 */
 
-/* 基础样式 */
+/* 基础样式 - 现代简约中国风 */
 html {
   scroll-behavior: smooth;
 }
 
 body {
-  color: #1f2937;
-  background-color: #f9fafb;
+  color: #2D2D2D;
+  background-color: #F5F5F0;
   font-family: 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-/* 组件样式 */
+/* 标题字体 - 思源宋体 */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Noto Serif SC', 'SimSun', serif;
+}
+
+/* 组件样式 - 现代简约中国风 */
 .btn {
   padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  border-radius: 0.375rem;
   font-weight: 500;
   transition: all 0.2s;
+  font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
 }
 
 .btn:focus {
@@ -132,27 +161,43 @@ body {
 }
 
 .btn-primary {
-  background-color: var(--color-primary-400);
-  color: #1f2937;
+  background-color: var(--color-primary-700);
+  color: white;
+  border: 1px solid var(--color-primary-700);
 }
 
 .btn-primary:hover {
-  background-color: var(--color-primary-500);
+  background-color: var(--color-primary-800);
+  border-color: var(--color-primary-800);
 }
 
 .btn-secondary {
-  background-color: var(--color-secondary-500);
+  background-color: var(--color-secondary-800);
   color: white;
+  border: 1px solid var(--color-secondary-800);
 }
 
 .btn-secondary:hover {
-  background-color: var(--color-secondary-600);
+  background-color: var(--color-secondary-900);
+  border-color: var(--color-secondary-900);
+}
+
+/* 金色边框按钮 */
+.btn-gold {
+  background-color: transparent;
+  color: var(--color-gold-600);
+  border: 1px solid var(--color-gold-500);
+}
+
+.btn-gold:hover {
+  background-color: var(--color-gold-500);
+  color: white;
 }
 
 .card {
   background-color: white;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   padding: 1.5rem;
-  box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  border: 1px solid #f3f4f6;
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  border: 1px solid #E5E7EB;
 }

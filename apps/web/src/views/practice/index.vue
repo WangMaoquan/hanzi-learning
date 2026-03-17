@@ -2,7 +2,7 @@
   import { onMounted } from 'vue'
   import { RouterLink } from 'vue-router'
   import { useContentCounts, useToast } from '@/composables'
-  import { BackLink } from '@hanzi-learning/ui'
+  import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 
   const { characterCount, poemCount, loading, error, fetchCounts } = useContentCounts()
   const toast = useToast()
@@ -47,11 +47,33 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-[var(--color-secondary-50)] py-8">
-    <div class="max-w-4xl mx-auto px-4">
-      <BackLink to="/" text="返回首页" />
+  <div class="min-h-screen bg-[var(--color-background)] transition-colors duration-300">
+    <header
+      class="bg-[var(--color-surface)] shadow-sm sticky top-0 z-50 border-b border-[var(--color-secondary-200)]"
+    >
+      <div class="max-w-6xl mx-auto px-4 py-3">
+        <div class="flex items-center justify-between">
+          <RouterLink to="/" class="flex items-center gap-2">
+            <img src="/favicon.svg" alt="logo" class="w-6 h-6" />
+            <span class="font-bold text-[var(--color-secondary-900)]">汉字学习</span>
+          </RouterLink>
+          <div class="flex items-center gap-1">
+            <RouterLink
+              to="/practice"
+              class="px-3 py-1.5 rounded-lg text-sm bg-[var(--color-primary-100)] text-[var(--color-primary-700)] font-medium"
+            >
+              ✍️ 练习
+            </RouterLink>
+            <div class="ml-2">
+              <ThemeSwitcher />
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
 
-      <h1 class="text-2xl font-bold mt-6 mb-6 text-[var(--color-secondary-900)] font-serif">
+    <main class="max-w-4xl mx-auto px-4 py-8">
+      <h1 class="text-2xl font-bold mb-6 text-[var(--color-secondary-900)] font-serif">
         练习中心
       </h1>
 
@@ -110,6 +132,6 @@
           </div>
         </div>
       </div>
-    </div>
+    </main>
   </div>
 </template>

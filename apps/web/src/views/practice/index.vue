@@ -46,25 +46,31 @@
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-gray-900 mb-6"> 练习中心 </h1>
+    <h1 class="text-2xl font-bold mb-6" style="color: #1a1a2e; font-family: 'Noto Serif SC', serif">
+      练习中心
+    </h1>
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <RouterLink
         v-for="exercise in exercises"
         :key="exercise.path"
         :to="exercise.available ? exercise.path : '#'"
-        class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-all"
+        class="bg-white rounded-xl p-6 transition-all border-2 border-transparent hover:shadow-md"
+        style="border-color: #e5e7eb"
         :class="{ 'opacity-50 cursor-not-allowed': !exercise.available }"
       >
         <div class="flex items-center gap-4">
-          <div class="text-4xl">
+          <div
+            class="w-16 h-16 flex items-center justify-center rounded-xl text-3xl"
+            style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)"
+          >
             {{ exercise.icon }}
           </div>
           <div>
-            <h3 class="text-lg font-semibold text-gray-900">
+            <h3 class="text-lg font-semibold" style="color: #1a1a2e">
               {{ exercise.title }}
             </h3>
-            <p class="text-gray-500 text-sm">
+            <p class="text-secondary-500 text-sm">
               {{ exercise.description }}
             </p>
           </div>
@@ -73,25 +79,30 @@
     </div>
 
     <!-- 学习统计 -->
-    <div class="mt-8 bg-white rounded-xl p-6 shadow-sm border border-gray-100">
-      <h2 class="text-lg font-semibold text-gray-900 mb-4"> 学习统计 </h2>
-      <div v-if="loading" class="text-center text-gray-500 py-4"> 加载中... </div>
+    <div class="mt-8 bg-white rounded-xl p-6 border" style="border-color: #e5e7eb">
+      <h2
+        class="text-lg font-semibold mb-4"
+        style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+      >
+        学习统计
+      </h2>
+      <div v-if="loading" class="text-center text-secondary-400 py-4"> 加载中... </div>
       <div v-else class="grid grid-cols-3 gap-6 text-center">
         <div>
-          <div class="text-2xl font-bold text-primary-500">
+          <div class="text-2xl font-bold" style="color: #c41e3a">
             {{ characterCount.toLocaleString() }}
           </div>
-          <div class="text-gray-500 text-sm"> 已学汉字 </div>
+          <div class="text-secondary-500 text-sm"> 已学汉字 </div>
         </div>
         <div>
-          <div class="text-2xl font-bold text-secondary-500">
+          <div class="text-2xl font-bold" style="color: #1a1a2e">
             {{ (poemCount / 1000).toFixed(0) }}k+
           </div>
-          <div class="text-gray-500 text-sm"> 已学古诗 </div>
+          <div class="text-secondary-500 text-sm"> 已学古诗 </div>
         </div>
         <div>
-          <div class="text-2xl font-bold text-green-500"> 0 </div>
-          <div class="text-gray-500 text-sm"> 连续学习天数 </div>
+          <div class="text-2xl font-bold" style="color: #d4af37"> 0 </div>
+          <div class="text-secondary-500 text-sm"> 连续学习天数 </div>
         </div>
       </div>
     </div>

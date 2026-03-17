@@ -66,12 +66,20 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- 页面头部 -->
-    <div class="bg-gradient-to-r from-primary-50 to-yellow-50 py-12 mb-8">
+  <div class="min-h-screen" style="background-color: #f5f5f0">
+    <!-- 页面头部 - 现代简约中国风 -->
+    <div
+      class="py-12 mb-8 border-b"
+      style="background: linear-gradient(135deg, #fef2f2 0%, #fffbeb 100%); border-color: #e5e7eb"
+    >
       <div class="max-w-4xl mx-auto px-4 text-center">
-        <h1 class="text-4xl font-bold text-gray-900 mb-4"> 关于汉字学习平台 </h1>
-        <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+        <h1
+          class="text-4xl font-bold mb-4"
+          style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+        >
+          关于汉字学习平台
+        </h1>
+        <p class="text-lg max-w-2xl mx-auto" style="color: #6b7280">
           趣味学习中华文化的在线平台，帮助孩子掌握汉字、古诗、文言文和成语
         </p>
       </div>
@@ -82,13 +90,19 @@
       <Card hoverable class="mb-8">
         <div class="flex items-start gap-6">
           <div
-            class="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl flex items-center justify-center shrink-0"
+            class="w-16 h-16 rounded-xl flex items-center justify-center shrink-0"
+            style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)"
           >
             <span class="text-3xl">🏫</span>
           </div>
           <div>
-            <h2 class="text-xl font-bold text-gray-900 mb-2"> 平台简介 </h2>
-            <p class="text-gray-600 leading-relaxed">
+            <h2
+              class="text-xl font-bold mb-2"
+              style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+            >
+              平台简介
+            </h2>
+            <p class="leading-relaxed" style="color: #6b7280">
               汉字学习平台是一个专注于中华文化学习的在线教育工具。我们致力于通过趣味互动的学习方式，帮助用户轻松掌握汉字书写、古诗背诵、成语理解和文言文阅读能力。
             </p>
           </div>
@@ -97,7 +111,12 @@
 
       <!-- 学习路线 -->
       <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center"> 学习路线 </h2>
+        <h2
+          class="text-2xl font-bold mb-6 text-center"
+          style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+        >
+          学习路线
+        </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div v-for="feature in features" :key="feature.title" class="group">
             <Card
@@ -119,7 +138,7 @@
                   <h3 :class="['font-bold mb-1', colorMap[feature.color].text]">
                     {{ feature.title }}
                   </h3>
-                  <p class="text-gray-500 text-sm">
+                  <p class="text-sm" style="color: #6b7280">
                     {{ feature.description }}
                   </p>
                 </div>
@@ -131,20 +150,26 @@
 
       <!-- 技术栈 -->
       <div class="mb-8">
-        <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center"> 技术栈 </h2>
+        <h2
+          class="text-2xl font-bold mb-6 text-center"
+          style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+        >
+          技术栈
+        </h2>
         <Card>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div
               v-for="tech in techStack"
               :key="tech.name"
-              class="flex items-center gap-3 p-3 bg-gray-50 rounded-xl hover:bg-primary-50 transition-colors"
+              class="flex items-center gap-3 p-3 rounded-xl transition-colors"
+              style="background-color: #f5f5f0"
             >
               <span class="text-2xl">{{ tech.icon }}</span>
               <div>
-                <div class="text-xs text-gray-500">
+                <div class="text-xs" style="color: #6b7280">
                   {{ tech.name }}
                 </div>
-                <div class="text-sm font-medium text-gray-800">
+                <div class="text-sm font-medium" style="color: #1a1a2e">
                   {{ tech.value }}
                 </div>
               </div>
@@ -154,9 +179,9 @@
       </div>
 
       <!-- 底部 -->
-      <div class="text-center pt-8 border-t border-gray-200">
-        <p class="text-gray-600 mb-2"> 让我们一起探索中华文化的魅力！ </p>
-        <p class="text-gray-400 text-sm"> 汉字学习平台 · 让学习变得更有趣 </p>
+      <div class="text-center pt-8 border-t" style="border-color: #e5e7eb">
+        <p class="mb-2" style="color: #6b7280"> 让我们一起探索中华文化的魅力！ </p>
+        <p class="text-sm" style="color: #9ca3af"> 汉字学习平台 · 让学习变得更有趣 </p>
       </div>
     </div>
   </div>

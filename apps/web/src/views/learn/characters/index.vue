@@ -52,12 +52,17 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <!-- 页面头部 -->
-    <div class="bg-gradient-to-r from-primary-50 to-primary-100 py-8 mb-6">
+  <div class="min-h-screen" style="background-color: #f5f5f0">
+    <!-- 页面头部 - 现代简约中国风 -->
+    <div
+      class="bg-gradient-to-r from-secondary-50 to-white py-8 mb-6 border-b"
+      style="border-color: #e5e7eb"
+    >
       <div class="max-w-6xl mx-auto px-4">
-        <h1 class="text-3xl font-bold text-gray-900 mb-2"> 汉字学习 </h1>
-        <p class="text-gray-600"> 掌握汉字笔画顺序，轻松学会常用汉字 </p>
+        <h1 class="text-3xl font-bold" style="color: #1a1a2e; font-family: 'Noto Serif SC', serif">
+          汉字学习
+        </h1>
+        <p class="text-secondary-600 mt-1"> 掌握汉字笔画顺序，轻松学会常用汉字 </p>
       </div>
     </div>
 
@@ -67,38 +72,42 @@
 
       <template v-else>
         <!-- 当前学习 - 特色卡片 -->
-        <Card v-if="currentCharacter" hoverable class="mb-8 border-2 border-primary-200">
+        <Card v-if="currentCharacter" hoverable class="mb-8 border-2" style="border-color: #c41e3a">
           <div class="flex items-center gap-8">
             <!-- 汉字展示 -->
             <div
-              class="w-36 h-36 flex items-center justify-center bg-gradient-to-br from-primary-100 to-primary-200 rounded-2xl shadow-inner"
+              class="w-36 h-36 flex items-center justify-center rounded-xl shadow-inner"
+              style="background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)"
             >
-              <span class="text-7xl font-bold text-gray-900">{{ currentCharacter.title }}</span>
+              <span class="text-7xl font-bold" style="color: #1a1a2e">{{
+                currentCharacter.title
+              }}</span>
             </div>
 
             <!-- 信息区域 -->
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-4">
                 <span
-                  class="px-3 py-1 bg-primary-100 text-primary-600 text-sm font-semibold rounded-full"
+                  class="px-3 py-1 text-sm font-semibold rounded-full"
+                  style="background-color: #c41e3a; color: white"
                 >
                   正在学习
                 </span>
-                <span class="text-gray-400 text-sm">点击下方汉字继续学习</span>
+                <span class="text-secondary-400 text-sm">点击下方汉字继续学习</span>
               </div>
 
               <!-- 拼音 -->
               <div class="mb-4">
-                <span class="text-gray-500 text-sm">拼音</span>
-                <p class="text-2xl font-semibold text-gray-900">
+                <span class="text-secondary-500 text-sm">拼音</span>
+                <p class="text-2xl font-semibold" style="color: #1a1a2e">
                   {{ currentCharacter.pinyin || '-' }}
                 </p>
               </div>
 
               <!-- 释义 -->
               <div class="mb-5">
-                <span class="text-gray-500 text-sm">释义</span>
-                <p class="text-gray-800 leading-relaxed">
+                <span class="text-secondary-500 text-sm">释义</span>
+                <p class="text-secondary-700 leading-relaxed">
                   {{ currentCharacter.content || '-' }}
                 </p>
               </div>
@@ -107,19 +116,22 @@
               <div class="flex flex-wrap gap-3">
                 <span
                   v-if="currentCharacter.strokes"
-                  class="px-3 py-1.5 bg-gray-100 text-gray-600 text-sm rounded-lg"
+                  class="px-3 py-1.5 text-sm rounded-lg"
+                  style="background-color: #f5f5f0; color: #6b7280"
                 >
                   {{ currentCharacter.strokes }} 画
                 </span>
                 <span
                   v-if="currentCharacter.structure"
-                  class="px-3 py-1.5 bg-gray-100 text-gray-600 text-sm rounded-lg"
+                  class="px-3 py-1.5 text-sm rounded-lg"
+                  style="background-color: #f5f5f0; color: #6b7280"
                 >
                   {{ currentCharacter.structure }}
                 </span>
                 <span
                   v-if="currentCharacter.radicals"
-                  class="px-3 py-1.5 bg-gray-100 text-gray-600 text-sm rounded-lg"
+                  class="px-3 py-1.5 text-sm rounded-lg"
+                  style="background-color: #f5f5f0; color: #6b7280"
                 >
                   部首：{{ currentCharacter.radicals }}
                 </span>
@@ -134,8 +146,13 @@
         <!-- 字表 -->
         <div>
           <div class="flex items-center justify-between mb-4">
-            <h2 class="text-xl font-bold text-gray-900"> 字表 </h2>
-            <span class="text-gray-500 text-sm">共 {{ total }} 个汉字</span>
+            <h2
+              class="text-xl font-bold"
+              style="color: #1a1a2e; font-family: 'Noto Serif SC', serif"
+            >
+              字表
+            </h2>
+            <span class="text-secondary-500 text-sm">共 {{ total }} 个汉字</span>
           </div>
 
           <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3 mb-8">
@@ -145,9 +162,7 @@
               :to="`/learn/characters/${char.id}`"
               class="group aspect-square flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-primary-300 hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
             >
-              <span
-                class="text-2xl font-bold text-gray-700 group-hover:text-primary-600 transition-colors"
-              >
+              <span class="text-2xl font-bold transition-colors" style="color: #374151">
                 {{ char.title }}
               </span>
             </RouterLink>

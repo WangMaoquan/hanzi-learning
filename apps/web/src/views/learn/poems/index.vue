@@ -78,7 +78,7 @@
           >
             <Card
               hoverable
-              class="h-full border-2 border-transparent hover:border-secondary-200 transition-all duration-200"
+              class="h-full border-2 border-[var(--color-secondary-200)] hover:shadow-lg transition-all duration-200"
             >
               <!-- 头部 -->
               <div class="flex items-start justify-between mb-4">

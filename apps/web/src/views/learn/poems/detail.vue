@@ -178,7 +178,7 @@
         <RouterLink
           v-if="neighbors.prev"
           :to="`/learn/poems/${neighbors.prev.id}`"
-          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-[var(--color-secondary-200)]"
+          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:shadow-lg transition-all"
         >
           <span
             class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-secondary-100 text-secondary-500"
@@ -206,7 +206,7 @@
         <RouterLink
           v-if="neighbors.next"
           :to="`/learn/poems/${neighbors.next.id}`"
-          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-[var(--color-secondary-200)]"
+          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:shadow-lg transition-all"
         >
           <div class="text-right">
             <div class="text-xs text-[var(--color-secondary-400)]"> 下一首 </div>

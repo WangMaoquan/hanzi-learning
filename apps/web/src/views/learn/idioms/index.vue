@@ -141,7 +141,7 @@
               class="group"
             >
               <div
-                class="flex items-center justify-center bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:border-[var(--color-accent-300)] hover:bg-[var(--color-accent-50)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-4"
+                class="flex items-center justify-center bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-accent-200)] hover:border-[var(--color-accent-500)] hover:bg-[var(--color-accent-50)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-4"
               >
                 <span class="font-bold transition-colors text-lg text-[var(--color-secondary-700)]">
                   {{ idiom.title }}

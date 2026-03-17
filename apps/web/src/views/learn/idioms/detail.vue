@@ -148,7 +148,7 @@
         <RouterLink
           v-if="neighbors.prev"
           :to="`/learn/idioms/${neighbors.prev.id}`"
-          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-[var(--color-secondary-200)]"
+          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:shadow-lg transition-all"
         >
           <span
             class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-accent-50)] text-[var(--color-accent-600)]"
@@ -176,7 +176,7 @@
         <RouterLink
           v-if="neighbors.next"
           :to="`/learn/idioms/${neighbors.next.id}`"
-          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-[var(--color-secondary-200)]"
+          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:shadow-lg transition-all"
         >
           <div class="text-right">
             <div class="text-xs text-[var(--color-secondary-400)]"> 下一个 </div>

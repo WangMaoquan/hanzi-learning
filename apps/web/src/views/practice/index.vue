@@ -53,7 +53,7 @@
         v-for="exercise in exercises"
         :key="exercise.path"
         :to="exercise.available ? exercise.path : '#'"
-        class="bg-[var(--color-surface)] rounded-xl p-6 transition-all border-2 border-transparent hover:shadow-md border-[var(--color-secondary-200)]"
+        class="bg-[var(--color-surface)] rounded-xl p-6 transition-all border-2 border-[var(--color-secondary-200)] hover:shadow-md"
         :class="{ 'opacity-50 cursor-not-allowed': !exercise.available }"
       >
         <div class="flex items-center gap-4">

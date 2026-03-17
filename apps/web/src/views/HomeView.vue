@@ -13,18 +13,18 @@
       bgHover: 'hover:bg-primary-100',
       text: 'text-primary-700',
       textHover: 'group-hover:text-primary-800',
-      border: 'border-primary-200',
-      borderHover: 'hover:border-primary-500',
-      icon: 'text-primary-600',
+      border: 'border-[var(--color-primary-200)]',
+      borderHover: 'hover:border-[var(--color-primary-500)]',
+      icon: 'text-[var(--color-primary-600)]',
     },
     poems: {
       bg: 'bg-[var(--color-secondary-50)]',
-      bgHover: 'hover:bg-secondary-100',
-      text: 'text-secondary-700',
-      textHover: 'group-hover:text-secondary-800',
-      border: 'border-secondary-200',
-      borderHover: 'hover:border-secondary-500',
-      icon: 'text-secondary-600',
+      bgHover: 'hover:bg-[var(--color-secondary-100)]',
+      text: 'text-[var(--color-secondary-700)]',
+      textHover: 'group-hover:text-[var(--color-secondary-800)]',
+      border: 'border-[var(--color-secondary-200)]',
+      borderHover: 'hover:border-[var(--color-secondary-500)]',
+      icon: 'text-[var(--color-secondary-600)]',
     },
     idioms: {
       bg: 'bg-[var(--color-accent-50)]',
@@ -37,8 +37,8 @@
     },
     prose: {
       bg: 'bg-[var(--color-secondary-50)]',
-      bgHover: 'hover:bg-secondary-100',
-      text: 'text-secondary-600',
+      bgHover: 'hover:bg-[var(--color-secondary-100)]',
+      text: 'text-[var(--color-secondary-600)]',
       textHover: 'group-hover:text-secondary-700',
       border: 'border-secondary-200',
       borderHover: 'hover:border-secondary-400',
@@ -173,7 +173,8 @@
           >
             <div
               :class="[
-                'bg-[var(--color-surface)] rounded-2xl p-6 border-2 border-transparent transition-all duration-300',
+                'bg-[var(--color-surface)] rounded-2xl p-6 border-2 transition-all duration-300',
+                getFeatureColors(feature.type).border,
                 'hover:shadow-xl hover:-translate-y-1',
                 getFeatureColors(feature.type).borderHover,
               ]"

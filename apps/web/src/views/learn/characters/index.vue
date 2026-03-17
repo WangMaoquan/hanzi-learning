@@ -147,7 +147,7 @@
               v-for="char in characters"
               :key="char.id"
               :to="`/learn/characters/${char.id}`"
-              class="group aspect-square flex items-center justify-center bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:border-primary-300 hover:bg-[var(--color-primary-50)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+              class="group aspect-square flex items-center justify-center bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:border-[var(--color-primary-300)] hover:bg-[var(--color-primary-50)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
             >
               <span class="text-2xl font-bold transition-colors text-[var(--color-secondary-700)]">
                 {{ char.title }}

@@ -1,6 +1,7 @@
 <script setup lang="ts">
   // 文言文内容 - 后续扩展
   import PageHeader from '@/components/PageHeader.vue'
+  import PageContent from '@/components/PageContent.vue'
 </script>
 
 <template>
@@ -8,7 +9,7 @@
     <!-- 页面头部 -->
     <PageHeader title="文言文" description="学习古今对译，掌握实词虚词" />
 
-    <div class="max-w-6xl mx-auto px-4 pb-8">
+    <PageContent>
       <div
         class="bg-[var(--color-surface)] rounded-xl p-12 shadow-sm border border-[var(--color-secondary-100)] text-center"
       >
@@ -19,6 +20,6 @@
           预计包含：初中必背文言文、古今对译、实词虚词练习
         </p>
       </div>
-    </div>
+    </PageContent>
   </div>
 </template>

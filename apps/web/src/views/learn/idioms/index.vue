@@ -60,11 +60,15 @@
 
       <template v-else>
         <!-- 当前学习 - 特色卡片 -->
-        <Card v-if="currentIdiom" hoverable class="mb-8 border-2 border-[var(--color-accent-500)]">
+        <Card
+          v-if="currentIdiom"
+          hoverable
+          class="mb-8 border-2 border-[var(--color-secondary-200)]"
+        >
           <div class="flex items-start gap-8">
             <!-- 成语展示 -->
             <div
-              class="flex items-center justify-center rounded-xl px-6 py-4 shadow-inner shrink-0 bg-[var(--color-accent-50)]"
+              class="flex items-center justify-center rounded-xl px-6 py-4 shadow-inner shrink-0 bg-[var(--color-primary-50)]"
             >
               <span class="text-4xl font-bold tracking-widest text-[var(--color-secondary-900)]">{{
                 currentIdiom.title
@@ -75,7 +79,7 @@
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-4">
                 <span
-                  class="px-3 py-1 text-sm font-semibold rounded-full bg-[var(--color-accent-500)] text-white"
+                  class="px-3 py-1 text-sm font-semibold rounded-full bg-[var(--color-primary-500)] text-white"
                 >
                   正在学习
                 </span>
@@ -137,7 +141,7 @@
               class="group"
             >
               <div
-                class="flex items-center justify-center bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-accent-200)] hover:border-[var(--color-accent-500)] hover:bg-[var(--color-accent-50)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-4"
+                class="flex items-center justify-center bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:border-[var(--color-primary-300)] hover:bg-[var(--color-primary-50)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-4"
               >
                 <span class="font-bold transition-colors text-lg text-[var(--color-secondary-700)]">
                   {{ idiom.title }}
@@ -152,7 +156,7 @@
               v-model="currentPage"
               :total="total"
               :limit="pageSize"
-              color="orange"
+              color="primary"
               show-size-changer
               :page-sizes="[20, 40, 60, 80]"
               @update:model-value="handlePageChange"

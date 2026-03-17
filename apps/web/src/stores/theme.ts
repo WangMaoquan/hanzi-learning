@@ -81,7 +81,7 @@ const themeColors: Record<ThemeName, Record<string, string>> = {
     '--color-primary-400': '#F89F9F',
     '--color-primary-500': '#F47D7D',
     '--color-primary-600': '#E86565',
-    '--color-primary-700': '#D94747',
+    '--color-primary-700': '#E07070',
     '--color-primary-800': '#B53838',
     '--color-primary-900': '#8B2A2A',
 

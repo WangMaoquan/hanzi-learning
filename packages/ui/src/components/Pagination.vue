@@ -25,15 +25,15 @@ const emit = defineEmits<{
 
 const colorMap = {
   primary: {
-    bg: 'bg-primary-500',
-    hover: 'hover:bg-primary-100',
-    text: 'text-primary-600',
+    bg: 'bg-[var(--color-primary-600)]',
+    hover: 'hover:bg-[var(--color-primary-600)]',
+    text: 'text-[var(--color-primary-600)]',
     ring: 'focus:ring-primary-500',
   },
   secondary: {
-    bg: 'bg-secondary-500',
-    hover: 'hover:bg-secondary-100',
-    text: 'text-secondary-600',
+    bg: 'bg-[var(--color-secondary-600)]',
+    hover: 'hover:bg-[var(--color-secondary-600)]',
+    text: 'text-[var(--color-secondary-600)]',
     ring: 'focus:ring-secondary-500',
   },
   orange: {

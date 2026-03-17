@@ -22,7 +22,7 @@
         <div class="flex items-center justify-between">
           <RouterLink to="/" class="flex items-center gap-2">
             <img src="/favicon.svg" alt="logo" class="w-6 h-6" />
-            <span class="font-bold text-secondary-900">汉字学习</span>
+            <span class="font-bold text-[var(--color-secondary-900)]">汉字学习</span>
           </RouterLink>
           <nav class="flex items-center gap-1">
             <RouterLink
@@ -32,8 +32,8 @@
               class="px-3 py-1.5 rounded-lg text-sm transition-colors"
               :class="[
                 route.path === tab.path || route.path.startsWith(tab.path + '/')
-                  ? 'bg-primary-100 text-primary-700 font-medium'
-                  : 'text-secondary-600 hover:bg-secondary-50',
+                  ? 'bg-[var(--color-primary-100)] text-[var(--color-primary-700)] font-medium'
+                  : 'text-[var(--color-secondary-600)] hover:bg-[var(--color-secondary-50)]',
               ]"
             >
               {{ tab.icon }} {{ tab.name }}

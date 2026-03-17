@@ -62,18 +62,20 @@
           <div
             class="inline-flex items-center justify-center rounded-xl px-8 py-4 mb-4 shadow-inner bg-[linear-gradient(135deg,#fffbeb_0%,#fef3c7_100%)]"
           >
-            <span class="text-5xl font-bold tracking-widest text-secondary-950">{{
+            <span class="text-5xl font-bold tracking-widest text-[var(--color-secondary-900)]">{{
               idiom.title
             }}</span>
           </div>
-          <p class="text-2xl font-semibold text-secondary-500">
+          <p class="text-2xl font-semibold text-[var(--color-secondary-500)]">
             {{ idiom.pinyin }}
           </p>
         </div>
 
         <!-- 释义 -->
         <div class="mb-8">
-          <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-secondary-950 font-serif">
+          <h2
+            class="text-lg font-bold mb-4 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
+          >
             <span class="w-2 h-6 rounded-full bg-[var(--color-accent-500)]"></span>
             释义
           </h2>
@@ -84,12 +86,14 @@
 
         <!-- 出处 -->
         <div v-if="idiom.derivation" class="mb-8">
-          <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-secondary-950 font-serif">
+          <h2
+            class="text-lg font-bold mb-4 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
+          >
             <span class="w-2 h-6 rounded-full bg-[var(--color-accent-500)]"></span>
             出处
           </h2>
           <p
-            class="italic leading-relaxed rounded-xl p-4 bg-[var(--color-accent-50)] text-secondary-500"
+            class="italic leading-relaxed rounded-xl p-4 bg-[var(--color-accent-50)] text-[var(--color-secondary-500)]"
           >
             {{ idiom.derivation }}
           </p>
@@ -97,7 +101,9 @@
 
         <!-- 例句 -->
         <div v-if="idiom.example" class="mb-8">
-          <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-secondary-950 font-serif">
+          <h2
+            class="text-lg font-bold mb-4 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
+          >
             <span class="w-2 h-6 rounded-full bg-[var(--color-accent-500)]"></span>
             例句
           </h2>
@@ -110,7 +116,9 @@
 
         <!-- 近义词 -->
         <div v-if="idiom.synonyms?.length" class="mb-8">
-          <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-secondary-950 font-serif">
+          <h2
+            class="text-lg font-bold mb-4 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
+          >
             <span class="w-2 h-6 rounded-full bg-blue-500"></span>
             近义词
           </h2>
@@ -127,7 +135,9 @@
 
         <!-- 反义词 -->
         <div v-if="idiom.antonyms?.length">
-          <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-secondary-950 font-serif">
+          <h2
+            class="text-lg font-bold mb-4 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
+          >
             <span class="w-2 h-6 rounded-full bg-red-500"></span>
             反义词
           </h2>

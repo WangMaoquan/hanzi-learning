@@ -50,8 +50,10 @@
       class="py-8 mb-6 border-b bg-[var(--color-secondary-100)] border-[var(--color-secondary-200)]"
     >
       <div class="max-w-6xl mx-auto px-4">
-        <h1 class="text-3xl font-bold mb-2 text-secondary-950 font-serif"> 古诗词 </h1>
-        <p class="text-secondary-600 mt-1"> 品味经典唐诗宋词，感受诗词之美 </p>
+        <h1 class="text-3xl font-bold mb-2 text-[var(--color-secondary-900)] font-serif">
+          古诗词
+        </h1>
+        <p class="text-[var(--color-secondary-600)] mt-1"> 品味经典唐诗宋词，感受诗词之美 </p>
       </div>
     </div>
 
@@ -65,8 +67,8 @@
       <!-- 古诗列表 -->
       <div v-else>
         <div class="flex items-center justify-between mb-6">
-          <h2 class="text-xl font-bold text-secondary-950 font-serif"> 诗词列表 </h2>
-          <span class="text-secondary-500 text-sm">共 {{ total }} 首古诗</span>
+          <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif"> 诗词列表 </h2>
+          <span class="text-[var(--color-secondary-500)] text-sm">共 {{ total }} 首古诗</span>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
@@ -83,21 +85,21 @@
               <!-- 头部 -->
               <div class="flex items-start justify-between mb-4">
                 <h3
-                  class="text-lg font-bold group-hover:text-secondary-700 transition-colors text-secondary-950"
+                  class="text-lg font-bold group-hover:text-[var(--color-secondary-700)] transition-colors text-[var(--color-secondary-900)]"
                 >
                   {{ poem.title }}
                 </h3>
                 <span
-                  class="px-3 py-1 text-xs font-medium rounded-full bg-secondary-100 text-secondary-600"
+                  class="px-3 py-1 text-xs font-medium rounded-full bg-[var(--color-secondary-100)] text-[var(--color-secondary-600)]"
                 >
                   {{ DYNASTY_LABELS[poem.dynasty] || poem.dynasty }}
                 </span>
               </div>
 
               <!-- 作者 -->
-              <p class="text-secondary-500 text-sm mb-3 flex items-center gap-2">
+              <p class="text-[var(--color-secondary-500)] text-sm mb-3 flex items-center gap-2">
                 <span
-                  class="w-5 h-5 flex items-center justify-center rounded-full text-xs bg-secondary-100 text-secondary-500"
+                  class="w-5 h-5 flex items-center justify-center rounded-full text-xs bg-[var(--color-secondary-100)] text-[var(--color-secondary-500)]"
                 >
                   ✍️
                 </span>
@@ -105,14 +107,16 @@
               </p>
 
               <!-- 诗句预览 -->
-              <p class="text-secondary-600 text-sm leading-relaxed line-clamp-3 mb-4">
+              <p
+                class="text-[var(--color-secondary-600)] text-sm leading-relaxed line-clamp-3 mb-4"
+              >
                 {{ poem.content }}
               </p>
 
               <!-- 底部 -->
               <div class="flex items-center justify-end text-sm">
                 <span
-                  class="font-medium group-hover:translate-x-1 transition-transform text-primary-700"
+                  class="font-medium group-hover:translate-x-1 transition-transform text-[var(--color-primary-700)]"
                 >
                   查看全文 →
                 </span>

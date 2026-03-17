@@ -56,7 +56,7 @@
           <span class="text-3xl">✍️</span>
           <span class="text-xl font-bold">开始学汉字</span>
         </div>
-        <p class="text-primary-100"> 从一年级常用字开始 </p>
+        <p class="text-[var(--color-primary-100)]"> 从一年级常用字开始 </p>
       </RouterLink>
 
       <RouterLink
@@ -67,7 +67,7 @@
           <span class="text-3xl">📜</span>
           <span class="text-xl font-bold">开始读古诗</span>
         </div>
-        <p class="text-secondary-100"> 背诵经典唐诗 </p>
+        <p class="text-[var(--color-secondary-100)]"> 背诵经典唐诗 </p>
       </RouterLink>
     </div>
   </div>

@@ -11,7 +11,7 @@ defineProps<{
   <component
     :is="to ? (replace ? 'span' : 'a') : 'span'"
     :href="to"
-    class="inline-flex items-center gap-1 text-[var(--color-secondary-500)] hover:text-primary-600 transition-colors cursor-pointer"
+    class="inline-flex items-center gap-1 text-[var(--color-secondary-500)] hover:text-[var(--color-primary-600)] transition-colors cursor-pointer"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"

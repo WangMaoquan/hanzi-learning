@@ -58,16 +58,16 @@
 
       <!-- 标题区域 -->
       <div class="mb-8">
-        <h1 class="text-4xl font-bold mb-4 text-secondary-950 font-serif">
+        <h1 class="text-4xl font-bold mb-4 text-[var(--color-secondary-900)] font-serif">
           {{ poem.title }}
         </h1>
         <div class="flex items-center gap-4">
           <span
-            class="px-4 py-1.5 text-sm font-semibold rounded-full bg-secondary-100 text-secondary-600"
+            class="px-4 py-1.5 text-sm font-semibold rounded-full bg-[var(--color-secondary-100)] text-[var(--color-secondary-600)]"
           >
             {{ poem.dynasty }}
           </span>
-          <span class="text-lg text-secondary-500">{{ poem.author }}</span>
+          <span class="text-lg text-[var(--color-secondary-500)]">{{ poem.author }}</span>
         </div>
       </div>
 
@@ -90,7 +90,9 @@
                   <span class="text-xs h-4 text-[var(--color-secondary-400)]">
                     {{ poem.versePinyins?.[verseIdx]?.[charIdx] || '' }}
                   </span>
-                  <span class="text-2xl font-bold py-1 text-secondary-950">{{ char }}</span>
+                  <span class="text-2xl font-bold py-1 text-[var(--color-secondary-900)]">{{
+                    char
+                  }}</span>
                 </div>
               </div>
             </div>
@@ -103,7 +105,7 @@
               <span
                 v-for="tag in poem.tags"
                 :key="tag"
-                class="px-3 py-1.5 text-sm rounded-lg transition-colors cursor-pointer bg-[var(--color-secondary-50)] text-secondary-500"
+                class="px-3 py-1.5 text-sm rounded-lg transition-colors cursor-pointer bg-[var(--color-secondary-50)] text-[var(--color-secondary-500)]"
               >
                 #{{ tag }}
               </span>
@@ -116,15 +118,17 @@
           <!-- 信息卡片 -->
           <Card>
             <h2
-              class="text-lg font-bold mb-5 flex items-center gap-2 text-secondary-950 font-serif"
+              class="text-lg font-bold mb-5 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
             >
-              <span class="w-1.5 h-6 rounded-full bg-secondary-950"></span>
+              <span class="w-1.5 h-6 rounded-full bg-[var(--color-secondary-900)]"></span>
               诗词信息
             </h2>
             <div class="space-y-4">
               <div v-if="poem.type" class="flex items-center justify-between">
                 <span class="text-[var(--color-secondary-400)]">类型</span>
-                <span class="px-3 py-1 font-medium rounded-lg bg-secondary-100 text-secondary-600">
+                <span
+                  class="px-3 py-1 font-medium rounded-lg bg-[var(--color-secondary-100)] text-[var(--color-secondary-600)]"
+                >
                   {{ poem.type }}
                 </span>
               </div>
@@ -138,7 +142,7 @@
                       class="w-2 h-2 rounded-full"
                       :class="
                         i <= poem.difficulty
-                          ? 'bg-secondary-950'
+                          ? 'bg-[var(--color-secondary-900)]'
                           : 'bg-[var(--color-secondary-200)]'
                       "
                     ></span>
@@ -159,7 +163,7 @@
 
           <!-- 背诵模式按钮 -->
           <button
-            class="w-full px-6 py-4 font-semibold rounded-xl hover:bg-secondary-800 transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 bg-secondary-950 text-white"
+            class="w-full px-6 py-4 font-semibold rounded-xl hover:bg-[var(--color-secondary-800)] transition-all shadow-lg hover:shadow-xl hover:-translate-y-0.5 flex items-center justify-center gap-2 bg-[var(--color-secondary-900)] text-white"
             @click="router.push(`/practice?type=poem&id=${poem.id}`)"
           >
             <span class="text-xl">📖</span>
@@ -181,7 +185,7 @@
           class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:shadow-lg transition-all"
         >
           <span
-            class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-secondary-100 text-secondary-500"
+            class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-secondary-100)] text-[var(--color-secondary-500)]"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -217,7 +221,7 @@
             </div>
           </div>
           <span
-            class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-secondary-100 text-secondary-500"
+            class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-secondary-100)] text-[var(--color-secondary-500)]"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -235,6 +239,6 @@
   </div>
 
   <Empty v-else description="未找到该古诗">
-    <RouterLink to="/learn/poems" class="text-secondary-950"> 返回列表 </RouterLink>
+    <RouterLink to="/learn/poems" class="text-[var(--color-secondary-900)]"> 返回列表 </RouterLink>
   </Empty>
 </template>

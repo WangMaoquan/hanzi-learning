@@ -40,13 +40,13 @@
   const colorMap: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
     primary: {
       bg: 'bg-[var(--color-primary-50)]',
-      text: 'text-primary-600',
+      text: 'text-[var(--color-primary-600)]',
       border: 'border-primary-200',
       gradient: 'from-primary-50 to-primary-100',
     },
     secondary: {
       bg: 'bg-[var(--color-secondary-50)]',
-      text: 'text-secondary-600',
+      text: 'text-[var(--color-secondary-600)]',
       border: 'border-secondary-200',
       gradient: 'from-secondary-50 to-secondary-100',
     },
@@ -72,8 +72,10 @@
       class="py-12 mb-8 border-b bg-[var(--color-primary-50)] border-[var(--color-secondary-200)]"
     >
       <div class="max-w-4xl mx-auto px-4 text-center">
-        <h1 class="text-4xl font-bold mb-4 text-secondary-950 font-serif"> 关于汉字学习平台 </h1>
-        <p class="text-lg max-w-2xl mx-auto text-secondary-500">
+        <h1 class="text-4xl font-bold mb-4 text-[var(--color-secondary-900)] font-serif">
+          关于汉字学习平台
+        </h1>
+        <p class="text-lg max-w-2xl mx-auto text-[var(--color-secondary-500)]">
           趣味学习中华文化的在线平台，帮助孩子掌握汉字、古诗、文言文和成语
         </p>
       </div>
@@ -89,8 +91,10 @@
             <span class="text-3xl">🏫</span>
           </div>
           <div>
-            <h2 class="text-xl font-bold mb-2 text-secondary-950 font-serif"> 平台简介 </h2>
-            <p class="leading-relaxed text-secondary-500">
+            <h2 class="text-xl font-bold mb-2 text-[var(--color-secondary-900)] font-serif">
+              平台简介
+            </h2>
+            <p class="leading-relaxed text-[var(--color-secondary-500)]">
               汉字学习平台是一个专注于中华文化学习的在线教育工具。我们致力于通过趣味互动的学习方式，帮助用户轻松掌握汉字书写、古诗背诵、成语理解和文言文阅读能力。
             </p>
           </div>
@@ -99,7 +103,9 @@
 
       <!-- 学习路线 -->
       <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-6 text-center text-secondary-950 font-serif">
+        <h2
+          class="text-2xl font-bold mb-6 text-center text-[var(--color-secondary-900)] font-serif"
+        >
           学习路线
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -123,7 +129,7 @@
                   <h3 :class="['font-bold mb-1', colorMap[feature.color].text]">
                     {{ feature.title }}
                   </h3>
-                  <p class="text-sm text-secondary-500">
+                  <p class="text-sm text-[var(--color-secondary-500)]">
                     {{ feature.description }}
                   </p>
                 </div>
@@ -135,7 +141,11 @@
 
       <!-- 技术栈 -->
       <div class="mb-8">
-        <h2 class="text-2xl font-bold mb-6 text-center text-secondary-950 font-serif"> 技术栈 </h2>
+        <h2
+          class="text-2xl font-bold mb-6 text-center text-[var(--color-secondary-900)] font-serif"
+        >
+          技术栈
+        </h2>
         <Card>
           <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             <div
@@ -145,10 +155,10 @@
             >
               <span class="text-2xl">{{ tech.icon }}</span>
               <div>
-                <div class="text-xs text-secondary-500">
+                <div class="text-xs text-[var(--color-secondary-500)]">
                   {{ tech.name }}
                 </div>
-                <div class="text-sm font-medium text-secondary-950">
+                <div class="text-sm font-medium text-[var(--color-secondary-900)]">
                   {{ tech.value }}
                 </div>
               </div>
@@ -159,7 +169,7 @@
 
       <!-- 底部 -->
       <div class="text-center pt-8 border-t border-[var(--color-secondary-200)]">
-        <p class="mb-2 text-secondary-500"> 让我们一起探索中华文化的魅力！ </p>
+        <p class="mb-2 text-[var(--color-secondary-500)]"> 让我们一起探索中华文化的魅力！ </p>
         <p class="text-sm text-[var(--color-secondary-400)]"> 汉字学习平台 · 让学习变得更有趣 </p>
       </div>
     </div>

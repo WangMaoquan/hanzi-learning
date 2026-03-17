@@ -10,9 +10,9 @@
   const featureColors = {
     characters: {
       bg: 'bg-[var(--color-primary-50)]',
-      bgHover: 'hover:bg-primary-100',
-      text: 'text-primary-700',
-      textHover: 'group-hover:text-primary-800',
+      bgHover: 'hover:bg-[var(--color-primary-100)]',
+      text: 'text-[var(--color-primary-700)]',
+      textHover: 'group-hover:text-[var(--color-primary-800)]',
       border: 'border-[var(--color-primary-200)]',
       borderHover: 'hover:border-[var(--color-primary-500)]',
       icon: 'text-[var(--color-primary-600)]',
@@ -40,9 +40,9 @@
       bgHover: 'hover:bg-[var(--color-secondary-100)]',
       text: 'text-[var(--color-secondary-600)]',
       textHover: 'group-hover:text-secondary-700',
-      border: 'border-secondary-200',
-      borderHover: 'hover:border-secondary-400',
-      icon: 'text-secondary-500',
+      border: 'border-[var(--color-secondary-200)]',
+      borderHover: 'hover:border-[var(--color-secondary-400)]',
+      icon: 'text-[var(--color-secondary-500)]',
     },
   }
 
@@ -105,25 +105,25 @@
         <nav class="flex items-center gap-6">
           <RouterLink
             to="/"
-            class="text-[var(--color-secondary-600)] hover:text-primary-500 transition-colors"
+            class="text-[var(--color-secondary-600)] hover:text-[var(--color-primary-500)] transition-colors"
           >
             首页
           </RouterLink>
           <RouterLink
             to="/learn"
-            class="text-[var(--color-secondary-600)] hover:text-primary-500 transition-colors"
+            class="text-[var(--color-secondary-600)] hover:text-[var(--color-primary-500)] transition-colors"
           >
             学习
           </RouterLink>
           <RouterLink
             to="/practice"
-            class="text-[var(--color-secondary-600)] hover:text-primary-500 transition-colors"
+            class="text-[var(--color-secondary-600)] hover:text-[var(--color-primary-500)] transition-colors"
           >
             练习
           </RouterLink>
           <RouterLink
             to="/about"
-            class="text-[var(--color-secondary-600)] hover:text-primary-500 transition-colors"
+            class="text-[var(--color-secondary-600)] hover:text-[var(--color-primary-500)] transition-colors"
           >
             关于
           </RouterLink>
@@ -135,10 +135,14 @@
     <!-- Hero - 现代简约中国风 -->
     <section class="bg-[var(--color-secondary-50)] py-20">
       <div class="max-w-4xl mx-auto px-4 text-center">
-        <h1 class="text-4xl md:text-5xl font-bold text-secondary-900 mb-6 font-serif">
+        <h1
+          class="text-4xl md:text-5xl font-bold text-[var(--color-secondary-900)] mb-6 font-serif"
+        >
           趣味学习，轻松掌握中华文化
         </h1>
-        <p class="text-lg md:text-xl text-secondary-600 mb-10 max-w-2xl mx-auto leading-relaxed">
+        <p
+          class="text-lg md:text-xl text-[var(--color-secondary-600)] mb-10 max-w-2xl mx-auto leading-relaxed"
+        >
           笔画顺序动画、古诗朗读背诵、成语故事讲解，让学习变得有趣
         </p>
         <RouterLink

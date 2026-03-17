@@ -1,7 +1,8 @@
 <script setup lang="ts">
+  import { computed } from 'vue'
   import { Loading, Empty, Pagination } from '@hanzi-learning/ui'
 
-  defineProps<{
+  const props = defineProps<{
     loading?: boolean
     total?: number
     limit?: number
@@ -16,6 +17,9 @@
     'update:page': [page: number]
     'update:limit': [limit: number]
   }>()
+
+  // 是否有数据
+  const hasData = computed(() => props.total && props.total > 0)
 
   function handlePageChange(page: number) {
     emit('update:page', page)
@@ -34,13 +38,13 @@
     <Loading v-if="loading" text="加载中..." />
 
     <!-- 空状态 -->
-    <Empty v-else-if="$slots.default === undefined" :description="emptyDescription || '暂无数据'" />
+    <Empty v-else-if="!hasData" :description="emptyDescription || '暂无数据'" />
 
     <!-- 内容区域 -->
     <slot v-else></slot>
 
     <!-- 分页 -->
-    <div v-if="!loading && total && total > 0" class="flex justify-center mt-8">
+    <div v-if="hasData" class="flex justify-center mt-8">
       <Pagination
         v-if="page !== undefined && limit !== undefined"
         :model-value="page"

@@ -52,7 +52,7 @@
   <div class="min-h-screen bg-[var(--color-secondary-50)]">
     <!-- 页面头部 - 现代简约中国风 -->
     <div
-      class="py-8 mb-6 border-b border-[var(--color-secondary-200)] bg-[var(--color-accent-50)] rounded-xl px-6 py-4 shadow-inner"
+      class="py-8 mb-6 border-b border-[var(--color-secondary-200)] bg-[var(--color-accent-50)] shadow-inner"
     >
       <div class="max-w-6xl mx-auto px-4">
         <h1 class="text-3xl font-bold mb-2 text-secondary-950 font-serif"> 成语故事 </h1>

@@ -86,7 +86,7 @@ const themeColors: Record<ThemeName, Record<string, string>> = {
     '--color-primary-900': '#8B2A2A',
 
     // 辅助色 - 柔和粉
-    '--color-secondary-50': '#FFF5F5',
+    '--color-secondary-50': '#FFF0F0',
     '--color-secondary-100': '#FFE8E8',
     '--color-secondary-200': '#FFD5D5',
     '--color-secondary-300': '#FFBDBD',
@@ -220,7 +220,7 @@ const themeColors: Record<ThemeName, Record<string, string>> = {
     '--color-primary-900': '#064E3B',
 
     // 辅助色 - 翠绿
-    '--color-secondary-50': '#F0FDF4',
+    '--color-secondary-50': '#EDF7ED',
     '--color-secondary-100': '#DCFCE7',
     '--color-secondary-200': '#BBF7D0',
     '--color-secondary-300': '#86EFAC',

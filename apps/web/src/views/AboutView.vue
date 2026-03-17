@@ -1,7 +1,6 @@
 <script setup lang="ts">
-  import { RouterLink } from 'vue-router'
   import { Card } from '@hanzi-learning/ui'
-  import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
+  import AppHeader from '@/components/AppHeader.vue'
 
   const features = [
     {
@@ -69,41 +68,7 @@
 
 <template>
   <div class="min-h-screen bg-[var(--color-background)] transition-colors duration-300">
-    <header
-      class="bg-[var(--color-surface)] shadow-sm sticky top-0 z-50 border-b border-[var(--color-secondary-200)]"
-    >
-      <div class="max-w-6xl mx-auto px-4 py-3">
-        <div class="flex items-center justify-between">
-          <RouterLink to="/" class="flex items-center gap-2">
-            <img src="/favicon.svg" alt="logo" class="w-6 h-6" />
-            <span class="font-bold text-[var(--color-secondary-900)]">汉字学习</span>
-          </RouterLink>
-          <div class="flex items-center gap-1">
-            <RouterLink
-              to="/learn"
-              class="px-3 py-1.5 rounded-lg text-sm text-[var(--color-secondary-600)] hover:bg-[var(--color-secondary-50)] transition-colors"
-            >
-              🏠 首页
-            </RouterLink>
-            <RouterLink
-              to="/practice"
-              class="px-3 py-1.5 rounded-lg text-sm text-[var(--color-secondary-600)] hover:bg-[var(--color-secondary-50)] transition-colors"
-            >
-              ✍️ 练习
-            </RouterLink>
-            <RouterLink
-              to="/about"
-              class="px-3 py-1.5 rounded-lg text-sm bg-[var(--color-primary-100)] text-[var(--color-primary-700)] font-medium"
-            >
-              ℹ️ 关于
-            </RouterLink>
-            <div class="ml-2">
-              <ThemeSwitcher />
-            </div>
-          </div>
-        </div>
-      </div>
-    </header>
+    <AppHeader :nav-items="[]" />
 
     <main class="max-w-4xl mx-auto px-4 py-8 pb-12">
       <Card hoverable class="mb-8">

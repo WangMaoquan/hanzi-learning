@@ -21,6 +21,24 @@ export interface HanziWriterOptions {
   highlightCompleteColor?: string;
 }
 
+export interface StrokeData {
+  character: string;
+  strokeNum: number;
+  totalStrokes: number;
+}
+
+export interface QuizOptions {
+  onMistake?: (strokeData: StrokeData) => void;
+  onCorrectStroke?: (strokeData: StrokeData) => void;
+  onComplete?: () => void;
+  highlightComplete?: boolean;
+  highlightCompleteColor?: string;
+  showCharacterAfterMisses?: number;
+  showOutlineAfterMisses?: number;
+  strokeAnimationSpeed?: number;
+  delayBetweenStrokes?: number;
+}
+
 export interface HanziWriterInstance {
   animateCharacter: () => void;
   animateStroke: (strokeNum: number, onComplete?: () => void) => void;
@@ -32,18 +50,8 @@ export interface HanziWriterInstance {
   hideOutline: () => void;
   showStrokeOrder: () => void;
   hideStrokeOrder: () => void;
-  getCharacter: () => any;
-  quiz: (options?: {
-    onMistake?: (strokeData: any) => void;
-    onCorrectStroke?: (strokeData: any) => void;
-    onComplete?: () => void;
-    highlightComplete?: boolean;
-    highlightCompleteColor?: string;
-    showCharacterAfterMisses?: number;
-    showOutlineAfterMisses?: number;
-    strokeAnimationSpeed?: number;
-    delayBetweenStrokes?: number;
-  }) => void;
+  getCharacter: () => unknown;
+  quiz: (options?: QuizOptions) => void;
   cancelQuiz: () => void;
   updateColor: (color: string) => void;
   updateStrokeColor: (strokeColor: string) => void;
@@ -86,7 +94,7 @@ export function useHanziWriter(
         containerRef.value,
         char,
         defaultOptions,
-      ) as any;
+      ) as HanziWriterInstance;
 
       writer.value?.animateCharacter();
       isLoading.value = false;
@@ -130,7 +138,7 @@ export function useHanziWriter(
     hideCharacter: () => writer.value?.hideCharacter(),
     showOutline: () => writer.value?.showOutline(),
     hideOutline: () => writer.value?.hideOutline(),
-    quiz: (quizOptions?: any) => writer.value?.quiz(quizOptions),
+    quiz: (options?: QuizOptions) => writer.value?.quiz(options),
     cancelQuiz: () => writer.value?.cancelQuiz(),
   };
 }

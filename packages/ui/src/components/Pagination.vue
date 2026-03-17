@@ -94,7 +94,10 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
   <div class="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-100">
     <!-- 左侧：显示信息和每页条数选择 -->
     <div class="flex items-center gap-4 text-sm text-gray-500 order-2 sm:order-1">
-      <span v-if="total > 0" class="whitespace-nowrap">
+      <span
+        v-if="total > 0"
+        class="whitespace-nowrap"
+      >
         第 <span class="text-gray-700 font-medium">{{ startNum }}</span> -
         <span class="text-gray-700 font-medium">{{ endNum }}</span> 条，
         共 <span class="text-gray-700 font-medium">{{ total }}</span> 条
@@ -107,7 +110,11 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
         style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270%200%2020%2020%27%3E%3Cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3E%3C/svg%3E'); background-size: 1rem;"
         @change="changeSize"
       >
-        <option v-for="size in (pageSizes || [10, 20, 40, 60])" :key="size" :value="size">
+        <option
+          v-for="size in (pageSizes || [10, 20, 40, 60])"
+          :key="size"
+          :value="size"
+        >
           {{ size }} 条/页
         </option>
       </select>
@@ -122,8 +129,18 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
         title="首页"
         @click="goTo(1)"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+          />
         </svg>
       </button>
 
@@ -133,14 +150,27 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
         :disabled="modelValue <= 1"
         @click="goTo(modelValue - 1)"
       >
-        <svg class="w-4 h-4 mr-1 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        <svg
+          class="w-4 h-4 mr-1 sm:hidden"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M15 19l-7-7 7-7"
+          />
         </svg>
         <span class="hidden sm:inline">上一页</span>
       </button>
 
       <!-- 页码 -->
-      <template v-for="(page, index) in pages" :key="index">
+      <template
+        v-for="(page, index) in pages"
+        :key="index"
+      >
         <span
           v-if="page === '...'"
           class="px-1.5 text-gray-400"
@@ -164,8 +194,18 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
         @click="goTo(modelValue + 1)"
       >
         <span class="hidden sm:inline">下一页</span>
-        <svg class="w-4 h-4 ml-1 sm:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+        <svg
+          class="w-4 h-4 ml-1 sm:hidden"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M9 5l7 7-7 7"
+          />
         </svg>
       </button>
 
@@ -176,8 +216,18 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
         title="末页"
         @click="goTo(totalPages)"
       >
-        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+        <svg
+          class="w-4 h-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 5l7 7-7 7M5 5l7 7-7 7"
+          />
         </svg>
       </button>
 

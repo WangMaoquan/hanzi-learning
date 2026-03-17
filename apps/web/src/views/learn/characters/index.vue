@@ -1,5 +1,5 @@
 <script setup lang="ts">
-  import { ref, onMounted, watch } from 'vue'
+  import { ref, onMounted } from 'vue'
   import { getCharacters, getCharacterCount, type Character } from '@/services/api'
   import { Card, Loading, Empty, Pagination } from '@hanzi-learning/ui'
 

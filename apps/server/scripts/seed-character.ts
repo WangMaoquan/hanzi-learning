@@ -65,7 +65,6 @@ function processCharacter(
     const pinyins = Array.from(pinyinSet).sort();
     const pinyin = pinyins.join(","); // 主拼音字段存储所有拼音
     const strokes = strokeSet.size === 1 ? Array.from(strokeSet)[0] : null; // 单笔画用 strokes
-    const strokeMap = Object.keys(pinyinMap).length > 0 ? pinyinMap : null; // 多音字用 strokeMap
 
     // 处理部首（取第一个）
     const radical = chars[0].radicals?.trim() || null;
@@ -182,7 +181,7 @@ async function main() {
     // 处理数据
     console.log("处理数据...");
     const characters: Prisma.CharacterCreateInput[] = [];
-    for (const [word, chars] of groups) {
+    for (const [, chars] of groups) {
       const processed = processCharacter(chars);
       if (processed) {
         characters.push(processed);

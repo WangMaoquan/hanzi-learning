@@ -1,5 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../../prisma/prisma.service";
+import { Prisma, PrismaService } from "../../prisma/prisma.service";
 import { PoemTransformer } from "../../transformers";
 import type { PoemVO, PaginatedVO } from "../../transformers/vo";
 
@@ -14,7 +14,7 @@ export class PoemsService {
     search?: string,
   ): Promise<PaginatedVO<PoemVO>> {
     const skip = (page - 1) * limit;
-    const where: any = {};
+    const where: Prisma.PoemWhereInput = {};
 
     if (dynasty) {
       where.dynasty = dynasty;

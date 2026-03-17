@@ -53,7 +53,7 @@
         v-for="exercise in exercises"
         :key="exercise.path"
         :to="exercise.available ? exercise.path : '#'"
-        class="bg-white rounded-xl p-6 transition-all border-2 border-transparent hover:shadow-md border-gray-200"
+        class="bg-[var(--color-surface)] rounded-xl p-6 transition-all border-2 border-transparent hover:shadow-md border-[var(--color-secondary-200)]"
         :class="{ 'opacity-50 cursor-not-allowed': !exercise.available }"
       >
         <div class="flex items-center gap-4">
@@ -75,7 +75,9 @@
     </div>
 
     <!-- 学习统计 -->
-    <div class="mt-8 bg-white rounded-xl p-6 border border-gray-200">
+    <div
+      class="mt-8 bg-[var(--color-surface)] rounded-xl p-6 border border-[var(--color-secondary-200)]"
+    >
       <h2 class="text-lg font-semibold mb-4 text-secondary-950 font-serif"> 学习统计 </h2>
       <div v-if="loading" class="text-center text-secondary-400 py-4"> 加载中... </div>
       <div v-else class="grid grid-cols-3 gap-6 text-center">

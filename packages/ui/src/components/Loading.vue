@@ -41,7 +41,7 @@ defineProps<{
       </svg>
       <span
         v-if="text || $slots.default"
-        class="text-gray-500"
+        class="text-[var(--color-secondary-500)]"
         :class="{
           'text-sm': size === 'sm',
           'text-base': size === 'md' || !size,

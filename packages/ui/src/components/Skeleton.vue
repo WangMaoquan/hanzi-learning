@@ -14,7 +14,7 @@ defineProps<{
     <div
       v-for="i in lines || 3"
       :key="i"
-      class="bg-gray-200 rounded"
+      class="bg-[var(--color-secondary-200)] rounded"
       :style="{
         width: width || '100%',
         height: height || '1rem',

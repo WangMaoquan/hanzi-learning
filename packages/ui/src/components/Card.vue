@@ -11,7 +11,7 @@ defineProps<{
 
 <template>
   <div
-    class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 transition-all"
+    class="bg-[var(--color-surface)] rounded-xl p-6 shadow-sm border border-[var(--color-secondary-100)] transition-all"
     :class="{
       'hover:shadow-md hover:border-primary-200': hoverable,
       'cursor-pointer active:scale-[0.99]': clickable,

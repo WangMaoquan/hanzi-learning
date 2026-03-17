@@ -91,22 +91,22 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
 </script>
 
 <template>
-  <div class="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-3 bg-white rounded-xl shadow-sm border border-gray-100">
+  <div class="flex flex-col sm:flex-row items-center justify-between gap-4 px-4 py-3 bg-[var(--color-surface)] rounded-xl shadow-sm border border-[var(--color-secondary-100)]">
     <!-- 左侧：显示信息和每页条数选择 -->
-    <div class="flex items-center gap-4 text-sm text-gray-500 order-2 sm:order-1">
+    <div class="flex items-center gap-4 text-sm text-[var(--color-secondary-500)] order-2 sm:order-1">
       <span
         v-if="total > 0"
         class="whitespace-nowrap"
       >
-        第 <span class="text-gray-700 font-medium">{{ startNum }}</span> -
-        <span class="text-gray-700 font-medium">{{ endNum }}</span> 条，
-        共 <span class="text-gray-700 font-medium">{{ total }}</span> 条
+        第 <span class="text-[var(--color-secondary-700)] font-medium">{{ startNum }}</span> -
+        <span class="text-[var(--color-secondary-700)] font-medium">{{ endNum }}</span> 条，
+        共 <span class="text-[var(--color-secondary-700)] font-medium">{{ total }}</span> 条
       </span>
 
       <select
         v-if="showSizeChanger"
         :value="limit || 10"
-        class="h-8 px-2 pr-7 border border-gray-200 rounded-lg text-sm bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 cursor-pointer appearance-none bg-no-repeat bg-[right_0.5rem_center]"
+        class="h-8 px-2 pr-7 border border-[var(--color-secondary-200)] rounded-lg text-sm bg-[var(--color-surface)] focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 cursor-pointer appearance-none bg-no-repeat bg-[right_0.5rem_center]"
         style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270%200%2020%2020%27%3E%3Cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3E%3C/svg%3E'); background-size: 1rem;"
         @change="changeSize"
       >
@@ -124,7 +124,7 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
     <div class="flex items-center gap-1 order-1 sm:order-2">
       <!-- 首页 -->
       <button
-        class="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg text-sm text-gray-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        class="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg text-sm text-[var(--color-secondary-500)] hover:bg-[var(--color-secondary-100)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         :disabled="modelValue <= 1"
         title="首页"
         @click="goTo(1)"
@@ -146,7 +146,7 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
 
       <!-- 上一页 -->
       <button
-        class="flex items-center justify-center h-8 px-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        class="flex items-center justify-center h-8 px-3 rounded-lg text-sm font-medium text-[var(--color-secondary-600)] hover:bg-[var(--color-secondary-100)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         :disabled="modelValue <= 1"
         @click="goTo(modelValue - 1)"
       >
@@ -173,7 +173,7 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
       >
         <span
           v-if="page === '...'"
-          class="px-1.5 text-gray-400"
+          class="px-1.5 text-[var(--color-secondary-400)]"
         >...</span>
         <button
           v-else
@@ -189,7 +189,7 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
 
       <!-- 下一页 -->
       <button
-        class="flex items-center justify-center h-8 px-3 rounded-lg text-sm font-medium text-gray-600 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        class="flex items-center justify-center h-8 px-3 rounded-lg text-sm font-medium text-[var(--color-secondary-600)] hover:bg-[var(--color-secondary-100)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         :disabled="modelValue >= totalPages"
         @click="goTo(modelValue + 1)"
       >
@@ -211,7 +211,7 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
 
       <!-- 末页 -->
       <button
-        class="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg text-sm text-gray-500 hover:bg-gray-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+        class="hidden sm:flex items-center justify-center w-8 h-8 rounded-lg text-sm text-[var(--color-secondary-500)] hover:bg-[var(--color-secondary-100)] disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
         :disabled="modelValue >= totalPages"
         title="末页"
         @click="goTo(totalPages)"
@@ -234,18 +234,18 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
       <!-- 页码跳转 -->
       <div
         v-if="showJumper"
-        class="flex items-center gap-1.5 ml-2 pl-2 border-l border-gray-200"
+        class="flex items-center gap-1.5 ml-2 pl-2 border-l border-[var(--color-secondary-200)]"
       >
-        <span class="text-sm text-gray-500 hidden sm:inline">跳至</span>
+        <span class="text-sm text-[var(--color-secondary-500)] hidden sm:inline">跳至</span>
         <input
           type="number"
           :min="1"
           :max="totalPages"
-          class="w-14 h-8 px-2 border border-gray-200 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-shadow"
+          class="w-14 h-8 px-2 border border-[var(--color-secondary-200)] rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 transition-shadow"
           placeholder="页码"
           @keyup.enter="goTo(Number(($event.target as HTMLInputElement).value))"
         />
-        <span class="text-sm text-gray-500 hidden sm:inline">页</span>
+        <span class="text-sm text-[var(--color-secondary-500)] hidden sm:inline">页</span>
       </div>
     </div>
   </div>

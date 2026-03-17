@@ -44,10 +44,10 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-secondary-50">
+  <div class="min-h-screen bg-[var(--color-secondary-50)]">
     <!-- 页面头部 - 现代简约中国风 -->
     <div
-      class="py-8 mb-6 border-b bg-gradient-to-r from-secondary-100 to-secondary-200 border-gray-200"
+      class="py-8 mb-6 border-b bg-[var(--color-secondary-100)] border-[var(--color-secondary-200)]"
     >
       <div class="max-w-6xl mx-auto px-4">
         <h1 class="text-3xl font-bold mb-2 text-secondary-950 font-serif"> 古诗词 </h1>

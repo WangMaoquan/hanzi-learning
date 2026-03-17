@@ -1,5 +1,6 @@
 <script setup lang="ts">
   import { RouterView, useRoute } from 'vue-router'
+  import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 
   const route = useRoute()
 
@@ -13,15 +14,17 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-secondary-50">
-    <header class="bg-white shadow-sm sticky top-0 z-50 border-b border-gray-200">
+  <div class="min-h-screen bg-[var(--color-background)] transition-colors duration-300">
+    <header
+      class="bg-[var(--color-surface)] shadow-sm sticky top-0 z-50 border-b border-[var(--color-secondary-200)]"
+    >
       <div class="max-w-6xl mx-auto px-4 py-3">
         <div class="flex items-center justify-between">
           <RouterLink to="/" class="flex items-center gap-2">
             <img src="/favicon.svg" alt="logo" class="w-6 h-6" />
-            <span class="font-bold text-secondary-950">汉字学习</span>
+            <span class="font-bold text-secondary-900">汉字学习</span>
           </RouterLink>
-          <nav class="flex gap-1">
+          <nav class="flex items-center gap-1">
             <RouterLink
               v-for="tab in tabs"
               :key="tab.path"
@@ -35,6 +38,9 @@
             >
               {{ tab.icon }} {{ tab.name }}
             </RouterLink>
+            <div class="ml-2">
+              <ThemeSwitcher />
+            </div>
           </nav>
         </div>
       </div>

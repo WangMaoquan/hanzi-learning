@@ -39,36 +39,38 @@
 
   const colorMap: Record<string, { bg: string; text: string; border: string; gradient: string }> = {
     primary: {
-      bg: 'bg-primary-50',
+      bg: 'bg-[var(--color-primary-50)]',
       text: 'text-primary-600',
       border: 'border-primary-200',
       gradient: 'from-primary-50 to-primary-100',
     },
     secondary: {
-      bg: 'bg-secondary-50',
+      bg: 'bg-[var(--color-secondary-50)]',
       text: 'text-secondary-600',
       border: 'border-secondary-200',
       gradient: 'from-secondary-50 to-secondary-100',
     },
     orange: {
-      bg: 'bg-yellow-50',
-      text: 'text-yellow-600',
-      border: 'border-yellow-200',
-      gradient: 'from-yellow-50 to-yellow-100',
+      bg: 'bg-[var(--color-accent-50)]',
+      text: 'text-[var(--color-accent-600)]',
+      border: 'border-[var(--color-accent-200)]',
+      gradient: 'from-[var(--color-accent-50)] to-[var(--color-accent-100)]',
     },
     purple: {
-      bg: 'bg-purple-50',
-      text: 'text-purple-600',
-      border: 'border-purple-200',
-      gradient: 'from-purple-50 to-purple-100',
+      bg: 'bg-[var(--color-secondary-50)]',
+      text: 'text-[var(--color-secondary-600)]',
+      border: 'border-[var(--color-secondary-200)]',
+      gradient: 'from-[var(--color-secondary-50)] to-[var(--color-secondary-100)]',
     },
   }
 </script>
 
 <template>
-  <div class="min-h-screen bg-secondary-50">
+  <div class="min-h-screen bg-[var(--color-secondary-50)]">
     <!-- 页面头部 - 现代简约中国风 -->
-    <div class="py-12 mb-8 border-b bg-gradient-to-r from-primary-50 to-yellow-50 border-gray-200">
+    <div
+      class="py-12 mb-8 border-b bg-[var(--color-primary-50)] border-[var(--color-secondary-200)]"
+    >
       <div class="max-w-4xl mx-auto px-4 text-center">
         <h1 class="text-4xl font-bold mb-4 text-secondary-950 font-serif"> 关于汉字学习平台 </h1>
         <p class="text-lg max-w-2xl mx-auto text-secondary-500">
@@ -139,7 +141,7 @@
             <div
               v-for="tech in techStack"
               :key="tech.name"
-              class="flex items-center gap-3 p-3 rounded-xl transition-colors bg-secondary-50"
+              class="flex items-center gap-3 p-3 rounded-xl transition-colors bg-[var(--color-secondary-50)]"
             >
               <span class="text-2xl">{{ tech.icon }}</span>
               <div>
@@ -156,9 +158,9 @@
       </div>
 
       <!-- 底部 -->
-      <div class="text-center pt-8 border-t border-gray-200">
+      <div class="text-center pt-8 border-t border-[var(--color-secondary-200)]">
         <p class="mb-2 text-secondary-500"> 让我们一起探索中华文化的魅力！ </p>
-        <p class="text-sm text-gray-400"> 汉字学习平台 · 让学习变得更有趣 </p>
+        <p class="text-sm text-[var(--color-secondary-400)]"> 汉字学习平台 · 让学习变得更有趣 </p>
       </div>
     </div>
   </div>

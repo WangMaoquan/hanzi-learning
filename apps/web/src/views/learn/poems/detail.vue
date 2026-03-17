@@ -49,7 +49,7 @@
 <template>
   <Loading v-if="loading" text="加载中..." />
 
-  <div v-else-if="poem" class="min-h-screen pb-12 bg-secondary-50">
+  <div v-else-if="poem" class="min-h-screen pb-12 bg-[var(--color-secondary-50)]">
     <div class="max-w-6xl mx-auto px-4 pt-6">
       <!-- 返回链接 -->
       <div class="mb-6">
@@ -87,7 +87,7 @@
                   :key="charIdx"
                   class="flex flex-col items-center min-w-[2rem]"
                 >
-                  <span class="text-xs h-4 text-gray-400">
+                  <span class="text-xs h-4 text-[var(--color-secondary-400)]">
                     {{ poem.versePinyins?.[verseIdx]?.[charIdx] || '' }}
                   </span>
                   <span class="text-2xl font-bold py-1 text-secondary-950">{{ char }}</span>
@@ -98,12 +98,12 @@
             <!-- 标签 -->
             <div
               v-if="poem.tags?.length"
-              class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-gray-200"
+              class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-[var(--color-secondary-200)]"
             >
               <span
                 v-for="tag in poem.tags"
                 :key="tag"
-                class="px-3 py-1.5 text-sm rounded-lg transition-colors cursor-pointer bg-secondary-50 text-secondary-500"
+                class="px-3 py-1.5 text-sm rounded-lg transition-colors cursor-pointer bg-[var(--color-secondary-50)] text-secondary-500"
               >
                 #{{ tag }}
               </span>
@@ -123,28 +123,34 @@
             </h2>
             <div class="space-y-4">
               <div v-if="poem.type" class="flex items-center justify-between">
-                <span class="text-gray-400">类型</span>
+                <span class="text-[var(--color-secondary-400)]">类型</span>
                 <span class="px-3 py-1 font-medium rounded-lg bg-secondary-100 text-secondary-600">
                   {{ poem.type }}
                 </span>
               </div>
               <div v-if="poem.difficulty" class="flex items-center justify-between">
-                <span class="text-gray-400">难度</span>
+                <span class="text-[var(--color-secondary-400)]">难度</span>
                 <div class="flex items-center gap-2">
                   <div class="flex gap-1">
                     <span
                       v-for="i in 5"
                       :key="i"
                       class="w-2 h-2 rounded-full"
-                      :class="i <= poem.difficulty ? 'bg-secondary-950' : 'bg-gray-200'"
+                      :class="
+                        i <= poem.difficulty
+                          ? 'bg-secondary-950'
+                          : 'bg-[var(--color-secondary-200)]'
+                      "
                     ></span>
                   </div>
-                  <span class="font-medium text-gray-700">{{ poem.difficulty }}/5</span>
+                  <span class="font-medium text-[var(--color-secondary-700)]"
+                    >{{ poem.difficulty }}/5</span
+                  >
                 </div>
               </div>
               <div class="flex items-center justify-between">
-                <span class="text-gray-400">字数</span>
-                <span class="font-medium text-gray-700">
+                <span class="text-[var(--color-secondary-400)]">字数</span>
+                <span class="font-medium text-[var(--color-secondary-700)]">
                   {{ poem.verses?.flat().length || 0 }} 字
                 </span>
               </div>
@@ -161,7 +167,7 @@
           </button>
 
           <!-- 分享提示 -->
-          <p class="text-center text-sm text-gray-400">
+          <p class="text-center text-sm text-[var(--color-secondary-400)]">
             点击按钮开始背诵模式，系统将随机展示诗句让你背诵
           </p>
         </div>
@@ -172,7 +178,7 @@
         <RouterLink
           v-if="neighbors.prev"
           :to="`/learn/poems/${neighbors.prev.id}`"
-          class="group flex items-center gap-3 px-6 py-4 bg-white rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-gray-200"
+          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-[var(--color-secondary-200)]"
         >
           <span
             class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-secondary-100 text-secondary-500"
@@ -187,8 +193,10 @@
             </svg>
           </span>
           <div class="text-left">
-            <div class="text-xs text-gray-400"> 上一首 </div>
-            <div class="text-base font-semibold transition-colors text-gray-700">
+            <div class="text-xs text-[var(--color-secondary-400)]"> 上一首 </div>
+            <div
+              class="text-base font-semibold transition-colors text-[var(--color-secondary-700)]"
+            >
               {{ neighbors.prev.title }}
             </div>
           </div>
@@ -198,11 +206,13 @@
         <RouterLink
           v-if="neighbors.next"
           :to="`/learn/poems/${neighbors.next.id}`"
-          class="group flex items-center gap-3 px-6 py-4 bg-white rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-gray-200"
+          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-[var(--color-secondary-200)]"
         >
           <div class="text-right">
-            <div class="text-xs text-gray-400"> 下一首 </div>
-            <div class="text-base font-semibold transition-colors text-gray-700">
+            <div class="text-xs text-[var(--color-secondary-400)]"> 下一首 </div>
+            <div
+              class="text-base font-semibold transition-colors text-[var(--color-secondary-700)]"
+            >
               {{ neighbors.next.title }}
             </div>
           </div>

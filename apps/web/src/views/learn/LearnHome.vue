@@ -22,35 +22,35 @@
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-gray-900 mb-6"> 选择学习内容 </h1>
+    <h1 class="text-2xl font-bold text-[var(--color-secondary-900)] mb-6"> 选择学习内容 </h1>
 
     <!-- Stats -->
-    <div v-if="loading" class="text-center text-gray-500 py-8"> 加载中... </div>
+    <div v-if="loading" class="text-center text-[var(--color-secondary-500)] py-8"> 加载中... </div>
     <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
       <RouterLink
         v-for="stat in stats"
         :key="stat.path"
         :to="stat.path"
-        class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 hover:shadow-md transition-shadow text-center"
+        class="bg-[var(--color-surface)] rounded-xl p-6 shadow-sm border border-[var(--color-secondary-100)] hover:shadow-md transition-shadow text-center"
       >
         <div class="text-3xl mb-2">
           {{ stat.icon }}
         </div>
-        <div class="text-2xl font-bold text-gray-900">
+        <div class="text-2xl font-bold text-[var(--color-secondary-900)]">
           {{ stat.value.value.toLocaleString() }}
         </div>
-        <div class="text-gray-500 text-sm">
+        <div class="text-[var(--color-secondary-500)] text-sm">
           {{ stat.label }}
         </div>
       </RouterLink>
     </div>
 
     <!-- Quick Start -->
-    <h2 class="text-lg font-semibold text-gray-900 mb-4"> 快速开始 </h2>
+    <h2 class="text-lg font-semibold text-[var(--color-secondary-900)] mb-4"> 快速开始 </h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <RouterLink
         to="/learn/characters"
-        class="bg-gradient-to-r from-primary-400 to-primary-500 rounded-xl p-6 text-white hover:from-primary-500 hover:to-primary-600 transition-all"
+        class="bg-[var(--color-primary-500)] rounded-xl p-6 text-white hover:bg-[var(--color-primary-600)] transition-all"
       >
         <div class="flex items-center gap-3 mb-2">
           <span class="text-3xl">✍️</span>
@@ -61,7 +61,7 @@
 
       <RouterLink
         to="/learn/poems"
-        class="bg-gradient-to-r from-secondary-400 to-secondary-500 rounded-xl p-6 text-white hover:from-secondary-500 hover:to-secondary-600 transition-all"
+        class="bg-[var(--color-secondary-500)] rounded-xl p-6 text-white hover:bg-[var(--color-secondary-600)] transition-all"
       >
         <div class="flex items-center gap-3 mb-2">
           <span class="text-3xl">📜</span>

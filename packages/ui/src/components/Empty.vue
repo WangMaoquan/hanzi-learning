@@ -29,7 +29,7 @@ defineProps<{
         />
       </svg>
     </div>
-    <p class="text-gray-500 text-base">
+    <p class="text-[var(--color-secondary-500)] text-base">
       <slot>{{ description || '暂无数据' }}</slot>
     </p>
   </div>

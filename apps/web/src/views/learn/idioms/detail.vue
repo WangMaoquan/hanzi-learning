@@ -49,16 +49,16 @@
 <template>
   <Loading v-if="loading" text="加载中..." />
 
-  <div v-else-if="idiom" class="min-h-screen pb-12 bg-secondary-50">
+  <div v-else-if="idiom" class="min-h-screen pb-12 bg-[var(--color-secondary-50)]">
     <div class="max-w-4xl mx-auto px-4 pt-6">
       <!-- 返回链接 -->
       <div class="mb-6">
         <BackLink to="/learn/idioms" text="返回列表" />
       </div>
 
-      <Card hoverable class="border-2 border-yellow-500">
+      <Card hoverable class="border-2 border-[var(--color-accent-500)]">
         <!-- 成语标题区域 -->
-        <div class="text-center mb-8 pb-8 border-b border-yellow-100">
+        <div class="text-center mb-8 pb-8 border-b border-[var(--color-accent-100)]">
           <div
             class="inline-flex items-center justify-center rounded-xl px-8 py-4 mb-4 shadow-inner bg-[linear-gradient(135deg,#fffbeb_0%,#fef3c7_100%)]"
           >
@@ -74,10 +74,10 @@
         <!-- 释义 -->
         <div class="mb-8">
           <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-secondary-950 font-serif">
-            <span class="w-2 h-6 rounded-full bg-yellow-500"></span>
+            <span class="w-2 h-6 rounded-full bg-[var(--color-accent-500)]"></span>
             释义
           </h2>
-          <p class="leading-relaxed text-lg text-gray-700">
+          <p class="leading-relaxed text-lg text-[var(--color-secondary-700)]">
             {{ idiom.content || '暂无释义' }}
           </p>
         </div>
@@ -85,10 +85,12 @@
         <!-- 出处 -->
         <div v-if="idiom.derivation" class="mb-8">
           <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-secondary-950 font-serif">
-            <span class="w-2 h-6 rounded-full bg-yellow-500"></span>
+            <span class="w-2 h-6 rounded-full bg-[var(--color-accent-500)]"></span>
             出处
           </h2>
-          <p class="italic leading-relaxed rounded-xl p-4 bg-yellow-50 text-secondary-500">
+          <p
+            class="italic leading-relaxed rounded-xl p-4 bg-[var(--color-accent-50)] text-secondary-500"
+          >
             {{ idiom.derivation }}
           </p>
         </div>
@@ -96,11 +98,11 @@
         <!-- 例句 -->
         <div v-if="idiom.example" class="mb-8">
           <h2 class="text-lg font-bold mb-4 flex items-center gap-2 text-secondary-950 font-serif">
-            <span class="w-2 h-6 rounded-full bg-yellow-500"></span>
+            <span class="w-2 h-6 rounded-full bg-[var(--color-accent-500)]"></span>
             例句
           </h2>
           <p
-            class="italic leading-relaxed rounded-xl p-5 border bg-secondary-50 text-gray-700 border-gray-200"
+            class="italic leading-relaxed rounded-xl p-5 border bg-[var(--color-secondary-50)] text-[var(--color-secondary-700)] border-[var(--color-secondary-200)]"
           >
             {{ idiom.example }}
           </p>
@@ -146,10 +148,10 @@
         <RouterLink
           v-if="neighbors.prev"
           :to="`/learn/idioms/${neighbors.prev.id}`"
-          class="group flex items-center gap-3 px-6 py-4 bg-white rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-gray-200"
+          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-[var(--color-secondary-200)]"
         >
           <span
-            class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-yellow-50 text-amber-700"
+            class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-accent-50)] text-[var(--color-accent-600)]"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -161,8 +163,10 @@
             </svg>
           </span>
           <div class="text-left">
-            <div class="text-xs text-gray-400"> 上一个 </div>
-            <div class="text-base font-semibold transition-colors text-gray-700">
+            <div class="text-xs text-[var(--color-secondary-400)]"> 上一个 </div>
+            <div
+              class="text-base font-semibold transition-colors text-[var(--color-secondary-700)]"
+            >
               {{ neighbors.prev.title }}
             </div>
           </div>
@@ -172,16 +176,18 @@
         <RouterLink
           v-if="neighbors.next"
           :to="`/learn/idioms/${neighbors.next.id}`"
-          class="group flex items-center gap-3 px-6 py-4 bg-white rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-gray-200"
+          class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:shadow-lg transition-all border-[var(--color-secondary-200)]"
         >
           <div class="text-right">
-            <div class="text-xs text-gray-400"> 下一个 </div>
-            <div class="text-base font-semibold transition-colors text-gray-700">
+            <div class="text-xs text-[var(--color-secondary-400)]"> 下一个 </div>
+            <div
+              class="text-base font-semibold transition-colors text-[var(--color-secondary-700)]"
+            >
               {{ neighbors.next.title }}
             </div>
           </div>
           <span
-            class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-yellow-50 text-amber-700"
+            class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-accent-50)] text-[var(--color-accent-600)]"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -199,6 +205,6 @@
   </div>
 
   <Empty v-else description="未找到该成语">
-    <RouterLink to="/learn/idioms" class="text-yellow-500"> 返回列表 </RouterLink>
+    <RouterLink to="/learn/idioms" class="text-[var(--color-accent-500)]"> 返回列表 </RouterLink>
   </Empty>
 </template>

@@ -2,12 +2,15 @@
   import { RouterView } from 'vue-router'
   import { ToastContainer } from '@hanzi-learning/ui'
   import { useToast } from '@/composables'
+  import { useThemeStore } from '@/stores/theme'
 
   const { toasts } = useToast()
+  // 初始化主题
+  useThemeStore()
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen bg-[var(--color-background)]">
     <RouterView />
     <ToastContainer :toasts="toasts" />
   </div>

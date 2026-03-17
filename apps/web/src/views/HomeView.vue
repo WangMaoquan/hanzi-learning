@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import { useContentCounts, useToast } from '@/composables'
+  import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 
   const { characterCount, poemCount, idiomCount, loading, error, fetchCounts } = useContentCounts()
   const toast = useToast()
@@ -8,7 +9,7 @@
   // 功能色配置 - 现代简约中国风
   const featureColors = {
     characters: {
-      bg: 'bg-primary-50',
+      bg: 'bg-[var(--color-primary-50)]',
       bgHover: 'hover:bg-primary-100',
       text: 'text-primary-700',
       textHover: 'group-hover:text-primary-800',
@@ -17,7 +18,7 @@
       icon: 'text-primary-600',
     },
     poems: {
-      bg: 'bg-secondary-50',
+      bg: 'bg-[var(--color-secondary-50)]',
       bgHover: 'hover:bg-secondary-100',
       text: 'text-secondary-700',
       textHover: 'group-hover:text-secondary-800',
@@ -26,16 +27,16 @@
       icon: 'text-secondary-600',
     },
     idioms: {
-      bg: 'bg-yellow-50',
-      bgHover: 'hover:bg-yellow-100',
-      text: 'text-yellow-700',
-      textHover: 'group-hover:text-yellow-800',
-      border: 'border-yellow-200',
-      borderHover: 'hover:border-yellow-500',
-      icon: 'text-yellow-600',
+      bg: 'bg-[var(--color-accent-50)]',
+      bgHover: 'hover:bg-[var(--color-accent-100)]',
+      text: 'text-[var(--color-accent-700)]',
+      textHover: 'group-hover:text-[var(--color-accent-800)]',
+      border: 'border-[var(--color-accent-200)]',
+      borderHover: 'hover:border-[var(--color-accent-500)]',
+      icon: 'text-[var(--color-accent-600)]',
     },
     prose: {
-      bg: 'bg-secondary-50',
+      bg: 'bg-[var(--color-secondary-50)]',
       bgHover: 'hover:bg-secondary-100',
       text: 'text-secondary-600',
       textHover: 'group-hover:text-secondary-700',
@@ -95,31 +96,44 @@
 <template>
   <div class="min-h-screen">
     <!-- Header -->
-    <header class="bg-white shadow-sm">
+    <header class="bg-[var(--color-surface)] shadow-sm">
       <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         <div class="flex items-center gap-2">
           <img src="/favicon.svg" alt="logo" class="w-8 h-8" />
-          <span class="text-xl font-bold text-gray-900">汉字学习平台</span>
+          <span class="text-xl font-bold text-[var(--color-secondary-900)]">汉字学习平台</span>
         </div>
-        <nav class="flex gap-6">
-          <RouterLink to="/" class="text-gray-600 hover:text-primary-500 transition-colors">
+        <nav class="flex items-center gap-6">
+          <RouterLink
+            to="/"
+            class="text-[var(--color-secondary-600)] hover:text-primary-500 transition-colors"
+          >
             首页
           </RouterLink>
-          <RouterLink to="/learn" class="text-gray-600 hover:text-primary-500 transition-colors">
+          <RouterLink
+            to="/learn"
+            class="text-[var(--color-secondary-600)] hover:text-primary-500 transition-colors"
+          >
             学习
           </RouterLink>
-          <RouterLink to="/practice" class="text-gray-600 hover:text-primary-500 transition-colors">
+          <RouterLink
+            to="/practice"
+            class="text-[var(--color-secondary-600)] hover:text-primary-500 transition-colors"
+          >
             练习
           </RouterLink>
-          <RouterLink to="/about" class="text-gray-600 hover:text-primary-500 transition-colors">
+          <RouterLink
+            to="/about"
+            class="text-[var(--color-secondary-600)] hover:text-primary-500 transition-colors"
+          >
             关于
           </RouterLink>
+          <ThemeSwitcher />
         </nav>
       </div>
     </header>
 
     <!-- Hero - 现代简约中国风 -->
-    <section class="bg-gradient-to-br from-secondary-50 via-white to-primary-50 py-20">
+    <section class="bg-[var(--color-secondary-50)] py-20">
       <div class="max-w-4xl mx-auto px-4 text-center">
         <h1 class="text-4xl md:text-5xl font-bold text-secondary-900 mb-6 font-serif">
           趣味学习，轻松掌握中华文化
@@ -137,14 +151,18 @@
     </section>
 
     <!-- Features -->
-    <section class="py-20 bg-gray-50">
+    <section class="py-20 bg-[var(--color-background)]">
       <div class="max-w-6xl mx-auto px-4">
-        <h2 class="text-3xl font-bold text-gray-900 text-center mb-4"> 学习内容 </h2>
-        <p class="text-gray-500 text-center mb-12 max-w-xl mx-auto">
+        <h2 class="text-3xl font-bold text-[var(--color-secondary-900)] text-center mb-4">
+          学习内容
+        </h2>
+        <p class="text-[var(--color-secondary-500)] text-center mb-12 max-w-xl mx-auto">
           多种学习方式，轻松掌握中华文化精髓
         </p>
 
-        <div v-if="loading" class="text-center text-gray-500 py-12"> 加载中... </div>
+        <div v-if="loading" class="text-center text-[var(--color-secondary-500)] py-12">
+          加载中...
+        </div>
 
         <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <RouterLink
@@ -155,7 +173,7 @@
           >
             <div
               :class="[
-                'bg-white rounded-2xl p-6 border-2 border-transparent transition-all duration-300',
+                'bg-[var(--color-surface)] rounded-2xl p-6 border-2 border-transparent transition-all duration-300',
                 'hover:shadow-xl hover:-translate-y-1',
                 getFeatureColors(feature.type).borderHover,
               ]"
@@ -182,7 +200,7 @@
               </h3>
 
               <!-- 描述 -->
-              <p class="text-gray-500 text-sm mb-4 leading-relaxed">
+              <p class="text-[var(--color-secondary-500)] text-sm mb-4 leading-relaxed">
                 {{ feature.description }}
               </p>
 
@@ -191,7 +209,7 @@
                 <span :class="['text-sm font-semibold', getFeatureColors(feature.type).text]">
                   {{ feature.count.value }}
                 </span>
-                <span class="text-gray-400 text-sm">个内容</span>
+                <span class="text-[var(--color-secondary-400)] text-sm">个内容</span>
               </div>
             </div>
           </RouterLink>
@@ -200,39 +218,33 @@
     </section>
 
     <!-- Stats - 现代简约中国风 -->
-    <section class="bg-white py-16">
+    <section class="bg-[var(--color-surface)] py-16">
       <div class="max-w-4xl mx-auto px-4">
         <div class="grid grid-cols-3 gap-8 md:gap-12 text-center">
           <div class="py-6">
-            <div
-              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-primary-600 to-primary-800 bg-clip-text text-transparent"
-            >
+            <div class="text-4xl md:text-5xl font-bold text-[var(--color-primary-700)]">
               {{ characterCount.toLocaleString() }}+
             </div>
-            <div class="text-secondary-600 mt-3 font-medium"> 常用汉字 </div>
+            <div class="text-[var(--color-secondary-600)] mt-3 font-medium"> 常用汉字 </div>
           </div>
           <div class="py-6">
-            <div
-              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-secondary-600 to-secondary-800 bg-clip-text text-transparent"
-            >
+            <div class="text-4xl md:text-5xl font-bold text-[var(--color-secondary-700)]">
               {{ (poemCount / 1000).toFixed(0) }}k+
             </div>
-            <div class="text-secondary-600 mt-3 font-medium"> 经典古诗 </div>
+            <div class="text-[var(--color-secondary-600)] mt-3 font-medium"> 经典古诗 </div>
           </div>
           <div class="py-6">
-            <div
-              class="text-4xl md:text-5xl font-bold bg-gradient-to-r from-yellow-500 to-yellow-700 bg-clip-text text-transparent"
-            >
+            <div class="text-4xl md:text-5xl font-bold text-[var(--color-gold-600)]">
               {{ idiomCount.toLocaleString() }}+
             </div>
-            <div class="text-secondary-600 mt-3 font-medium"> 成语故事 </div>
+            <div class="text-[var(--color-secondary-600)] mt-3 font-medium"> 成语故事 </div>
           </div>
         </div>
       </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-gray-900 text-gray-400 py-8">
+    <footer class="bg-[var(--color-secondary-900)] text-[var(--color-secondary-400)] py-8">
       <div class="max-w-6xl mx-auto px-4 text-center">
         <p>汉字学习平台 - 让学习变得更有趣</p>
       </div>

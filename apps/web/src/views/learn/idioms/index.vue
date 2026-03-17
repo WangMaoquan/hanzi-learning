@@ -49,10 +49,10 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-secondary-50">
+  <div class="min-h-screen bg-[var(--color-secondary-50)]">
     <!-- 页面头部 - 现代简约中国风 -->
     <div
-      class="py-8 mb-6 border-b border-gray-200 bg-yellow-50 flex items-center justify-center rounded-xl px-6 py-4 shadow-inner bg-[linear-gradient(135deg,#fffbeb_0%,#fef3c7_100%)]"
+      class="py-8 mb-6 border-b border-[var(--color-secondary-200)] bg-[var(--color-accent-50)] rounded-xl px-6 py-4 shadow-inner"
     >
       <div class="max-w-6xl mx-auto px-4">
         <h1 class="text-3xl font-bold mb-2 text-secondary-950 font-serif"> 成语故事 </h1>
@@ -66,7 +66,7 @@
 
       <template v-else>
         <!-- 当前学习 - 特色卡片 -->
-        <Card v-if="currentIdiom" hoverable class="mb-8 border-2 border-yellow-500">
+        <Card v-if="currentIdiom" hoverable class="mb-8 border-2 border-[var(--color-accent-500)]">
           <div class="flex items-start gap-8">
             <!-- 成语展示 -->
             <div
@@ -80,7 +80,9 @@
             <!-- 信息区域 -->
             <div class="flex-1">
               <div class="flex items-center gap-3 mb-4">
-                <span class="px-3 py-1 text-sm font-semibold rounded-full bg-yellow-500 text-white">
+                <span
+                  class="px-3 py-1 text-sm font-semibold rounded-full bg-[var(--color-accent-500)] text-white"
+                >
                   正在学习
                 </span>
                 <span class="text-secondary-400 text-sm">点击下方成语继续学习</span>
@@ -139,9 +141,9 @@
               class="group"
             >
               <div
-                class="flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-yellow-300 hover:bg-yellow-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-4"
+                class="flex items-center justify-center bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:border-[var(--color-accent-300)] hover:bg-[var(--color-accent-50)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200 py-3 px-4"
               >
-                <span class="font-bold transition-colors text-lg text-gray-700">
+                <span class="font-bold transition-colors text-lg text-[var(--color-secondary-700)]">
                   {{ idiom.title }}
                 </span>
               </div>

@@ -62,7 +62,7 @@
 <template>
   <Loading v-if="loading" text="加载中..." />
 
-  <div v-else-if="character" class="min-h-screen pb-12 bg-secondary-50">
+  <div v-else-if="character" class="min-h-screen pb-12 bg-[var(--color-secondary-50)]">
     <div class="max-w-6xl mx-auto px-4 pt-6">
       <!-- 返回链接 -->
       <div class="mb-6">
@@ -89,7 +89,7 @@
             <div
               v-show="shouldShowWriter"
               ref="writerContainer"
-              class="rounded-xl p-4 bg-secondary-50"
+              class="rounded-xl p-4 bg-[var(--color-secondary-50)]"
             ></div>
           </div>
 
@@ -104,13 +104,13 @@
           </div>
 
           <!-- 导航 -->
-          <div class="flex justify-between pt-4 border-t border-gray-200">
+          <div class="flex justify-between pt-4 border-t border-[var(--color-secondary-200)]">
             <button
               v-if="prevCharacter"
-              class="px-4 py-2.5 bg-white rounded-xl border border-gray-200 transition-all flex items-center gap-2 hover:border-primary-300 text-gray-700"
+              class="px-4 py-2.5 bg-[var(--color-surface)] rounded-xl border border-[var(--color-secondary-200)] transition-all flex items-center gap-2 hover:border-primary-300 text-[var(--color-secondary-700)]"
               @click="router.push(`/learn/characters/${prevCharacter.id}`)"
             >
-              <span class="text-gray-400">←</span>
+              <span class="text-[var(--color-secondary-400)]">←</span>
               <span class="font-medium">{{ prevCharacter.title }}</span>
             </button>
             <div v-else></div>
@@ -138,15 +138,15 @@
             <div class="space-y-4">
               <!-- 拼音 -->
               <div class="flex items-start gap-4">
-                <span class="w-12 shrink-0 text-gray-400">拼音</span>
+                <span class="w-12 shrink-0 text-[var(--color-secondary-400)]">拼音</span>
                 <span class="text-2xl font-semibold text-secondary-950">
                   {{ character.pinyin || '-' }}
                 </span>
               </div>
               <!-- 释义 -->
               <div class="flex items-start gap-4">
-                <span class="w-12 shrink-0 text-gray-400">释义</span>
-                <span class="leading-relaxed text-gray-700">
+                <span class="w-12 shrink-0 text-[var(--color-secondary-400)]">释义</span>
+                <span class="leading-relaxed text-[var(--color-secondary-700)]">
                   {{ character.content || '-' }}
                 </span>
               </div>
@@ -154,19 +154,19 @@
               <div class="flex flex-wrap gap-3 pt-2">
                 <span
                   v-if="character.strokes"
-                  class="px-4 py-2 font-medium rounded-lg bg-primary-50 text-primary-700"
+                  class="px-4 py-2 font-medium rounded-lg bg-[var(--color-primary-50)] text-primary-700"
                 >
                   {{ character.strokes }} 画
                 </span>
                 <span
                   v-if="character.structure"
-                  class="px-4 py-2 font-medium rounded-lg bg-secondary-50 text-secondary-500"
+                  class="px-4 py-2 font-medium rounded-lg bg-[var(--color-secondary-50)] text-secondary-500"
                 >
                   {{ character.structure }}
                 </span>
                 <span
                   v-if="character.radicals"
-                  class="px-4 py-2 font-medium rounded-lg bg-secondary-50 text-secondary-500"
+                  class="px-4 py-2 font-medium rounded-lg bg-[var(--color-secondary-50)] text-secondary-500"
                 >
                   部首：{{ character.radicals }}
                 </span>
@@ -186,7 +186,7 @@
               <span
                 v-for="word in character.words"
                 :key="word"
-                class="px-4 py-2 font-medium rounded-lg transition-colors cursor-pointer bg-secondary-50 text-gray-700"
+                class="px-4 py-2 font-medium rounded-lg transition-colors cursor-pointer bg-[var(--color-secondary-50)] text-[var(--color-secondary-700)]"
               >
                 {{ word }}
               </span>

@@ -2,28 +2,12 @@
 
 /* Google Fonts - 中国风字体 (已移至 index.html) */
 
-:root {
-  /* 经典中国红 */
-  --color-primary: #C41E3A;
-  --color-primary-dark: #8B2332;
-  --color-primary-light: #E85A71;
-  /* 金色点缀 */
-  --color-gold: #D4AF37;
-  --color-gold-light: #F4D03F;
-  /* 淡雅灰白背景 */
-  --color-bg: #F5F5F0;
-  --color-surface: #FFFFFF;
-  /* 深靛蓝 */
-  --color-secondary: #1A1A2E;
-}
-
 /* ========================================
-   视觉层次设计规范 - 现代简约中国风
+   多主题配色方案
    ======================================== */
 
-/* ---------- 1. 色彩层次系统 ---------- */
-@theme {
-  /* 主色 - 中国红系 (传统、喜庆) */
+/* 主题1: 现代简约中国风 - 经典中国红 */
+[data-theme="chinese"] {
   --color-primary-50: #FEF2F2;
   --color-primary-100: #FEE2E2;
   --color-primary-200: #FECACA;
@@ -35,7 +19,6 @@
   --color-primary-800: #9B2C2C;
   --color-primary-900: #7F1D1D;
 
-  /* 辅助色 - 深靛蓝 (沉稳、雅致) */
   --color-secondary-50: #F8FAFC;
   --color-secondary-100: #F1F5F9;
   --color-secondary-200: #E2E8F0;
@@ -48,7 +31,6 @@
   --color-secondary-900: #0F172A;
   --color-secondary-950: #1A1A2E;
 
-  /* 金色点缀 */
   --color-gold-50: #FFFBEB;
   --color-gold-100: #FEF3C7;
   --color-gold-200: #FDE68A;
@@ -56,147 +38,258 @@
   --color-gold-400: #FBBF24;
   --color-gold-500: #D4AF37;
   --color-gold-600: #B4941F;
-  --color-gold-700: #977B14;
-  --color-gold-800: #74550A;
+
+  --color-brand-primary: #C41E3A;
+  --color-brand-secondary: #1A1A2E;
+  --color-background: #F5F5F0;
+  --color-surface: #FFFFFF;
+}
+
+/* 主题2: 温馨可爱风 - 柔和粉橙 */
+[data-theme="cute"] {
+  --color-primary-50: #FEF3F3;
+  --color-primary-100: #FDE8E8;
+  --color-primary-200: #FCD5D5;
+  --color-primary-300: #FBBFBF;
+  --color-primary-400: #F89F9F;
+  --color-primary-500: #F47D7D;
+  --color-primary-600: #E86565;
+  --color-primary-700: #D94747;
+  --color-primary-800: #B53838;
+  --color-primary-900: #8B2A2A;
+
+  --color-secondary-50: #FFF5F5;
+  --color-secondary-100: #FFE8E8;
+  --color-secondary-200: #FFD5D5;
+  --color-secondary-300: #FFBDBD;
+  --color-secondary-400: #FF9E9E;
+  --color-secondary-500: #FF7D7D;
+  --color-secondary-600: #E65555;
+  --color-secondary-700: #CC3D3D;
+  --color-secondary-800: #A32D2D;
+  --color-secondary-900: #7A2222;
+  --color-secondary-950: #4A1515;
+
+  --color-gold-50: #FFF8F0;
+  --color-gold-100: #FFF0E0;
+  --color-gold-200: #FFE0C0;
+  --color-gold-300: #FFCC99;
+  --color-gold-400: #FFB366;
+  --color-gold-500: #FF9933;
+  --color-gold-600: #E68000;
+
+  --color-brand-primary: #FF7D7D;
+  --color-brand-secondary: #FFB366;
+  --color-background: #FFF5F5;
+  --color-surface: #FFFFFF;
+}
+
+/* 主题3: 古典深邃风 - 墨色文雅 */
+[data-theme="classical"] {
+  --color-primary-50: #F5F5F5;
+  --color-primary-100: #EBEBEB;
+  --color-primary-200: #D9D9D9;
+  --color-primary-300: #C4C4C4;
+  --color-primary-400: #A8A8A8;
+  --color-primary-500: #8C8C8C;
+  --color-primary-600: #6B6B6B;
+  --color-primary-700: #4A4A4A;
+  --color-primary-800: #333333;
+  --color-primary-900: #1F1F1F;
+
+  --color-secondary-50: #F8F8F8;
+  --color-secondary-100: #F0F0F0;
+  --color-secondary-200: #E0E0E0;
+  --color-secondary-300: #C8C8C8;
+  --color-secondary-400: #A8A8A8;
+  --color-secondary-500: #888888;
+  --color-secondary-600: #686868;
+  --color-secondary-700: #484848;
+  --color-secondary-800: #2D2D2D;
+  --color-secondary-900: #1A1A1A;
+  --color-secondary-950: #0D0D0D;
+
+  --color-gold-50: #FDF8F0;
+  --color-gold-100: #FAF0E0;
+  --color-gold-200: #F5E0C8;
+  --color-gold-300: #ECC9A8;
+  --color-gold-400: #E0B088;
+  --color-gold-500: #D49966;
+  --color-gold-600: #B8824D;
+
+  --color-brand-primary: #4A4A4A;
+  --color-brand-secondary: #1A1A1A;
+  --color-background: #F5F5F0;
+  --color-surface: #FAFAFA;
+}
+
+/* 主题4: 清新自然风 - 绿意盎然 */
+[data-theme="nature"] {
+  --color-primary-50: #ECFDF5;
+  --color-primary-100: #D1FAE5;
+  --color-primary-200: #A7F3D0;
+  --color-primary-300: #6EE7B7;
+  --color-primary-400: #34D399;
+  --color-primary-500: #10B981;
+  --color-primary-600: #059669;
+  --color-primary-700: #047857;
+  --color-primary-800: #065F46;
+  --color-primary-900: #064E3B;
+
+  --color-secondary-50: #F0FDF4;
+  --color-secondary-100: #DCFCE7;
+  --color-secondary-200: #BBF7D0;
+  --color-secondary-300: #86EFAC;
+  --color-secondary-400: #4ADE80;
+  --color-secondary-500: #22C55E;
+  --color-secondary-600: #16A34A;
+  --color-secondary-700: #15803D;
+  --color-secondary-800: #166534;
+  --color-secondary-900: #14532D;
+  --color-secondary-950: #052E16;
+
+  --color-gold-50: #FEFCE8;
+  --color-gold-100: #FEF9C3;
+  --color-gold-200: #FEF08A;
+  --color-gold-300: #FDE047;
+  --color-gold-400: #FACC15;
+  --color-gold-500: #EAB308;
+  --color-gold-600: #CA8A04;
+
+  --color-brand-primary: #059669;
+  --color-brand-secondary: #14532D;
+  --color-background: #F0FDF4;
+  --color-surface: #FFFFFF;
+}
+
+/* 主题5: 星空深邃风 - 蓝紫梦幻 */
+[data-theme="starry"] {
+  --color-primary-50: #EEF2FF;
+  --color-primary-100: #E0E7FF;
+  --color-primary-200: #C7D2FE;
+  --color-primary-300: #A5B4FC;
+  --color-primary-400: #818CF8;
+  --color-primary-500: #6366F1;
+  --color-primary-600: #4F46E5;
+  --color-primary-700: #4338CA;
+  --color-primary-800: #3730A3;
+  --color-primary-900: #312E81;
+
+  --color-secondary-50: #FAFBFF;
+  --color-secondary-100: #F0F4FF;
+  --color-secondary-200: #E0E7FF;
+  --color-secondary-300: #C7D2FE;
+  --color-secondary-400: #A5B4FC;
+  --color-secondary-500: #818CF8;
+  --color-secondary-600: #6366F1;
+  --color-secondary-700: #4F46E5;
+  --color-secondary-800: #4338CA;
+  --color-secondary-900: #3730A3;
+  --color-secondary-950: #1E1B4B;
+
+  --color-gold-50: #FEF3C7;
+  --color-gold-100: #FDE68A;
+  --color-gold-200: #FCD34D;
+  --color-gold-300: #FBBF24;
+  --color-gold-400: #F59E0B;
+  --color-gold-500: #D97706;
+  --color-gold-600: #B45309;
+
+  --color-brand-primary: #6366F1;
+  --color-brand-secondary: #1E1B4B;
+  --color-background: #0F172A;
+  --color-surface: #1E293B;
+}
+
+/* 默认主题 (中国风) */
+:root {
+  --color-primary-50: #FEF2F2;
+  --color-primary-100: #FEE2E2;
+  --color-primary-200: #FECACA;
+  --color-primary-300: #FCA5A5;
+  --color-primary-400: #F87171;
+  --color-primary-500: #EF4444;
+  --color-primary-600: #DC2626;
+  --color-primary-700: #C41E3A;
+  --color-primary-800: #9B2C2C;
+  --color-primary-900: #7F1D1D;
+
+  --color-secondary-50: #F8FAFC;
+  --color-secondary-100: #F1F5F9;
+  --color-secondary-200: #E2E8F0;
+  --color-secondary-300: #CBD5E1;
+  --color-secondary-400: #94A3B8;
+  --color-secondary-500: #64748B;
+  --color-secondary-600: #475569;
+  --color-secondary-700: #334155;
+  --color-secondary-800: #1E293B;
+  --color-secondary-900: #0F172A;
+  --color-secondary-950: #1A1A2E;
+
+  --color-gold-50: #FFFBEB;
+  --color-gold-100: #FEF3C7;
+  --color-gold-200: #FDE68A;
+  --color-gold-300: #FCD34D;
+  --color-gold-400: #FBBF24;
+  --color-gold-500: #D4AF37;
+  --color-gold-600: #B4941F;
+
+  --color-brand-primary: #C41E3A;
+  --color-brand-secondary: #1A1A2E;
+  --color-background: #F5F5F0;
+  --color-surface: #FFFFFF;
+}
+
+/* ========================================
+   视觉层次设计规范
+   ======================================== */
+
+/* ---------- 1. 色彩层次系统 ---------- */
+@theme {
+  /* 主色 - 引用 CSS 变量 */
+  --color-primary-50: var(--color-primary-50);
+  --color-primary-100: var(--color-primary-100);
+  --color-primary-200: var(--color-primary-200);
+  --color-primary-300: var(--color-primary-300);
+  --color-primary-400: var(--color-primary-400);
+  --color-primary-500: var(--color-primary-500);
+  --color-primary-600: var(--color-primary-600);
+  --color-primary-700: var(--color-primary-700);
+  --color-primary-800: var(--color-primary-800);
+  --color-primary-900: var(--color-primary-900);
+
+  /* 辅助色 - 引用 CSS 变量 */
+  --color-secondary-50: var(--color-secondary-50);
+  --color-secondary-100: var(--color-secondary-100);
+  --color-secondary-200: var(--color-secondary-200);
+  --color-secondary-300: var(--color-secondary-300);
+  --color-secondary-400: var(--color-secondary-400);
+  --color-secondary-500: var(--color-secondary-500);
+  --color-secondary-600: var(--color-secondary-600);
+  --color-secondary-700: var(--color-secondary-700);
+  --color-secondary-800: var(--color-secondary-800);
+  --color-secondary-900: var(--color-secondary-900);
+  --color-secondary-950: var(--color-secondary-950);
+
+  /* 金色点缀 - 引用 CSS 变量 */
+  --color-gold-50: var(--color-gold-50);
+  --color-gold-100: var(--color-gold-100);
+  --color-gold-200: var(--color-gold-200);
+  --color-gold-300: var(--color-gold-300);
+  --color-gold-400: var(--color-gold-400);
+  --color-gold-500: var(--color-gold-500);
+  --color-gold-600: var(--color-gold-600);
+  --color-gold-700: var(--color-gold-700);
+  --color-gold-800: var(--color-gold-800);
 
   /* 强调色 */
   --color-accent-red: #EF4444;
   --color-accent-green: #10B981;
   --color-accent-orange: #F59E0B;
-}
 
-/* 色彩使用规范 */
-:root {
-  /* 主色调：中国红 + 深靛蓝 */
-  --color-brand-primary: var(--color-primary-700);
-  --color-brand-secondary: var(--color-secondary-900);
-
-  /* 功能色 */
+  /* 功能色 - 使用 CSS 变量引用主题色 */
   --color-content-character: var(--color-primary-700);
   --color-content-poem: var(--color-secondary-700);
   --color-content-idiom: var(--color-gold-600);
   --color-content-prose: var(--color-secondary-600);
-}
-
-/* ---------- 2. 文字层次系统 ---------- */
-/*
-  标题层级:
-  - h1: 页面主标题，text-4xl/font-bold，文字 #111827
-  - h2: 区块标题，text-2xl/font-semibold，文字 #1f2937
-  - h3: 卡片/小节标题，text-lg/font-semibold，文字 #374151
-
-  正文字层级:
-  - body-large: 主要正文，text-base/leading-relaxed，文字 #4b5563
-  - body: 默认正文，text-sm/leading-relaxed，文字 #6b7280
-  - body-small: 辅助说明，text-xs/leading-normal，文字 #9ca3af
-*/
-
-/* ---------- 3. 间距层次系统 ---------- */
-/*
-  间距层级 (从大到小):
-  - section: 页面区块之间，py-16 或 py-20
-  - container: 容器内部，gap-8 或 gap-6
-  - component: 组件内部，gap-4 或 gap-3
-  - inline: 元素之间，gap-2 或 gap-1
-
-  内边距层次:
-  - section-padding: 页面区块，px-4 py-8 ~ py-16
-  - card-padding: 卡片内部，p-4 ~ p-6
-  - button-padding: 按钮内部，px-4 py-2
-*/
-
-/* ---------- 4. 圆角层次系统 ---------- */
-/*
-  圆角使用规范:
-  - rounded-sm: 小元素、标签 (4px)
-  - rounded: 输入框、按钮 (6px)
-  - rounded-md: 中等卡片 (8px)
-  - rounded-lg: 大卡片、模态框 (12px)
-  - rounded-xl: 主卡片、特色区块 (16px)
-  - rounded-2xl/rounded-3xl: 大面积装饰 (24px+)
-*/
-
-/* ---------- 5. 阴影层次系统 ---------- */
-/*
-  阴影层级:
-  - shadow-sm: 轻微浮动，卡片默认
-  - shadow: 中等阴影，hover 状态
-  - shadow-md: 强调浮动
-  - shadow-lg: 模态框、重要卡片
-  - shadow-xl: 弹出层
-*/
-
-/* 基础样式 - 现代简约中国风 */
-html {
-  scroll-behavior: smooth;
-}
-
-body {
-  color: #2D2D2D;
-  background-color: #F5F5F0;
-  font-family: 'Noto Sans SC', 'Microsoft YaHei', system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-/* 标题字体 - 思源宋体 */
-h1, h2, h3, h4, h5, h6 {
-  font-family: 'Noto Serif SC', 'SimSun', serif;
-}
-
-/* 组件样式 - 现代简约中国风 */
-.btn {
-  padding: 0.5rem 1rem;
-  border-radius: 0.375rem;
-  font-weight: 500;
-  transition: all 0.2s;
-  font-family: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-}
-
-.btn:focus {
-  outline: none;
-  ring: 2px;
-  ring-offset: 2px;
-}
-
-.btn-primary {
-  background-color: var(--color-primary-700);
-  color: white;
-  border: 1px solid var(--color-primary-700);
-}
-
-.btn-primary:hover {
-  background-color: var(--color-primary-800);
-  border-color: var(--color-primary-800);
-}
-
-.btn-secondary {
-  background-color: var(--color-secondary-800);
-  color: white;
-  border: 1px solid var(--color-secondary-800);
-}
-
-.btn-secondary:hover {
-  background-color: var(--color-secondary-900);
-  border-color: var(--color-secondary-900);
-}
-
-/* 金色边框按钮 */
-.btn-gold {
-  background-color: transparent;
-  color: var(--color-gold-600);
-  border: 1px solid var(--color-gold-500);
-}
-
-.btn-gold:hover {
-  background-color: var(--color-gold-500);
-  color: white;
-}
-
-.card {
-  background-color: white;
-  border-radius: 0.5rem;
-  padding: 1.5rem;
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1);
-  border: 1px solid #E5E7EB;
 }

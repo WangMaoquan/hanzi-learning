@@ -52,9 +52,11 @@
 </script>
 
 <template>
-  <div class="min-h-screen bg-secondary-50">
+  <div class="min-h-screen bg-[var(--color-secondary-50)]">
     <!-- 页面头部 - 现代简约中国风 -->
-    <div class="bg-gradient-to-r from-secondary-50 to-white py-8 mb-6 border-b border-gray-200">
+    <div
+      class="bg-[var(--color-secondary-50)] py-8 mb-6 border-b border-[var(--color-secondary-200)]"
+    >
       <div class="max-w-6xl mx-auto px-4">
         <h1 class="text-3xl font-bold text-secondary-950 font-serif"> 汉字学习 </h1>
         <p class="text-secondary-600 mt-1"> 掌握汉字笔画顺序，轻松学会常用汉字 </p>
@@ -109,19 +111,19 @@
               <div class="flex flex-wrap gap-3">
                 <span
                   v-if="currentCharacter.strokes"
-                  class="px-3 py-1.5 text-sm rounded-lg bg-secondary-50 text-secondary-500"
+                  class="px-3 py-1.5 text-sm rounded-lg bg-[var(--color-secondary-50)] text-secondary-500"
                 >
                   {{ currentCharacter.strokes }} 画
                 </span>
                 <span
                   v-if="currentCharacter.structure"
-                  class="px-3 py-1.5 text-sm rounded-lg bg-secondary-50 text-secondary-500"
+                  class="px-3 py-1.5 text-sm rounded-lg bg-[var(--color-secondary-50)] text-secondary-500"
                 >
                   {{ currentCharacter.structure }}
                 </span>
                 <span
                   v-if="currentCharacter.radicals"
-                  class="px-3 py-1.5 text-sm rounded-lg bg-secondary-50 text-secondary-500"
+                  class="px-3 py-1.5 text-sm rounded-lg bg-[var(--color-secondary-50)] text-secondary-500"
                 >
                   部首：{{ currentCharacter.radicals }}
                 </span>
@@ -145,9 +147,9 @@
               v-for="char in characters"
               :key="char.id"
               :to="`/learn/characters/${char.id}`"
-              class="group aspect-square flex items-center justify-center bg-white rounded-xl border-2 border-transparent hover:border-primary-300 hover:bg-primary-50 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
+              class="group aspect-square flex items-center justify-center bg-[var(--color-surface)] rounded-xl border-2 border-transparent hover:border-primary-300 hover:bg-[var(--color-primary-50)] hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200"
             >
-              <span class="text-2xl font-bold transition-colors text-gray-700">
+              <span class="text-2xl font-bold transition-colors text-[var(--color-secondary-700)]">
                 {{ char.title }}
               </span>
             </RouterLink>

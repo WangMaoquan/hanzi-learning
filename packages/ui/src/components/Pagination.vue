@@ -99,9 +99,9 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
 </script>
 
 <template>
-  <div class="flex flex-col sm:flex-row items-center justify-between gap-4 py-4">
+  <div class="flex flex-wrap items-center justify-between gap-4 py-4">
     <!-- 左侧：显示信息和每页条数选择 -->
-    <div class="flex items-center gap-4 text-sm order-2 sm:order-1">
+    <div class="flex items-center gap-4 text-sm">
       <span
         v-if="total > 0"
         class="text-[var(--color-secondary-500)]"
@@ -130,7 +130,7 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
     </div>
 
     <!-- 右侧：分页按钮 -->
-    <div class="flex items-center gap-1 order-1 sm:order-2">
+    <div class="flex items-center gap-1">
       <!-- 首页 -->
       <button
         class="hidden sm:flex items-center justify-center w-9 h-9 rounded-full text-sm text-[var(--color-secondary-500)] hover:bg-[var(--color-secondary-100)] disabled:opacity-30 disabled:hover:bg-transparent disabled:cursor-not-allowed transition-all duration-200"

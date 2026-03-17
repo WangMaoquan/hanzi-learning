@@ -72,7 +72,7 @@
           <div class="flex items-start gap-8">
             <!-- 成语展示 -->
             <div
-              class="flex items-center justify-center rounded-xl px-6 py-4 shadow-inner shrink-0 bg-[linear-gradient(135deg,#fffbeb_0%,#fef3c7_100%)]"
+              class="flex items-center justify-center rounded-xl px-6 py-4 shadow-inner shrink-0 bg-[var(--color-accent-50)]"
             >
               <span class="text-4xl font-bold tracking-widest text-[var(--color-secondary-900)]">{{
                 currentIdiom.title

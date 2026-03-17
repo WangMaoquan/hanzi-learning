@@ -115,8 +115,7 @@ const endNum = computed(() => Math.min(props.modelValue * (props.limit || 10), p
       <select
         v-if="showSizeChanger"
         :value="limit || 10"
-        class="h-8 px-2 pr-7 border border-[var(--color-secondary-200)] rounded-lg text-sm bg-[var(--color-surface)] text-[var(--color-secondary-700)] focus:outline-none focus:ring-2 focus:ring-primary-500/20 focus:border-primary-500 cursor-pointer appearance-none bg-no-repeat bg-[right_0.5rem_center] transition-colors hover:border-[var(--color-secondary-300)]"
-        style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 fill=%27none%27 viewBox=%270%2020%2020%27%3E%3Cpath stroke=%27%236b7280%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27 stroke-width=%271.5%27 d=%27m6 8 4 4 4-4%27/%3E%3C/svg%3E'); background-size: 1rem;"
+        class="h-9 px-3 border-0 rounded-full text-sm bg-[var(--color-secondary-100)] text-[var(--color-secondary-700)] focus:outline-none focus:ring-2 focus:ring-primary-500/30 cursor-pointer transition-all hover:bg-[var(--color-secondary-200)]"
         @change="changeSize"
       >
         <option

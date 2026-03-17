@@ -1,5 +1,6 @@
 import { Injectable } from "@nestjs/common";
-import { Prisma, PrismaService } from "../../prisma/prisma.service";
+import { Prisma, PrismaClient } from "@prisma/client";
+import { PrismaService } from "../../prisma/prisma.service";
 import { PoemTransformer } from "../../transformers";
 import type { PoemVO, PaginatedVO } from "../../transformers/vo";
 

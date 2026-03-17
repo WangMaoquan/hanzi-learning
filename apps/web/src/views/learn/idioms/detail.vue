@@ -60,7 +60,7 @@
         <!-- 成语标题区域 -->
         <div class="text-center mb-8 pb-8 border-b border-[var(--color-accent-100)]">
           <div
-            class="inline-flex items-center justify-center rounded-xl px-8 py-4 mb-4 shadow-inner bg-[linear-gradient(135deg,#fffbeb_0%,#fef3c7_100%)]"
+            class="inline-flex items-center justify-center rounded-xl px-8 py-4 mb-4 bg-[var(--color-accent-50)]"
           >
             <span class="text-5xl font-bold tracking-widest text-[var(--color-secondary-900)]">{{
               idiom.title

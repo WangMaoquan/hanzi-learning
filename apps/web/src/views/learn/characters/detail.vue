@@ -73,7 +73,7 @@
         <Card hoverable class="border-2 border-primary-700">
           <!-- 汉字大字展示 -->
           <div
-            class="flex items-center justify-center h-48 rounded-xl mb-6 bg-[linear-gradient(135deg,#fef2f2_0%,#fee2e2_100%)]"
+            class="flex items-center justify-center h-48 rounded-xl mb-6 bg-[var(--color-primary-50)]"
           >
             <span class="text-9xl font-bold text-[var(--color-secondary-900)]">{{
               character.title

@@ -1,7 +1,8 @@
 import { Module } from "@nestjs/common";
 import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
+import { ConfigModule, ConfigService } from "@nestjs/config";
 import { ThrottlerModule } from "@nestjs/throttler";
-import { CacheModule, CacheInterceptor } from "@nestjs/cache-manager";
+import { CacheModule } from "@nestjs/cache-manager";
 import { LoggerModule } from "./logger/logger.module";
 import { CharactersModule } from "./modules/characters/characters.module";
 import { IdiomsModule } from "./modules/idioms/idioms.module";
@@ -10,31 +11,42 @@ import { HealthModule } from "./modules/health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
 import { HttpExceptionFilter } from "./filters/http-exception.filter";
+import { appConfig, cacheConfig, throttleConfig } from "./config/app.config";
 
 @Module({
   imports: [
-    LoggerModule,
-    CacheModule.register({
+    ConfigModule.forRoot({
       isGlobal: true,
-      ttl: 60 * 1000, // 默认缓存 1 分钟
+      load: [appConfig, cacheConfig, throttleConfig],
     }),
-    ThrottlerModule.forRoot([
-      {
-        name: "short",
-        ttl: 1000, // 1秒
-        limit: 10, // 最多10个请求
-      },
-      {
-        name: "medium",
-        ttl: 10000, // 10秒
-        limit: 50, // 最多50个请求
-      },
-      {
-        name: "long",
-        ttl: 60000, // 1分钟
-        limit: 200, // 最多200个请求
-      },
-    ]),
+    LoggerModule,
+    CacheModule.registerAsync({
+      isGlobal: true,
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        ttl: config.get<number>("cache.ttl") || 60000,
+      }),
+    }),
+    ThrottlerModule.forRootAsync({
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => [
+        {
+          name: "short",
+          ttl: config.get<number>("throttle.short.ttl") || 1000,
+          limit: config.get<number>("throttle.short.limit") || 10,
+        },
+        {
+          name: "medium",
+          ttl: config.get<number>("throttle.medium.ttl") || 10000,
+          limit: config.get<number>("throttle.medium.limit") || 50,
+        },
+        {
+          name: "long",
+          ttl: config.get<number>("throttle.long.ttl") || 60000,
+          limit: config.get<number>("throttle.long.limit") || 200,
+        },
+      ],
+    }),
     PrismaModule,
     CharactersModule,
     IdiomsModule,

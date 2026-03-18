@@ -1,5 +1,6 @@
 import { NestFactory, APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
+import { ConfigService } from "@nestjs/config";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
 import { Logger } from "nestjs-pino";
@@ -8,6 +9,7 @@ import { HttpExceptionFilter } from "./filters/http-exception.filter";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: false });
+  const configService = app.get(ConfigService);
 
   // 使用 Pino 作为全局日志
   app.useLogger(app.get(Logger));
@@ -15,11 +17,12 @@ async function bootstrap() {
   // 全局路由前缀
   app.setGlobalPrefix("api/v1");
 
-  // CORS 配置
+  // CORS 配置 - 从环境变量读取
+  const allowedOrigins = configService.get<string[]>("app.allowedOrigins") || [
+    "http://localhost:3000",
+  ];
   app.enableCors({
-    origin: process.env.ALLOWED_ORIGINS?.split(",") || [
-      "http://localhost:3000",
-    ],
+    origin: allowedOrigins,
     credentials: true,
   });
 
@@ -33,7 +36,7 @@ async function bootstrap() {
   );
 
   // Swagger API 文档配置
-  const config = new DocumentBuilder()
+  const swaggerConfig = new DocumentBuilder()
     .setTitle("汉字学习平台 API")
     .setDescription("趣味学习中华文化的在线平台 API 文档")
     .setVersion("1.0")
@@ -41,13 +44,15 @@ async function bootstrap() {
     .addTag("idioms", "成语相关接口")
     .addTag("poems", "古诗相关接口")
     .build();
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, swaggerConfig);
   SwaggerModule.setup("api/docs", app, document);
 
-  await app.listen(3001);
+  // 从配置获取端口
+  const port = configService.get<number>("app.port") || 3001;
+  await app.listen(port);
   const logger = app.get(Logger);
-  logger.log("API server running on http://localhost:3001");
-  logger.log("Swagger docs available at http://localhost:3001/api/docs");
+  logger.log(`API server running on http://localhost:${port}`);
+  logger.log(`Swagger docs available at http://localhost:${port}/api/docs`);
 }
 
 bootstrap();

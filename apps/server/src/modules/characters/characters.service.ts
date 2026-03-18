@@ -64,6 +64,7 @@ export class CharactersService {
   }
 
   async findRandom(): Promise<CharacterVO | null> {
+    // 随机查询不缓存
     this.logger.debug({}, "Find random character");
     const count = await this.prisma.character.count();
     if (count === 0) return null;
@@ -75,14 +76,10 @@ export class CharactersService {
     return data ? CharacterTransformer.toVO(data) : null;
   }
 
-  /**
-   * 获取相邻的汉字（上一个和下一个）
-   */
   async findNeighbors(
     id: string,
   ): Promise<{ prev: CharacterVO | null; next: CharacterVO | null }> {
     this.logger.debug({ id }, "Find character neighbors");
-    // 先获取当前汉字
     const current = await this.prisma.character.findUnique({
       where: { id },
     });
@@ -91,7 +88,6 @@ export class CharactersService {
       return { prev: null, next: null };
     }
 
-    // 获取上一个（word 字典序小于当前）
     const prev = await this.prisma.character.findFirst({
       where: {
         word: { lt: current.word },
@@ -99,7 +95,6 @@ export class CharactersService {
       orderBy: { word: "desc" },
     });
 
-    // 获取下一个（word 字典序大于当前）
     const next = await this.prisma.character.findFirst({
       where: {
         word: { gt: current.word },

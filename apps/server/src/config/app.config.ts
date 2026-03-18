@@ -1,4 +1,5 @@
 import { registerAs } from "@nestjs/config";
+import { LoggingConfig } from "./logging.config";
 
 export const appConfig = registerAs("app", () => ({
   port: parseInt(process.env.PORT || "3001", 10),
@@ -34,3 +35,5 @@ export const throttleConfig = registerAs("throttle", () => ({
 export const logConfig = registerAs("log", () => ({
   level: process.env.LOG_LEVEL || "info",
 }));
+
+export { LoggingConfig };

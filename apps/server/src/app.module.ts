@@ -10,14 +10,20 @@ import { PoemsModule } from "./modules/poems/poems.module";
 import { HealthModule } from "./modules/health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
+import { LoggingInterceptor } from "./interceptors/logging.interceptor";
 import { HttpExceptionFilter } from "./filters/http-exception.filter";
-import { appConfig, cacheConfig, throttleConfig } from "./config/app.config";
+import {
+  appConfig,
+  cacheConfig,
+  throttleConfig,
+  LoggingConfig,
+} from "./config/app.config";
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [appConfig, cacheConfig, throttleConfig],
+      load: [appConfig, cacheConfig, throttleConfig, LoggingConfig],
     }),
     LoggerModule,
     CacheModule.registerAsync({
@@ -61,6 +67,14 @@ import { appConfig, cacheConfig, throttleConfig } from "./config/app.config";
     {
       provide: APP_INTERCEPTOR,
       useClass: SuccessInterceptor,
+    },
+    // 日志拦截器（使用 useClass 无法注入 ConfigService，改为 useFactory）
+    {
+      provide: APP_INTERCEPTOR,
+      useFactory: (configService: ConfigService) => {
+        return new LoggingInterceptor(configService);
+      },
+      inject: [ConfigService],
     },
     {
       provide: APP_FILTER,

@@ -38,15 +38,11 @@ export class SuccessInterceptor<T> implements NestInterceptor<T, Response<T>> {
     return next.handle().pipe(
       map((data) => {
         const responseTime = Date.now() - startTime;
+        const statusCode = response.statusCode;
+
+        // 简化日志输出
         this.logger.info(
-          {
-            method,
-            url,
-            statusCode: response.statusCode,
-            responseTime,
-            ip: request.ip || request.headers["x-forwarded-for"],
-          },
-          "HTTP Request",
+          `${method} ${url} - ${statusCode} - ${responseTime}ms`,
         );
 
         return {

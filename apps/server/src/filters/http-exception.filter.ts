@@ -4,8 +4,6 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
-  Inject,
-  Optional,
 } from "@nestjs/common";
 import { Response } from "express";
 import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
@@ -42,32 +40,17 @@ export class HttpExceptionFilter implements ExceptionFilter {
         message = exceptionResponse as string;
         error = exception.name;
       }
+
+      // 简化日志输出
+      this.logger.warn(
+        `${request.method} ${request.url} - ${status} - ${message}`,
+      );
     } else if (exception instanceof Error) {
       this.logger.error(
-        {
-          err: exception,
-          method: request.method,
-          url: request.url,
-          body: request.body,
-          query: request.query,
-        },
-        "Unhandled error: %s",
-        exception.message,
+        `${request.method} ${request.url} - ${status} - ${exception.message}`,
       );
       message = exception.message;
     }
-
-    // 记录 HTTP 错误日志
-    this.logger.warn(
-      {
-        method: request.method,
-        url: request.url,
-        statusCode: status,
-        message,
-        error,
-      },
-      "HTTP Error",
-    );
 
     const responseBody = {
       success: false,

@@ -1,13 +1,19 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from "@nestjs/common";
+import {
+  Injectable,
+  OnModuleInit,
+  OnModuleDestroy,
+  Logger,
+} from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
-import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class PrismaService
   extends PrismaClient
   implements OnModuleInit, OnModuleDestroy
 {
-  constructor(@InjectPinoLogger() private logger: PinoLogger) {
+  private readonly logger = new Logger(PrismaService.name);
+
+  constructor() {
     super({
       log: [
         { level: "query", emit: "event" },
@@ -21,21 +27,17 @@ export class PrismaService
     // 监听查询事件
     this.$on("query" as never, (event: Prisma.QueryEvent) => {
       this.logger.debug(
-        {
-          query: event.query,
-          duration: `${event.duration}ms`,
-          params: event.params,
-        },
-        "Prisma Query",
+        `Prisma Query: ${event.query} - ${event.duration}ms`,
+        "PrismaService",
       );
     });
 
     await this.$connect();
-    this.logger.info("Prisma connected");
+    this.logger.log("Prisma connected", "PrismaService");
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
-    this.logger.info("Prisma disconnected");
+    this.logger.log("Prisma disconnected", "PrismaService");
   }
 }

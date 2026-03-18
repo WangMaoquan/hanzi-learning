@@ -1,22 +1,23 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
 import { CharacterTransformer } from "../../transformers";
 import type { CharacterVO, PaginatedVO } from "../../transformers/vo";
-import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class CharactersService {
-  constructor(
-    private prisma: PrismaService,
-    @InjectPinoLogger() private logger: PinoLogger,
-  ) {}
+  private readonly logger = new Logger(CharactersService.name);
+
+  constructor(private prisma: PrismaService) {}
 
   async findAll(
     page = 1,
     limit = 20,
     search?: string,
   ): Promise<PaginatedVO<CharacterVO>> {
-    this.logger.debug({ page, limit, search }, "Query characters");
+    this.logger.debug(
+      `Query characters: page=${page}, limit=${limit}, search=${search}`,
+      CharactersService.name,
+    );
 
     const skip = (page - 1) * limit;
     const where = search
@@ -39,7 +40,10 @@ export class CharactersService {
       this.prisma.character.count({ where }),
     ]);
 
-    this.logger.debug({ total, page, limit }, "Characters query completed");
+    this.logger.debug(
+      `Characters query completed: total=${total}, page=${page}, limit=${limit}`,
+      CharactersService.name,
+    );
     return CharacterTransformer.toPaginatedVO(data, total, page, limit);
   }
 
@@ -48,7 +52,7 @@ export class CharactersService {
   }
 
   async findOne(id: string): Promise<CharacterVO | null> {
-    this.logger.debug({ id }, "Find character by id");
+    this.logger.debug(`Find character by id: ${id}`, CharactersService.name);
     const data = await this.prisma.character.findUnique({
       where: { id },
     });
@@ -56,7 +60,10 @@ export class CharactersService {
   }
 
   async findByWord(word: string): Promise<CharacterVO | null> {
-    this.logger.debug({ word }, "Find character by word");
+    this.logger.debug(
+      `Find character by word: ${word}`,
+      CharactersService.name,
+    );
     const data = await this.prisma.character.findUnique({
       where: { word },
     });
@@ -65,7 +72,7 @@ export class CharactersService {
 
   async findRandom(): Promise<CharacterVO | null> {
     // 随机查询不缓存
-    this.logger.debug({}, "Find random character");
+    this.logger.debug("Find random character", CharactersService.name);
     const count = await this.prisma.character.count();
     if (count === 0) return null;
     const random = Math.floor(Math.random() * count);
@@ -79,7 +86,10 @@ export class CharactersService {
   async findNeighbors(
     id: string,
   ): Promise<{ prev: CharacterVO | null; next: CharacterVO | null }> {
-    this.logger.debug({ id }, "Find character neighbors");
+    this.logger.debug(
+      `Find character neighbors: ${id}`,
+      CharactersService.name,
+    );
     const current = await this.prisma.character.findUnique({
       where: { id },
     });

@@ -3,10 +3,10 @@ import {
   NestInterceptor,
   ExecutionContext,
   CallHandler,
+  Logger,
 } from "@nestjs/common";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
-import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
 
 export interface Response<T> {
   success: boolean;
@@ -20,10 +20,7 @@ export interface Response<T> {
  */
 @Injectable()
 export class SuccessInterceptor<T> implements NestInterceptor<T, Response<T>> {
-  constructor(
-    @InjectPinoLogger()
-    private readonly logger: PinoLogger,
-  ) {}
+  private readonly logger = new Logger(SuccessInterceptor.name);
 
   intercept(
     context: ExecutionContext,
@@ -41,8 +38,9 @@ export class SuccessInterceptor<T> implements NestInterceptor<T, Response<T>> {
         const statusCode = response.statusCode;
 
         // 简化日志输出
-        this.logger.info(
+        this.logger.log(
           `${method} ${url} - ${statusCode} - ${responseTime}ms`,
+          SuccessInterceptor.name,
         );
 
         return {

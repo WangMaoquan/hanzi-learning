@@ -4,9 +4,9 @@ import {
   ArgumentsHost,
   HttpException,
   HttpStatus,
+  Logger,
 } from "@nestjs/common";
 import { Response } from "express";
-import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
 import {
   ErrorCode,
   ErrorCodeToStatus,
@@ -37,10 +37,7 @@ export class BusinessException extends Error {
  */
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
-  constructor(
-    @InjectPinoLogger()
-    private readonly logger: PinoLogger,
-  ) {}
+  private readonly logger = new Logger(HttpExceptionFilter.name);
 
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();

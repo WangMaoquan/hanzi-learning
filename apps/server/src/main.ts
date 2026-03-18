@@ -1,10 +1,11 @@
 import { NestFactory } from "@nestjs/core";
-import { ValidationPipe } from "@nestjs/common";
+import { ValidationPipe, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import compression from "compression";
 import { AppModule } from "./app.module";
-import { Logger } from "nestjs-pino";
+import { WinstonModule } from "nest-winston";
+import * as winston from "winston";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
 import { HttpExceptionFilter } from "./filters/http-exception.filter";
 
@@ -15,8 +16,26 @@ async function bootstrap() {
   // 启用响应压缩
   app.use(compression());
 
-  // 使用 Pino 作为全局日志
-  app.useLogger(app.get(Logger));
+  // 使用 Winston Logger 作为 NestJS 日志
+  const winstonLogger = winston.createLogger({
+    level: process.env.LOG_LEVEL || "info",
+    format: winston.format.combine(
+      winston.format.timestamp(),
+      winston.format.json(),
+    ),
+    transports: [
+      new winston.transports.Console({
+        format: winston.format.combine(
+          winston.format.colorize(),
+          winston.format.printf(({ timestamp, level, message }) => {
+            return `${timestamp} ${level}: ${message}`;
+          }),
+        ),
+      }),
+    ],
+  });
+
+  app.useLogger(winstonLogger);
 
   // 全局路由前缀
   app.setGlobalPrefix("api/v1");
@@ -66,9 +85,10 @@ async function bootstrap() {
   // 从配置获取端口
   const port = configService.get<number>("app.port") || 3001;
   await app.listen(port);
-  const logger = app.get(Logger);
-  logger.log(`API server running on http://localhost:${port}`);
-  logger.log(`Swagger docs available at http://localhost:${port}/api/docs`);
+  winstonLogger.info(`API server running on http://localhost:${port}`);
+  winstonLogger.info(
+    `Swagger docs available at http://localhost:${port}/api/docs`,
+  );
 }
 
 bootstrap();

@@ -1,6 +1,7 @@
 import { Module } from "@nestjs/common";
 import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { ThrottlerModule } from "@nestjs/throttler";
+import { CacheModule, CacheInterceptor } from "@nestjs/cache-manager";
 import { LoggerModule } from "./logger/logger.module";
 import { CharactersModule } from "./modules/characters/characters.module";
 import { IdiomsModule } from "./modules/idioms/idioms.module";
@@ -13,6 +14,10 @@ import { HttpExceptionFilter } from "./filters/http-exception.filter";
 @Module({
   imports: [
     LoggerModule,
+    CacheModule.register({
+      isGlobal: true,
+      ttl: 60 * 1000, // 默认缓存 1 分钟
+    }),
     ThrottlerModule.forRoot([
       {
         name: "short",

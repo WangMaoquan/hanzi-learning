@@ -1,10 +1,19 @@
-import { Controller, Get, Param, Query, ParseUUIDPipe } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  ParseUUIDPipe,
+  UseInterceptors,
+} from "@nestjs/common";
 import { ApiTags, ApiOperation } from "@nestjs/swagger";
 import { PoemsService } from "./poems.service";
 import { PoemQueryDto } from "../../dtos/poem-query.dto";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @ApiTags("poems")
 @Controller("poems")
+@UseInterceptors(CacheInterceptor)
 export class PoemsController {
   constructor(private readonly poemsService: PoemsService) {}
 

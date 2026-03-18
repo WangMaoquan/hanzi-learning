@@ -1,10 +1,19 @@
-import { Controller, Get, Param, Query, ParseUUIDPipe } from "@nestjs/common";
+import {
+  Controller,
+  Get,
+  Param,
+  Query,
+  ParseUUIDPipe,
+  UseInterceptors,
+} from "@nestjs/common";
 import { ApiTags, ApiOperation, ApiQuery } from "@nestjs/swagger";
 import { CharactersService } from "./characters.service";
 import { CharacterQueryDto } from "../../dtos/character-query.dto";
+import { CacheInterceptor } from "@nestjs/cache-manager";
 
 @ApiTags("characters")
 @Controller("characters")
+@UseInterceptors(CacheInterceptor)
 export class CharactersController {
   constructor(private readonly charactersService: CharactersService) {}
 

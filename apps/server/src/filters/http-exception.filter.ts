@@ -99,25 +99,42 @@ export class HttpExceptionFilter implements ExceptionFilter {
   /**
    * 根据状态码和消息映射到错误码
    */
-  private mapToErrorCode(status: number, message: string): string {
+  private mapToErrorCode(status: number, message: string | string[]): string {
+    // 处理数组格式的验证错误消息
+    const messageStr = Array.isArray(message) ? message.join(", ") : message;
+
     // 404 错误根据路径判断模块
     if (status === HttpStatus.NOT_FOUND) {
-      const url = message.includes("/characters")
+      const url = messageStr.includes("/characters")
         ? ErrorCode.CHARACTER_NOT_FOUND
-        : message.includes("/idioms")
+        : messageStr.includes("/idioms")
           ? ErrorCode.IDIOM_NOT_FOUND
-          : message.includes("/poems")
+          : messageStr.includes("/poems")
             ? ErrorCode.POEM_NOT_FOUND
             : ErrorCode.NOT_FOUND;
       return url;
     }
 
-    // 400 错误根据消息判断
+    // 400 错误根据消息内容判断
     if (status === HttpStatus.BAD_REQUEST) {
-      if (message.includes("page")) return ErrorCode.INVALID_PAGE;
-      if (message.includes("limit")) return ErrorCode.INVALID_LIMIT;
-      if (message.includes("dynasty")) return ErrorCode.INVALID_DYNASTY;
-      if (message.includes("search")) return ErrorCode.INVALID_SEARCH_KEYWORD;
+      // UUID 格式错误
+      if (messageStr.includes("uuid") || messageStr.includes("UUID"))
+        return ErrorCode.CHARACTER_INVALID_ID;
+
+      // 分页参数验证
+      if (messageStr.includes("page") || messageStr.includes("page must"))
+        return ErrorCode.INVALID_PAGE;
+      if (messageStr.includes("limit") || messageStr.includes("limit must"))
+        return ErrorCode.INVALID_LIMIT;
+
+      // 搜索参数验证
+      if (messageStr.includes("search") || messageStr.includes("search must"))
+        return ErrorCode.INVALID_SEARCH_KEYWORD;
+
+      // 朝代参数验证
+      if (messageStr.includes("dynasty") || messageStr.includes("dynasty must"))
+        return ErrorCode.INVALID_DYNASTY;
+
       return ErrorCode.BAD_REQUEST;
     }
 

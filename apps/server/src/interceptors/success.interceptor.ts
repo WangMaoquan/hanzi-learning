@@ -21,7 +21,7 @@ export interface Response<T> {
 @Injectable()
 export class SuccessInterceptor<T> implements NestInterceptor<T, Response<T>> {
   constructor(
-    @InjectPinoLogger(SuccessInterceptor.name)
+    @InjectPinoLogger()
     private readonly logger: PinoLogger,
   ) {}
 

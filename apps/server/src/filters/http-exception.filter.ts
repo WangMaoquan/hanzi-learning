@@ -17,7 +17,7 @@ import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
 @Catch()
 export class HttpExceptionFilter implements ExceptionFilter {
   constructor(
-    @InjectPinoLogger(HttpExceptionFilter.name)
+    @InjectPinoLogger()
     private readonly logger: PinoLogger,
   ) {}
 

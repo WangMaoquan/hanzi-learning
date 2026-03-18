@@ -2,6 +2,7 @@ import { NestFactory } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import compression from "compression";
 import { AppModule } from "./app.module";
 import { Logger } from "nestjs-pino";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
@@ -10,6 +11,9 @@ import { HttpExceptionFilter } from "./filters/http-exception.filter";
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { logger: false });
   const configService = app.get(ConfigService);
+
+  // 启用响应压缩
+  app.use(compression());
 
   // 使用 Pino 作为全局日志
   app.useLogger(app.get(Logger));

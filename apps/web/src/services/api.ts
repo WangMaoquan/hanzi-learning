@@ -1,5 +1,6 @@
 import axios from 'axios'
 import type { CharacterVO, IdiomVO, PoemVO, PaginatedVO } from '@hanzi-learning/types'
+import { getErrorMessage } from '@/constants/error-code'
 
 // 统一响应类型
 export interface ApiResponse<T> {
@@ -10,10 +11,10 @@ export interface ApiResponse<T> {
 
 export interface ApiError {
   success: false
-  statusCode: number
-  message: string
-  error: string
+  code: string // 业务错误码，如 "000001"
+  message: string // 错误消息
   timestamp: string
+  statusCode?: number // HTTP 状态码（可选）
 }
 
 // 类型别名（兼容旧代码）
@@ -36,8 +37,9 @@ api.interceptors.response.use(
   (response) => response.data,
   (error) => {
     if (error.response) {
-      const { statusCode, message } = error.response.data
-      console.error(`API Error ${statusCode}:`, message)
+      const { code, message } = error.response.data
+      const errorMessage = code ? getErrorMessage(code) : message
+      console.error(`API Error [${code}]:`, errorMessage)
     } else if (error.request) {
       console.error('API Error: 网络请求失败')
     } else {
@@ -46,6 +48,8 @@ api.interceptors.response.use(
     return Promise.reject(error)
   }
 )
+
+export { getErrorMessage }
 
 export default api
 

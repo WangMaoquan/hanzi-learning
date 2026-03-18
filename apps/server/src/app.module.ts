@@ -5,6 +5,7 @@ import { LoggerModule } from "./logger/logger.module";
 import { CharactersModule } from "./modules/characters/characters.module";
 import { IdiomsModule } from "./modules/idioms/idioms.module";
 import { PoemsModule } from "./modules/poems/poems.module";
+import { HealthModule } from "./modules/health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
 import { HttpExceptionFilter } from "./filters/http-exception.filter";
@@ -33,6 +34,7 @@ import { HttpExceptionFilter } from "./filters/http-exception.filter";
     CharactersModule,
     IdiomsModule,
     PoemsModule,
+    HealthModule,
   ],
   providers: [
     {

@@ -6,6 +6,10 @@ export default {
   transform: {
     "^.+\\.ts$": "ts-jest",
   },
+  moduleNameMapper: {
+    "^@prisma/client$": "<rootDir>/src/__mocks__/prisma.client.ts",
+  },
+  setupFilesAfterEnv: ["<rootDir>/src/__mocks__/jest.setup.ts"],
   collectCoverageFrom: [
     "src/**/*.ts",
     "!src/**/*.spec.ts",

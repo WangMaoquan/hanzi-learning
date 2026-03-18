@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
-import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
+import { APP_FILTER, APP_INTERCEPTOR, APP_GUARD } from "@nestjs/core";
 import { ConfigModule, ConfigService } from "@nestjs/config";
-import { ThrottlerModule } from "@nestjs/throttler";
+import { ThrottlerModule, ThrottlerGuard } from "@nestjs/throttler";
 import { CacheModule } from "@nestjs/cache-manager";
 import { LoggerModule } from "./logger/logger.module";
 import { CharactersModule } from "./modules/characters/characters.module";
@@ -54,6 +54,10 @@ import { appConfig, cacheConfig, throttleConfig } from "./config/app.config";
     HealthModule,
   ],
   providers: [
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
     {
       provide: APP_INTERCEPTOR,
       useClass: SuccessInterceptor,

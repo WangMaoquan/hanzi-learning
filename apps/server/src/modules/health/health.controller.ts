@@ -11,10 +11,12 @@ import {
   HealthCheckResult,
   PrismaHealthIndicator,
 } from "@nestjs/terminus";
+import { Throttle, SkipThrottle } from "@nestjs/throttler";
 import { PrismaService } from "../../prisma/prisma.service";
 
 @ApiTags("health")
 @Controller("health")
+@SkipThrottle()
 export class HealthController {
   constructor(
     private health: HealthCheckService,
@@ -23,6 +25,7 @@ export class HealthController {
   ) {}
 
   @Get()
+  @Throttle({ short: { limit: 100, ttl: 60000 } })
   @ApiOperation({
     summary: "健康检查",
     description: "执行所有健康检查项，包括数据库连接",
@@ -40,7 +43,7 @@ export class HealthController {
   @Get("live")
   @ApiOperation({
     summary: "存活检查",
-    description: "简单的存活探测，用于 k8s livenessProbe",
+    description: "简单的存活探测，用于 k8s livenessProbe，不限流",
   })
   @ApiProduces("text/plain")
   @ApiResponse({ status: 200, description: "返回 OK", type: String })

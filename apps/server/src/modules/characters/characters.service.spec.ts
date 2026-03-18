@@ -3,6 +3,21 @@ import { CharactersService } from "./characters.service";
 import { PrismaService } from "../../prisma/prisma.service";
 import { LoggerModule } from "../../logger/logger.module";
 
+jest.mock("@prisma/client", () => ({
+  PrismaClient: jest.fn().mockImplementation(() => ({
+    $connect: jest.fn(),
+    $disconnect: jest.fn(),
+    $on: jest.fn(),
+    $queryRaw: jest.fn().mockResolvedValue([]),
+    character: {
+      findMany: jest.fn(),
+      count: jest.fn(),
+      findUnique: jest.fn(),
+      findFirst: jest.fn(),
+    },
+  })),
+}));
+
 describe("CharactersService", () => {
   let service: CharactersService;
   let prismaService: Partial<PrismaService>;
@@ -48,7 +63,7 @@ describe("CharactersService", () => {
         findUnique: jest.fn().mockResolvedValue(mockCharacters[0]),
         findFirst: jest.fn().mockResolvedValue(mockCharacters[1]),
       },
-    };
+    } as unknown as Partial<PrismaService>;
 
     const module: TestingModule = await Test.createTestingModule({
       imports: [LoggerModule],
@@ -79,7 +94,7 @@ describe("CharactersService", () => {
     it("should apply pagination correctly", async () => {
       await service.findAll(2, 10);
 
-      expect(prismaService.character.findMany).toHaveBeenCalledWith(
+      expect(prismaService.character!.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           skip: 10,
           take: 10,
@@ -90,7 +105,7 @@ describe("CharactersService", () => {
     it("should apply search filter", async () => {
       await service.findAll(1, 20, "一");
 
-      expect(prismaService.character.findMany).toHaveBeenCalledWith(
+      expect(prismaService.character!.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({
             OR: expect.arrayContaining([
@@ -107,13 +122,13 @@ describe("CharactersService", () => {
       const result = await service.findOne("1");
 
       expect(result).toBeDefined();
-      expect(prismaService.character.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.character!.findUnique).toHaveBeenCalledWith({
         where: { id: "1" },
       });
     });
 
     it("should return null if character not found", async () => {
-      (prismaService.character.findUnique as jest.Mock).mockResolvedValueOnce(
+      (prismaService.character!.findUnique as jest.Mock).mockResolvedValueOnce(
         null,
       );
       const result = await service.findOne("999");
@@ -127,7 +142,7 @@ describe("CharactersService", () => {
       const result = await service.findByWord("一");
 
       expect(result).toBeDefined();
-      expect(prismaService.character.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.character!.findUnique).toHaveBeenCalledWith({
         where: { word: "一" },
       });
     });
@@ -138,12 +153,12 @@ describe("CharactersService", () => {
       const result = await service.findRandom();
 
       expect(result).toBeDefined();
-      expect(prismaService.character.count).toHaveBeenCalled();
-      expect(prismaService.character.findFirst).toHaveBeenCalled();
+      expect(prismaService.character!.count).toHaveBeenCalled();
+      expect(prismaService.character!.findFirst).toHaveBeenCalled();
     });
 
     it("should return null if no characters exist", async () => {
-      (prismaService.character.count as jest.Mock).mockResolvedValueOnce(0);
+      (prismaService.character!.count as jest.Mock).mockResolvedValueOnce(0);
       const result = await service.findRandom();
 
       expect(result).toBeNull();
@@ -159,7 +174,7 @@ describe("CharactersService", () => {
     });
 
     it("should return null neighbors if character not found", async () => {
-      (prismaService.character.findUnique as jest.Mock).mockResolvedValueOnce(
+      (prismaService.character!.findUnique as jest.Mock).mockResolvedValueOnce(
         null,
       );
       const result = await service.findNeighbors("999");
@@ -174,7 +189,7 @@ describe("CharactersService", () => {
       const result = await service.count();
 
       expect(result).toBe(3);
-      expect(prismaService.character.count).toHaveBeenCalled();
+      expect(prismaService.character!.count).toHaveBeenCalled();
     });
   });
 });

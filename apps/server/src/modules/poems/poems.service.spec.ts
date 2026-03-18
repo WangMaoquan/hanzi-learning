@@ -36,7 +36,7 @@ describe("PoemsService", () => {
         findUnique: jest.fn().mockResolvedValue(mockPoems[0]),
         findFirst: jest.fn().mockResolvedValue(mockPoems[1]),
       },
-    };
+    } as unknown as Partial<PrismaService>;
 
     const module: TestingModule = await Test.createTestingModule({
       imports: [LoggerModule],
@@ -65,7 +65,7 @@ describe("PoemsService", () => {
     it("should filter by dynasty", async () => {
       await service.findAll(1, 20, "唐");
 
-      expect(prismaService.poem.findMany).toHaveBeenCalledWith(
+      expect(prismaService.poem!.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({ dynasty: "唐" }),
         }),
@@ -75,7 +75,7 @@ describe("PoemsService", () => {
     it("should filter by search keyword", async () => {
       await service.findAll(1, 20, undefined, "静夜思");
 
-      expect(prismaService.poem.findMany).toHaveBeenCalledWith(
+      expect(prismaService.poem!.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({
             OR: expect.arrayContaining([
@@ -92,13 +92,13 @@ describe("PoemsService", () => {
       const result = await service.findOne("1");
 
       expect(result).toBeDefined();
-      expect(prismaService.poem.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.poem!.findUnique).toHaveBeenCalledWith({
         where: { id: "1" },
       });
     });
 
     it("should return null if poem not found", async () => {
-      (prismaService.poem.findUnique as jest.Mock).mockResolvedValueOnce(null);
+      (prismaService.poem!.findUnique as jest.Mock).mockResolvedValueOnce(null);
       const result = await service.findOne("999");
 
       expect(result).toBeNull();
@@ -110,7 +110,7 @@ describe("PoemsService", () => {
       const result = await service.findByTitle("静夜思");
 
       expect(result).toBeDefined();
-      expect(prismaService.poem.findFirst).toHaveBeenCalledWith({
+      expect(prismaService.poem!.findFirst).toHaveBeenCalledWith({
         where: { title: "静夜思" },
       });
     });
@@ -124,7 +124,7 @@ describe("PoemsService", () => {
     });
 
     it("should return null if no poems exist", async () => {
-      (prismaService.poem.count as jest.Mock).mockResolvedValueOnce(0);
+      (prismaService.poem!.count as jest.Mock).mockResolvedValueOnce(0);
       const result = await service.findRandom();
 
       expect(result).toBeNull();
@@ -140,7 +140,7 @@ describe("PoemsService", () => {
     });
 
     it("should return null neighbors if poem not found", async () => {
-      (prismaService.poem.findUnique as jest.Mock).mockResolvedValueOnce(null);
+      (prismaService.poem!.findUnique as jest.Mock).mockResolvedValueOnce(null);
       const result = await service.findNeighbors("999");
 
       expect(result.prev).toBeNull();

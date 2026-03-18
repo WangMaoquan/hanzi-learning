@@ -36,7 +36,7 @@ describe("IdiomsService", () => {
         findUnique: jest.fn().mockResolvedValue(mockIdioms[0]),
         findFirst: jest.fn().mockResolvedValue(mockIdioms[1]),
       },
-    };
+    } as unknown as Partial<PrismaService>;
 
     const module: TestingModule = await Test.createTestingModule({
       imports: [LoggerModule],
@@ -65,7 +65,7 @@ describe("IdiomsService", () => {
     it("should apply search filter", async () => {
       await service.findAll(1, 20, "一心");
 
-      expect(prismaService.idiom.findMany).toHaveBeenCalledWith(
+      expect(prismaService.idiom!.findMany).toHaveBeenCalledWith(
         expect.objectContaining({
           where: expect.objectContaining({
             OR: expect.arrayContaining([
@@ -82,13 +82,15 @@ describe("IdiomsService", () => {
       const result = await service.findOne("1");
 
       expect(result).toBeDefined();
-      expect(prismaService.idiom.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.idiom!.findUnique).toHaveBeenCalledWith({
         where: { id: "1" },
       });
     });
 
     it("should return null if idiom not found", async () => {
-      (prismaService.idiom.findUnique as jest.Mock).mockResolvedValueOnce(null);
+      (prismaService.idiom!.findUnique as jest.Mock).mockResolvedValueOnce(
+        null,
+      );
       const result = await service.findOne("999");
 
       expect(result).toBeNull();
@@ -100,7 +102,7 @@ describe("IdiomsService", () => {
       const result = await service.findByWord("一心一意");
 
       expect(result).toBeDefined();
-      expect(prismaService.idiom.findUnique).toHaveBeenCalledWith({
+      expect(prismaService.idiom!.findUnique).toHaveBeenCalledWith({
         where: { word: "一心一意" },
       });
     });
@@ -114,7 +116,7 @@ describe("IdiomsService", () => {
     });
 
     it("should return null if no idioms exist", async () => {
-      (prismaService.idiom.count as jest.Mock).mockResolvedValueOnce(0);
+      (prismaService.idiom!.count as jest.Mock).mockResolvedValueOnce(0);
       const result = await service.findRandom();
 
       expect(result).toBeNull();
@@ -130,7 +132,9 @@ describe("IdiomsService", () => {
     });
 
     it("should return null neighbors if idiom not found", async () => {
-      (prismaService.idiom.findUnique as jest.Mock).mockResolvedValueOnce(null);
+      (prismaService.idiom!.findUnique as jest.Mock).mockResolvedValueOnce(
+        null,
+      );
       const result = await service.findNeighbors("999");
 
       expect(result.prev).toBeNull();

@@ -14,9 +14,9 @@
 
 ## 环境要求
 
-- Node.js 18+
+- Node.js >= 22.17.0
 - PostgreSQL 14+
-- pnpm 8+
+- pnpm 10.32.0
 
 ## 本地开发
 

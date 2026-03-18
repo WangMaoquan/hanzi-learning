@@ -1,12 +1,17 @@
 import { Module } from "@nestjs/common";
+import { APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { ThrottlerModule } from "@nestjs/throttler";
+import { LoggerModule } from "./logger/logger.module";
 import { CharactersModule } from "./modules/characters/characters.module";
 import { IdiomsModule } from "./modules/idioms/idioms.module";
 import { PoemsModule } from "./modules/poems/poems.module";
 import { PrismaModule } from "./prisma/prisma.module";
+import { SuccessInterceptor } from "./interceptors/success.interceptor";
+import { HttpExceptionFilter } from "./filters/http-exception.filter";
 
 @Module({
   imports: [
+    LoggerModule,
     ThrottlerModule.forRoot([
       {
         name: "short",
@@ -28,6 +33,16 @@ import { PrismaModule } from "./prisma/prisma.module";
     CharactersModule,
     IdiomsModule,
     PoemsModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: SuccessInterceptor,
+    },
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
   ],
 })
 export class AppModule {}

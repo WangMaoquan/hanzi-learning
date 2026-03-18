@@ -1,12 +1,16 @@
-import { NestFactory } from "@nestjs/core";
+import { NestFactory, APP_FILTER, APP_INTERCEPTOR } from "@nestjs/core";
 import { ValidationPipe } from "@nestjs/common";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import { AppModule } from "./app.module";
-import { HttpExceptionFilter } from "./filters/http-exception.filter";
+import { Logger } from "nestjs-pino";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
+import { HttpExceptionFilter } from "./filters/http-exception.filter";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, { logger: false });
+
+  // 使用 Pino 作为全局日志
+  app.useLogger(app.get(Logger));
 
   // 全局路由前缀
   app.setGlobalPrefix("api/v1");
@@ -28,12 +32,6 @@ async function bootstrap() {
     }),
   );
 
-  // 全局响应拦截器 - 统一响应格式
-  app.useGlobalInterceptors(new SuccessInterceptor());
-
-  // 全局异常过滤器 - 统一错误响应
-  app.useGlobalFilters(new HttpExceptionFilter());
-
   // Swagger API 文档配置
   const config = new DocumentBuilder()
     .setTitle("汉字学习平台 API")
@@ -47,8 +45,9 @@ async function bootstrap() {
   SwaggerModule.setup("api/docs", app, document);
 
   await app.listen(3001);
-  console.log("API server running on http://localhost:3001");
-  console.log("Swagger docs available at http://localhost:3001/api/docs");
+  const logger = app.get(Logger);
+  logger.log("API server running on http://localhost:3001");
+  logger.log("Swagger docs available at http://localhost:3001/api/docs");
 }
 
 bootstrap();

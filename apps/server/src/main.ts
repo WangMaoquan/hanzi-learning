@@ -4,38 +4,45 @@ import { ConfigService } from "@nestjs/config";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import compression from "compression";
 import { AppModule } from "./app.module";
-import { WinstonModule } from "nest-winston";
 import * as winston from "winston";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
 import { HttpExceptionFilter } from "./filters/http-exception.filter";
 
+// 创建 Winston Logger
+const winstonLogger = winston.createLogger({
+  level: "info",
+  format: winston.format.combine(
+    winston.format.timestamp(),
+    winston.format.errors({ stack: true }),
+  ),
+  transports: [
+    new winston.transports.Console({
+      format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.printf(({ timestamp, level, message }) => {
+          return `${timestamp} ${level}: ${message}`;
+        }),
+      ),
+    }),
+  ],
+});
+
+// 创建适配器，将所有日志级别映射到 Winston
+const loggerAdapter = {
+  debug: (message: string) => winstonLogger.debug(message),
+  verbose: (message: string) => winstonLogger.verbose(message),
+  log: (message: string) => winstonLogger.info(message),
+  info: (message: string) => winstonLogger.info(message),
+  warn: (message: string) => winstonLogger.warn(message),
+  error: (message: string) => winstonLogger.error(message),
+};
+
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, { logger: false });
+  const app = await NestFactory.create(AppModule, { logger: loggerAdapter });
   const configService = app.get(ConfigService);
 
   // 启用响应压缩
   app.use(compression());
-
-  // 使用 Winston Logger 作为 NestJS 日志
-  const winstonLogger = winston.createLogger({
-    level: process.env.LOG_LEVEL || "info",
-    format: winston.format.combine(
-      winston.format.timestamp(),
-      winston.format.json(),
-    ),
-    transports: [
-      new winston.transports.Console({
-        format: winston.format.combine(
-          winston.format.colorize(),
-          winston.format.printf(({ timestamp, level, message }) => {
-            return `${timestamp} ${level}: ${message}`;
-          }),
-        ),
-      }),
-    ],
-  });
-
-  app.useLogger(winstonLogger);
 
   // 全局路由前缀
   app.setGlobalPrefix("api/v1");
@@ -52,9 +59,9 @@ async function bootstrap() {
   // 全局验证管道 - 自动验证 DTO 并转换类型
   app.useGlobalPipes(
     new ValidationPipe({
-      transform: true, // 自动将请求体转换为 DTO 实例
-      whitelist: true, // 剥离未在 DTO 中定义的属性
-      forbidNonWhitelisted: true, // 如果有未定义的属性抛出错误
+      transform: true,
+      whitelist: true,
+      forbidNonWhitelisted: true,
     }),
   );
 

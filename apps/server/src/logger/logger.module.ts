@@ -9,6 +9,8 @@ export const isProduction = process.env.NODE_ENV === "production";
     NestjsPinoLoggerModule.forRoot({
       pinoHttp: {
         level: process.env.LOG_LEVEL || "info",
+        // 禁用默认的 HTTP 请求日志，只使用自定义的拦截器日志
+        autoLogging: false,
         transport: isProduction
           ? undefined
           : {
@@ -16,31 +18,20 @@ export const isProduction = process.env.NODE_ENV === "production";
               options: {
                 colorize: true,
                 translateTime: "HH:MM:ss",
-                ignore:
-                  "pid,hostname,req.headers,req.remoteAddress,req.remotePort,req.params",
+                ignore: "pid,hostname,req,res",
               },
             },
         // 生成请求 ID
         genReqId: (req) => req.headers["x-request-id"] || randomUUID(),
-        // 自定义序列化 - 简化请求信息
+        // 自定义序列化 - 完全隐藏 req/res
         serializers: {
-          req(req) {
-            return {
-              id: req.id,
-              method: req.method,
-              url: req.url,
-            };
+          req() {
+            return undefined;
           },
-          res(res) {
-            return {
-              statusCode: res.statusCode,
-            };
+          res() {
+            return undefined;
           },
         },
-        // 自定义日志格式
-        customProps: (req) => ({
-          requestId: req.id,
-        }),
         // 生产环境输出到文件（可选）
         ...(isProduction &&
           {

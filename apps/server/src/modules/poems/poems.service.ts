@@ -3,10 +3,14 @@ import { Prisma, PrismaClient } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
 import { PoemTransformer } from "../../transformers";
 import type { PoemVO, PaginatedVO } from "../../transformers/vo";
+import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class PoemsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    @InjectPinoLogger() private logger: PinoLogger,
+  ) {}
 
   async findAll(
     page = 1,
@@ -14,6 +18,8 @@ export class PoemsService {
     dynasty?: string,
     search?: string,
   ): Promise<PaginatedVO<PoemVO>> {
+    this.logger.debug({ page, limit, dynasty, search }, "Query poems");
+
     const skip = (page - 1) * limit;
     const where: Prisma.PoemWhereInput = {};
 
@@ -38,6 +44,7 @@ export class PoemsService {
       this.prisma.poem.count({ where }),
     ]);
 
+    this.logger.debug({ total, page, limit }, "Poems query completed");
     return PoemTransformer.toPaginatedVO(data, total, page, limit);
   }
 
@@ -46,6 +53,7 @@ export class PoemsService {
   }
 
   async findOne(id: string): Promise<PoemVO | null> {
+    this.logger.debug({ id }, "Find poem by id");
     const data = await this.prisma.poem.findUnique({
       where: { id },
     });
@@ -53,6 +61,7 @@ export class PoemsService {
   }
 
   async findByTitle(title: string): Promise<PoemVO | null> {
+    this.logger.debug({ title }, "Find poem by title");
     const data = await this.prisma.poem.findFirst({
       where: { title },
     });
@@ -60,6 +69,7 @@ export class PoemsService {
   }
 
   async findRandom(): Promise<PoemVO | null> {
+    this.logger.debug({}, "Find random poem");
     const count = await this.prisma.poem.count();
     if (count === 0) return null;
     const random = Math.floor(Math.random() * count);
@@ -73,6 +83,7 @@ export class PoemsService {
   async findNeighbors(
     id: string,
   ): Promise<{ prev: PoemVO | null; next: PoemVO | null }> {
+    this.logger.debug({ id }, "Find poem neighbors");
     const current = await this.prisma.poem.findUnique({ where: { id } });
     if (!current) {
       return { prev: null, next: null };

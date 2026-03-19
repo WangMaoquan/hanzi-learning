@@ -2,7 +2,7 @@
   import { ref, onMounted } from 'vue'
   import { getPoems, getPoemCount, type Poem } from '@/services/api'
   import { DYNASTY_LABELS } from '@hanzi-learning/utils'
-  import { Card } from '@hanzi-learning/ui'
+  import { Card, Skeleton } from '@hanzi-learning/ui'
   import PageHeader from '@/components/PageHeader.vue'
   import PageContent from '@/components/PageContent.vue'
 
@@ -62,9 +62,33 @@
       show-size-changer
       :page-sizes="[12, 24, 36, 48]"
       empty-description="暂无古诗数据"
+      skeleton
       @update:page="handlePageChange"
       @update:limit="handleSizeChange"
     >
+      <!-- 骨架屏 -->
+      <template #skeleton>
+        <div class="flex items-center justify-between mb-6">
+          <Skeleton
+            :lines="1"
+            width="5rem"
+            height="1.5rem"
+          />
+          <Skeleton
+            :lines="1"
+            width="4rem"
+            height="1rem"
+          />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Skeleton
+            v-for="i in 12"
+            :key="i"
+            :lines="4"
+            height="6rem"
+          />
+        </div>
+      </template>
       <div class="flex items-center justify-between mb-6">
         <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif">
           诗词列表

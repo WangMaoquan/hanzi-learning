@@ -11,6 +11,8 @@
     showSizeChanger?: boolean
     pageSizes?: number[]
     color?: 'primary' | 'secondary' | 'orange' | 'purple'
+    /** 加载时显示骨架屏而非 Loading 文字 */
+    skeleton?: boolean
   }>()
 
   const emit = defineEmits<{
@@ -34,9 +36,14 @@
 
 <template>
   <div class="max-w-6xl mx-auto px-4 pb-8">
-    <!-- 加载状态 -->
+    <!-- 加载状态 - 骨架屏 -->
+    <div v-if="loading && skeleton">
+      <slot name="skeleton"></slot>
+    </div>
+
+    <!-- 加载状态 - Loading -->
     <Loading
-      v-if="loading"
+      v-else-if="loading"
       text="加载中..."
     />
 
@@ -49,9 +56,9 @@
     <!-- 内容区域 -->
     <slot v-else></slot>
 
-    <!-- 分页 -->
+    <!-- 分页 -骨架屏时不显示 -->
     <div
-      v-if="hasData"
+      v-if="hasData && !(loading && skeleton)"
       class="flex justify-center mt-8"
     >
       <Pagination

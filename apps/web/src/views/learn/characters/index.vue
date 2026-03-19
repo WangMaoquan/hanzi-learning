@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import { getCharacters, getCharacterCount, type Character } from '@/services/api'
-  import { Card } from '@hanzi-learning/ui'
+  import { Card, Skeleton } from '@hanzi-learning/ui'
   import PageHeader from '@/components/PageHeader.vue'
   import PageContent from '@/components/PageContent.vue'
 
@@ -69,9 +69,74 @@
       show-size-changer
       :page-sizes="[20, 40, 60, 80]"
       empty-description="暂无汉字数据"
+      skeleton
       @update:page="handlePageChange"
       @update:limit="handleSizeChange"
     >
+      <!-- 骨架屏 -->
+      <template #skeleton>
+        <!-- 特色卡片骨架 -->
+        <div class="mb-8 border-2 border-[var(--color-primary-700)] rounded-xl p-6">
+          <div class="flex items-center gap-8">
+            <Skeleton
+              :lines="1"
+              width="9rem"
+              height="9rem"
+            />
+            <div class="flex-1 space-y-3">
+              <Skeleton
+                :lines="1"
+                width="6rem"
+                height="1.5rem"
+              />
+              <Skeleton
+                :lines="1"
+                width="4rem"
+                height="1.25rem"
+              />
+              <Skeleton
+                :lines="1"
+                width="80%"
+              />
+              <div class="flex gap-3">
+                <Skeleton
+                  :lines="1"
+                  width="3rem"
+                  height="1.5rem"
+                />
+                <Skeleton
+                  :lines="1"
+                  width="3rem"
+                  height="1.5rem"
+                />
+                <Skeleton
+                  :lines="1"
+                  width="4rem"
+                  height="1.5rem"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- 字表骨架 -->
+        <div class="mt-8">
+          <Skeleton
+            :lines="1"
+            width="4rem"
+            height="1.5rem"
+            class="mb-4"
+          />
+          <div class="grid grid-cols-5 sm:grid-cols-8 md:grid-cols-10 gap-3">
+            <Skeleton
+              v-for="i in 40"
+              :key="i"
+              :lines="1"
+              width="100%"
+              height="3rem"
+            />
+          </div>
+        </div>
+      </template>
       <!-- 当前学习 - 特色卡片 -->
       <Card
         v-if="currentCharacter"

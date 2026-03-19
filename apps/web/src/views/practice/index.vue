@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { onMounted } from 'vue'
   import { useContentCounts, useToast } from '@/composables'
+  import { Skeleton } from '@hanzi-learning/ui'
   import AppHeader from '@/components/AppHeader.vue'
 
   const { characterCount, poemCount, loading, error, fetchCounts } = useContentCounts()
@@ -91,9 +92,44 @@
         </h2>
         <div
           v-if="loading"
-          class="text-center text-[var(--color-secondary-400)] py-4"
+          class="grid grid-cols-3 gap-6 text-center"
         >
-          加载中...
+          <div>
+            <Skeleton
+              width="60%"
+              height="40"
+              class="mx-auto mb-2"
+            />
+            <Skeleton
+              width="50%"
+              height="16"
+              class="mx-auto"
+            />
+          </div>
+          <div>
+            <Skeleton
+              width="60%"
+              height="40"
+              class="mx-auto mb-2"
+            />
+            <Skeleton
+              width="50%"
+              height="16"
+              class="mx-auto"
+            />
+          </div>
+          <div>
+            <Skeleton
+              width="60%"
+              height="40"
+              class="mx-auto mb-2"
+            />
+            <Skeleton
+              width="50%"
+              height="16"
+              class="mx-auto"
+            />
+          </div>
         </div>
         <div
           v-else

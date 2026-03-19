@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import { ref, onMounted } from 'vue'
   import { useContentCounts, useToast } from '@/composables'
+  import { Skeleton } from '@hanzi-learning/ui'
   import ThemeSwitcher from '@/components/ThemeSwitcher.vue'
 
   const { characterCount, poemCount, idiomCount, loading, error, fetchCounts } = useContentCounts()
@@ -170,9 +171,29 @@
 
         <div
           v-if="loading"
-          class="text-center text-[var(--color-secondary-500)] py-12"
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
         >
-          加载中...
+          <div
+            v-for="i in 4"
+            :key="i"
+            class="bg-[var(--color-surface)] rounded-2xl p-6 border-2 border-[var(--color-secondary-100)]"
+          >
+            <div class="w-14 h-14 rounded-xl mb-5 bg-[var(--color-secondary-100)]"></div>
+            <Skeleton
+              width="60%"
+              height="24"
+              class="mb-2"
+            />
+            <Skeleton
+              width="100%"
+              height="16"
+              class="mb-4"
+            />
+            <Skeleton
+              width="40%"
+              height="16"
+            />
+          </div>
         </div>
 
         <div

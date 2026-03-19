@@ -14,28 +14,28 @@
       description: '练习汉字笔顺和书写',
       icon: '✍️',
       path: '/practice/write',
-      available: true,
+      available: false,
     },
     {
       title: '拼音连线',
       description: '汉字与拼音配对练习',
       icon: '🔗',
       path: '/practice/pinyin',
-      available: true,
+      available: false,
     },
     {
       title: '古诗填空',
       description: '根据提示填写诗句',
       icon: '📝',
       path: '/practice/poem-fill',
-      available: true,
+      available: false,
     },
     {
       title: '诗词背诵',
       description: '回忆并背诵古诗',
       icon: '🎯',
       path: '/practice/recite',
-      available: true,
+      available: false,
     },
   ]
 

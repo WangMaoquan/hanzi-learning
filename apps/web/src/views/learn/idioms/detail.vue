@@ -2,11 +2,9 @@
   import { ref, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import { getIdiom, getIdiomNeighbors, type Idiom } from '@/services/api'
-  import { useToast } from '@/composables'
   import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
 
   const route = useRoute()
-  const toast = useToast()
 
   const loading = ref(true)
   const idiom = ref<Idiom | null>(null)
@@ -25,9 +23,8 @@
       const [idiomRes, neighborsRes] = await Promise.all([getIdiom(id), getIdiomNeighbors(id)])
       idiom.value = idiomRes.data
       neighbors.value = neighborsRes.data
-    } catch (error) {
-      console.error('获取成语详情失败:', error)
-      toast.error('获取成语详情失败')
+    } catch {
+      // API 拦截器已处理错误提示
     } finally {
       loading.value = false
     }

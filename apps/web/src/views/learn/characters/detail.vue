@@ -2,13 +2,11 @@
   import { ref, computed, onMounted, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { getCharacter, getCharacterNeighbors, type Character } from '@/services/api'
-  import { useToast } from '@/composables'
   import { useHanziWriter } from '@hanzi-learning/hanzi-vue'
   import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
 
   const route = useRoute()
   const router = useRouter()
-  const toast = useToast()
 
   const loading = ref(true)
   const character = ref<Character | null>(null)
@@ -38,9 +36,8 @@
       character.value = charRes.data
       prevCharacter.value = neighborsRes.data.prev
       nextCharacter.value = neighborsRes.data.next
-    } catch (error) {
-      console.error('获取汉字详情失败:', error)
-      toast.error('获取汉字详情失败')
+    } catch {
+      // API 拦截器已处理错误提示
     } finally {
       loading.value = false
     }

@@ -21,8 +21,8 @@
       ])
       total.value = countRes.data
       poems.value = listRes.data.data
-    } catch (error) {
-      console.error('获取古诗列表失败:', error)
+    } catch {
+      // API 拦截器已处理错误提示
     } finally {
       loading.value = false
     }

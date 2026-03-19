@@ -26,8 +26,8 @@
       if (idioms.value.length > 0) {
         currentIdiom.value = idioms.value[0]
       }
-    } catch (error) {
-      console.error('获取成语列表失败:', error)
+    } catch {
+      // API 拦截器已处理错误提示
     } finally {
       loading.value = false
     }

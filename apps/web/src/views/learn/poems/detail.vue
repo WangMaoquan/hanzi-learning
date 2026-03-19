@@ -2,12 +2,10 @@
   import { ref, onMounted, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { getPoem, getPoemNeighbors, type Poem } from '@/services/api'
-  import { useToast } from '@/composables'
   import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
 
   const route = useRoute()
   const router = useRouter()
-  const toast = useToast()
 
   const loading = ref(true)
   const poem = ref<Poem | null>(null)
@@ -25,9 +23,8 @@
       const [poemRes, neighborsRes] = await Promise.all([getPoem(id), getPoemNeighbors(id)])
       poem.value = poemRes.data
       neighbors.value = neighborsRes.data
-    } catch (error) {
-      console.error('获取古诗详情失败:', error)
-      toast.error('获取古诗详情失败')
+    } catch {
+      // API 拦截器已处理错误提示
     } finally {
       loading.value = false
     }

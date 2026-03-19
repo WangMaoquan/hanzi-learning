@@ -2,7 +2,7 @@
   import { ref, onMounted, watch } from 'vue'
   import { useRoute } from 'vue-router'
   import { getIdiom, getIdiomNeighbors, type Idiom } from '@/services/api'
-  import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
+  import { Card, Empty, BackLink, Skeleton } from '@hanzi-learning/ui'
 
   const route = useRoute()
 
@@ -44,10 +44,130 @@
 </script>
 
 <template>
-  <Loading
+  <!-- 骨架屏 -->
+  <div
     v-if="loading"
-    text="加载中..."
-  />
+    class="min-h-screen pb-12 bg-[var(--color-secondary-50)]"
+  >
+    <div class="max-w-4xl mx-auto px-4 pt-6">
+      <div class="mb-6">
+        <Skeleton
+          width="100"
+          height="24"
+        />
+      </div>
+
+      <Card>
+        <!-- 标题区域 -->
+        <div class="text-center mb-8 pb-8 border-b border-[var(--color-accent-100)]">
+          <div class="inline-flex items-center justify-center rounded-xl px-8 py-4 mb-4 bg-[var(--color-accent-50)]">
+            <Skeleton
+              width="200"
+              height="80"
+            />
+          </div>
+          <Skeleton
+            width="160"
+            height="40"
+            class="mx-auto"
+          />
+        </div>
+
+        <!-- 释义 -->
+        <div class="mb-8">
+          <Skeleton
+            width="80"
+            height="28"
+            class="mb-4"
+          />
+          <Skeleton
+            width="100%"
+            height="60"
+          />
+        </div>
+
+        <!-- 出处 -->
+        <div class="mb-8">
+          <Skeleton
+            width="80"
+            height="28"
+            class="mb-4"
+          />
+          <Skeleton
+            width="100%"
+            height="80"
+          />
+        </div>
+
+        <!-- 例句 -->
+        <div class="mb-8">
+          <Skeleton
+            width="80"
+            height="28"
+            class="mb-4"
+          />
+          <Skeleton
+            width="100%"
+            height="60"
+          />
+        </div>
+
+        <!-- 近义词 -->
+        <div class="mb-8">
+          <Skeleton
+            width="100"
+            height="28"
+            class="mb-4"
+          />
+          <div class="flex flex-wrap gap-3">
+            <Skeleton
+              width="80"
+              height="36"
+            />
+            <Skeleton
+              width="100"
+              height="36"
+            />
+            <Skeleton
+              width="60"
+              height="36"
+            />
+          </div>
+        </div>
+
+        <!-- 反义词 -->
+        <div>
+          <Skeleton
+            width="100"
+            height="28"
+            class="mb-4"
+          />
+          <div class="flex flex-wrap gap-3">
+            <Skeleton
+              width="80"
+              height="36"
+            />
+            <Skeleton
+              width="100"
+              height="36"
+            />
+          </div>
+        </div>
+      </Card>
+
+      <!-- 导航 -->
+      <div class="mt-8 flex items-center justify-between">
+        <Skeleton
+          width="180"
+          height="88"
+        />
+        <Skeleton
+          width="180"
+          height="88"
+        />
+      </div>
+    </div>
+  </div>
 
   <div
     v-else-if="idiom"

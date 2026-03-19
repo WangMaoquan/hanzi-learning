@@ -3,10 +3,16 @@ defineProps<{
   /** 占位行数 */
   lines?: number
   /** 宽度 */
-  width?: string
+  width?: string | number
   /** 高度 */
-  height?: string
+  height?: string | number
 }>()
+</script>
+
+<script lang="ts">
+export default {
+  inheritAttrs: false,
+}
 </script>
 
 <template>
@@ -19,6 +25,7 @@ defineProps<{
         width: width || '100%',
         height: height || '1rem',
       }"
+      v-bind="$attrs"
     ></div>
   </div>
 </template>

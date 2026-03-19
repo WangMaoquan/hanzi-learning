@@ -3,7 +3,7 @@
   import { useRoute, useRouter } from 'vue-router'
   import { getCharacter, getCharacterNeighbors, type Character } from '@/services/api'
   import { useHanziWriter } from '@hanzi-learning/hanzi-vue'
-  import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
+  import { Card, Empty, BackLink, Skeleton } from '@hanzi-learning/ui'
 
   const route = useRoute()
   const router = useRouter()
@@ -57,10 +57,113 @@
 </script>
 
 <template>
-  <Loading
+  <!-- 骨架屏 -->
+  <div
     v-if="loading"
-    text="加载中..."
-  />
+    class="min-h-screen pb-12 bg-[var(--color-secondary-50)]"
+  >
+    <div class="max-w-6xl mx-auto px-4 pt-6">
+      <div class="mb-6">
+        <Skeleton
+          width="100"
+          height="24"
+        />
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+        <!-- 左侧 -->
+        <Card>
+          <div class="flex items-center justify-center h-48 rounded-xl mb-6 bg-[var(--color-primary-50)]">
+            <Skeleton
+              width="160"
+              height="144"
+            />
+          </div>
+          <div class="mb-6">
+            <Skeleton
+              width="100"
+              height="24"
+              class="mb-4"
+            />
+            <Skeleton
+              width="100%"
+              height="200"
+            />
+          </div>
+          <div class="flex justify-center mb-6">
+            <Skeleton
+              width="140"
+              height="44"
+            />
+          </div>
+          <div class="flex justify-between pt-4 border-t border-[var(--color-secondary-200)]">
+            <Skeleton
+              width="80"
+              height="44"
+            />
+            <Skeleton
+              width="80"
+              height="44"
+            />
+          </div>
+        </Card>
+        <!-- 右侧 -->
+        <div class="space-y-6">
+          <Card>
+            <Skeleton
+              width="120"
+              height="28"
+              class="mb-5"
+            />
+            <div class="space-y-4">
+              <Skeleton
+                width="80"
+                height="40"
+              />
+              <Skeleton
+                width="100%"
+                height="60"
+              />
+              <div class="flex gap-3">
+                <Skeleton
+                  width="60"
+                  height="36"
+                />
+                <Skeleton
+                  width="80"
+                  height="36"
+                />
+                <Skeleton
+                  width="80"
+                  height="36"
+                />
+              </div>
+            </div>
+          </Card>
+          <Card>
+            <Skeleton
+              width="80"
+              height="28"
+              class="mb-5"
+            />
+            <div class="flex flex-wrap gap-3">
+              <Skeleton
+                width="60"
+                height="36"
+              />
+              <Skeleton
+                width="80"
+                height="36"
+              />
+              <Skeleton
+                width="60"
+                height="36"
+              />
+            </div>
+          </Card>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <div
     v-else-if="character"

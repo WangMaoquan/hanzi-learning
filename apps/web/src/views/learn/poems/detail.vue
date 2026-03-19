@@ -2,7 +2,7 @@
   import { ref, onMounted, watch } from 'vue'
   import { useRoute, useRouter } from 'vue-router'
   import { getPoem, getPoemNeighbors, type Poem } from '@/services/api'
-  import { Card, Loading, Empty, BackLink } from '@hanzi-learning/ui'
+  import { Card, Empty, BackLink, Skeleton } from '@hanzi-learning/ui'
 
   const route = useRoute()
   const router = useRouter()
@@ -44,10 +44,134 @@
 </script>
 
 <template>
-  <Loading
+  <!-- 骨架屏 -->
+  <div
     v-if="loading"
-    text="加载中..."
-  />
+    class="min-h-screen pb-12 bg-[var(--color-secondary-50)]"
+  >
+    <div class="max-w-6xl mx-auto px-4 pt-6">
+      <div class="mb-6">
+        <Skeleton
+          width="100"
+          height="24"
+        />
+      </div>
+
+      <!-- 标题区域 -->
+      <div class="mb-8">
+        <Skeleton
+          width="60%"
+          height="48"
+          class="mb-4"
+        />
+        <div class="flex items-center gap-4">
+          <Skeleton
+            width="80"
+            height="32"
+          />
+          <Skeleton
+            width="100"
+            height="28"
+          />
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- 左侧 -->
+        <div class="lg:col-span-2 space-y-6">
+          <Card>
+            <div class="space-y-6">
+              <Skeleton
+                v-for="i in 4"
+                :key="i"
+                width="100%"
+                height="40"
+              />
+            </div>
+            <div class="flex flex-wrap gap-2 mt-8 pt-6 border-t border-[var(--color-secondary-200)]">
+              <Skeleton
+                width="60"
+                height="28"
+              />
+              <Skeleton
+                width="80"
+                height="28"
+              />
+              <Skeleton
+                width="60"
+                height="28"
+              />
+            </div>
+          </Card>
+        </div>
+
+        <!-- 右侧 -->
+        <div class="space-y-6">
+          <Card>
+            <Skeleton
+              width="120"
+              height="28"
+              class="mb-5"
+            />
+            <div class="space-y-4">
+              <div class="flex justify-between">
+                <Skeleton
+                  width="60"
+                  height="24"
+                />
+                <Skeleton
+                  width="80"
+                  height="28"
+                />
+              </div>
+              <div class="flex justify-between">
+                <Skeleton
+                  width="60"
+                  height="24"
+                />
+                <Skeleton
+                  width="100"
+                  height="24"
+                />
+              </div>
+              <div class="flex justify-between">
+                <Skeleton
+                  width="60"
+                  height="24"
+                />
+                <Skeleton
+                  width="60"
+                  height="24"
+                />
+              </div>
+            </div>
+          </Card>
+
+          <Skeleton
+            width="100%"
+            height="56"
+          />
+
+          <Skeleton
+            width="100%"
+            height="20"
+          />
+        </div>
+      </div>
+
+      <!-- 导航 -->
+      <div class="mt-8 flex items-center justify-between">
+        <Skeleton
+          width="180"
+          height="88"
+        />
+        <Skeleton
+          width="180"
+          height="88"
+        />
+      </div>
+    </div>
+  </div>
 
   <div
     v-else-if="poem"

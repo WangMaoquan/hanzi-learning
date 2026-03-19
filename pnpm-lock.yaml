@@ -159,9 +159,6 @@ importers:
 
   apps/web:
     dependencies:
-      '@hanzi-learning/data':
-        specifier: workspace:*
-        version: link:../../packages/data
       '@hanzi-learning/hanzi-vue':
         specifier: workspace:*
         version: link:../../packages/hanzi-vue
@@ -217,8 +214,6 @@ importers:
       vue-tsc:
         specifier: ^2.1.6
         version: 2.2.12(typescript@5.9.3)
-
-  packages/data: {}
 
   packages/hanzi-vue:
     dependencies:

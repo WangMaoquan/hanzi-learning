@@ -71,12 +71,12 @@ export class IdiomsService {
     this.logger.debug("Find random idiom", IdiomsService.name);
     const count = await this.prisma.idiom.count();
     if (count === 0) return null;
-    const random = Math.floor(Math.random() * count);
-    const data = await this.prisma.idiom.findFirst({
-      skip: random,
+    const skip = Math.floor(Math.random() * count);
+    const data = await this.prisma.idiom.findMany({
+      skip,
       take: 1,
     });
-    return data ? IdiomTransformer.toVO(data) : null;
+    return data[0] ? IdiomTransformer.toVO(data[0]) : null;
   }
 
   async findNeighbors(

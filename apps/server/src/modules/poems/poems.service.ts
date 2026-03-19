@@ -76,12 +76,12 @@ export class PoemsService {
     this.logger.debug("Find random poem", PoemsService.name);
     const count = await this.prisma.poem.count();
     if (count === 0) return null;
-    const random = Math.floor(Math.random() * count);
-    const data = await this.prisma.poem.findFirst({
-      skip: random,
+    const skip = Math.floor(Math.random() * count);
+    const data = await this.prisma.poem.findMany({
+      skip,
       take: 1,
     });
-    return data ? PoemTransformer.toVO(data) : null;
+    return data[0] ? PoemTransformer.toVO(data[0]) : null;
   }
 
   async findNeighbors(

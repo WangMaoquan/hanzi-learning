@@ -75,12 +75,12 @@ export class CharactersService {
     this.logger.debug("Find random character", CharactersService.name);
     const count = await this.prisma.character.count();
     if (count === 0) return null;
-    const random = Math.floor(Math.random() * count);
-    const data = await this.prisma.character.findFirst({
-      skip: random,
+    const skip = Math.floor(Math.random() * count);
+    const data = await this.prisma.character.findMany({
+      skip,
       take: 1,
     });
-    return data ? CharacterTransformer.toVO(data) : null;
+    return data[0] ? CharacterTransformer.toVO(data[0]) : null;
   }
 
   async findNeighbors(

@@ -1,6 +1,7 @@
 import axios from 'axios'
 import type { CharacterVO, IdiomVO, PoemVO, PaginatedVO } from '@hanzi-learning/types'
 import { getErrorMessage } from '@/constants/error-code'
+import { toast } from '@/composables/useToast'
 
 // 统一响应类型
 export interface ApiResponse<T> {
@@ -40,10 +41,13 @@ api.interceptors.response.use(
       const { code, message } = error.response.data
       const errorMessage = code ? getErrorMessage(code) : message
       console.error(`API Error [${code}]:`, errorMessage)
+      toast.error(errorMessage || '请求失败，请稍后重试')
     } else if (error.request) {
       console.error('API Error: 网络请求失败')
+      toast.error('网络连接失败，请检查网络设置')
     } else {
       console.error('API Error:', error.message)
+      toast.error('请求失败，请稍后重试')
     }
     return Promise.reject(error)
   }

@@ -65,3 +65,11 @@ export function useToast(): {
     remove,
   }
 }
+
+// 导出全局 toast 对象，用于非组件环境（如 API 拦截器）
+export const toast = {
+  success: (message: string, duration?: number) => useToast().success(message, duration),
+  error: (message: string, duration?: number) => useToast().error(message, duration),
+  warning: (message: string, duration?: number) => useToast().warning(message, duration),
+  info: (message: string, duration?: number) => useToast().info(message, duration),
+}

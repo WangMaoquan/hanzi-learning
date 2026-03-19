@@ -54,7 +54,10 @@
 <template>
   <div class="min-h-screen bg-[var(--color-secondary-50)]">
     <!-- 页面头部 -->
-    <PageHeader title="汉字学习" description="掌握汉字笔画顺序，轻松学会常用汉字" />
+    <PageHeader
+      title="汉字学习"
+      description="掌握汉字笔画顺序，轻松学会常用汉字"
+    />
 
     <PageContent
       v-model:page="currentPage"
@@ -138,12 +141,18 @@
       </Card>
 
       <!-- 空状态 -->
-      <Empty v-else description="暂无汉字数据" class="mb-6" />
+      <Empty
+        v-else
+        description="暂无汉字数据"
+        class="mb-6"
+      />
 
       <!-- 字表 -->
       <div class="mt-8">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif"> 字表 </h2>
+          <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif">
+            字表
+          </h2>
           <span class="text-[var(--color-secondary-500)] text-sm">共 {{ total }} 个汉字</span>
         </div>
 

@@ -22,11 +22,21 @@
 
 <template>
   <div>
-    <h1 class="text-2xl font-bold text-[var(--color-secondary-900)] mb-6"> 选择学习内容 </h1>
+    <h1 class="text-2xl font-bold text-[var(--color-secondary-900)] mb-6">
+      选择学习内容
+    </h1>
 
     <!-- Stats -->
-    <div v-if="loading" class="text-center text-[var(--color-secondary-500)] py-8"> 加载中... </div>
-    <div v-else class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+    <div
+      v-if="loading"
+      class="text-center text-[var(--color-secondary-500)] py-8"
+    >
+      加载中...
+    </div>
+    <div
+      v-else
+      class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"
+    >
       <RouterLink
         v-for="stat in stats"
         :key="stat.path"
@@ -46,7 +56,9 @@
     </div>
 
     <!-- Quick Start -->
-    <h2 class="text-lg font-semibold text-[var(--color-secondary-900)] mb-4"> 快速开始 </h2>
+    <h2 class="text-lg font-semibold text-[var(--color-secondary-900)] mb-4">
+      快速开始
+    </h2>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
       <RouterLink
         to="/learn/characters"
@@ -56,7 +68,9 @@
           <span class="text-3xl">✍️</span>
           <span class="text-xl font-bold">开始学汉字</span>
         </div>
-        <p class="text-[var(--color-primary-100)]"> 从一年级常用字开始 </p>
+        <p class="text-[var(--color-primary-100)]">
+          从一年级常用字开始
+        </p>
       </RouterLink>
 
       <RouterLink
@@ -67,7 +81,9 @@
           <span class="text-3xl">📜</span>
           <span class="text-xl font-bold">开始读古诗</span>
         </div>
-        <p class="text-[var(--color-secondary-100)]"> 背诵经典唐诗 </p>
+        <p class="text-[var(--color-secondary-100)]">
+          背诵经典唐诗
+        </p>
       </RouterLink>
     </div>
   </div>

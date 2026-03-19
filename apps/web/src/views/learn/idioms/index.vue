@@ -52,7 +52,10 @@
 <template>
   <div class="min-h-screen bg-[var(--color-secondary-50)]">
     <!-- 页面头部 -->
-    <PageHeader title="成语故事" description="学习成语典故，了解传统文化" />
+    <PageHeader
+      title="成语故事"
+      description="学习成语典故，了解传统文化"
+    />
 
     <PageContent
       v-model:page="currentPage"
@@ -68,7 +71,11 @@
       @update:limit="handleSizeChange"
     >
       <!-- 当前学习 - 特色卡片 -->
-      <Card v-if="currentIdiom" hoverable class="mb-8 border-2 border-[var(--color-secondary-200)]">
+      <Card
+        v-if="currentIdiom"
+        hoverable
+        class="mb-8 border-2 border-[var(--color-secondary-200)]"
+      >
         <div class="flex items-start gap-8">
           <!-- 成语展示 -->
           <div
@@ -107,7 +114,10 @@
             </div>
 
             <!-- 出处 -->
-            <div v-if="currentIdiom.derivation" class="mb-4">
+            <div
+              v-if="currentIdiom.derivation"
+              class="mb-4"
+            >
               <span class="text-[var(--color-secondary-500)] text-sm">出处</span>
               <p class="text-[var(--color-secondary-600)] text-sm italic leading-relaxed">
                 {{ currentIdiom.derivation }}
@@ -126,12 +136,18 @@
       </Card>
 
       <!-- 空状态 -->
-      <Empty v-else description="暂无成语数据" class="mb-6" />
+      <Empty
+        v-else
+        description="暂无成语数据"
+        class="mb-6"
+      />
 
       <!-- 成语列表 -->
       <div class="mt-8">
         <div class="flex items-center justify-between mb-4">
-          <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif"> 成语列表 </h2>
+          <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif">
+            成语列表
+          </h2>
           <span class="text-[var(--color-secondary-500)] text-sm">共 {{ total }} 个成语</span>
         </div>
 

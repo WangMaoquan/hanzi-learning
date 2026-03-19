@@ -35,16 +35,25 @@
 <template>
   <div class="max-w-6xl mx-auto px-4 pb-8">
     <!-- 加载状态 -->
-    <Loading v-if="loading" text="加载中..." />
+    <Loading
+      v-if="loading"
+      text="加载中..."
+    />
 
     <!-- 空状态 -->
-    <Empty v-else-if="!hasData" :description="emptyDescription || '暂无数据'" />
+    <Empty
+      v-else-if="!hasData"
+      :description="emptyDescription || '暂无数据'"
+    />
 
     <!-- 内容区域 -->
     <slot v-else></slot>
 
     <!-- 分页 -->
-    <div v-if="hasData" class="flex justify-center mt-8">
+    <div
+      v-if="hasData"
+      class="flex justify-center mt-8"
+    >
       <Pagination
         v-if="page !== undefined && limit !== undefined"
         :model-value="page"

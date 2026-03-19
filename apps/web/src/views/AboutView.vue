@@ -71,7 +71,10 @@
     <AppHeader :nav-items="[]" />
 
     <main class="max-w-4xl mx-auto px-4 py-8 pb-12">
-      <Card hoverable class="mb-8">
+      <Card
+        hoverable
+        class="mb-8"
+      >
         <div class="flex items-start gap-6">
           <div
             class="w-16 h-16 rounded-xl flex items-center justify-center shrink-0 bg-[var(--color-primary-50)]"
@@ -97,11 +100,15 @@
           学习路线
         </h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div v-for="feature in features" :key="feature.title" class="group">
+          <div
+            v-for="feature in features"
+            :key="feature.title"
+            class="group"
+          >
             <Card
               :class="
                 'h-full border-2 transition-all duration-200 hover:-translate-y-1 ' +
-                colorMap[feature.color].border
+                  colorMap[feature.color].border
               "
             >
               <div class="flex items-start gap-4">
@@ -157,8 +164,12 @@
 
       <!-- 底部 -->
       <div class="text-center pt-8 border-t border-[var(--color-secondary-200)]">
-        <p class="mb-2 text-[var(--color-secondary-500)]"> 让我们一起探索中华文化的魅力！ </p>
-        <p class="text-sm text-[var(--color-secondary-400)]"> 汉字学习平台 · 让学习变得更有趣 </p>
+        <p class="mb-2 text-[var(--color-secondary-500)]">
+          让我们一起探索中华文化的魅力！
+        </p>
+        <p class="text-sm text-[var(--color-secondary-400)]">
+          汉字学习平台 · 让学习变得更有趣
+        </p>
       </div>
     </main>
   </div>

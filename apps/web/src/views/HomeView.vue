@@ -99,7 +99,11 @@
     <header class="bg-[var(--color-surface)] shadow-sm">
       <div class="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
         <div class="flex items-center gap-2">
-          <img src="/favicon.svg" alt="logo" class="w-8 h-8" />
+          <img
+            src="/favicon.svg"
+            alt="logo"
+            class="w-8 h-8"
+          />
           <span class="text-xl font-bold text-[var(--color-secondary-900)]">汉字学习平台</span>
         </div>
         <nav class="flex items-center gap-6">
@@ -164,11 +168,17 @@
           多种学习方式，轻松掌握中华文化精髓
         </p>
 
-        <div v-if="loading" class="text-center text-[var(--color-secondary-500)] py-12">
+        <div
+          v-if="loading"
+          class="text-center text-[var(--color-secondary-500)] py-12"
+        >
           加载中...
         </div>
 
-        <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div
+          v-else
+          class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+        >
           <RouterLink
             v-for="feature in features"
             :key="feature.path"
@@ -230,19 +240,25 @@
             <div class="text-4xl md:text-5xl font-bold text-[var(--color-primary-700)]">
               {{ characterCount.toLocaleString() }}+
             </div>
-            <div class="text-[var(--color-secondary-600)] mt-3 font-medium"> 常用汉字 </div>
+            <div class="text-[var(--color-secondary-600)] mt-3 font-medium">
+              常用汉字
+            </div>
           </div>
           <div class="py-6">
             <div class="text-4xl md:text-5xl font-bold text-[var(--color-secondary-700)]">
               {{ (poemCount / 1000).toFixed(0) }}k+
             </div>
-            <div class="text-[var(--color-secondary-600)] mt-3 font-medium"> 经典古诗 </div>
+            <div class="text-[var(--color-secondary-600)] mt-3 font-medium">
+              经典古诗
+            </div>
           </div>
           <div class="py-6">
             <div class="text-4xl md:text-5xl font-bold text-[var(--color-gold-600)]">
               {{ idiomCount.toLocaleString() }}+
             </div>
-            <div class="text-[var(--color-secondary-600)] mt-3 font-medium"> 成语故事 </div>
+            <div class="text-[var(--color-secondary-600)] mt-3 font-medium">
+              成语故事
+            </div>
           </div>
         </div>
       </div>

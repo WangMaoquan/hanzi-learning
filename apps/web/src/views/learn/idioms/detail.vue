@@ -47,16 +47,28 @@
 </script>
 
 <template>
-  <Loading v-if="loading" text="加载中..." />
+  <Loading
+    v-if="loading"
+    text="加载中..."
+  />
 
-  <div v-else-if="idiom" class="min-h-screen pb-12 bg-[var(--color-secondary-50)]">
+  <div
+    v-else-if="idiom"
+    class="min-h-screen pb-12 bg-[var(--color-secondary-50)]"
+  >
     <div class="max-w-4xl mx-auto px-4 pt-6">
       <!-- 返回链接 -->
       <div class="mb-6">
-        <BackLink to="/learn/idioms" text="返回列表" />
+        <BackLink
+          to="/learn/idioms"
+          text="返回列表"
+        />
       </div>
 
-      <Card hoverable class="border-2 border-[var(--color-accent-500)]">
+      <Card
+        hoverable
+        class="border-2 border-[var(--color-accent-500)]"
+      >
         <!-- 成语标题区域 -->
         <div class="text-center mb-8 pb-8 border-b border-[var(--color-accent-100)]">
           <div
@@ -85,7 +97,10 @@
         </div>
 
         <!-- 出处 -->
-        <div v-if="idiom.derivation" class="mb-8">
+        <div
+          v-if="idiom.derivation"
+          class="mb-8"
+        >
           <h2
             class="text-lg font-bold mb-4 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
           >
@@ -100,7 +115,10 @@
         </div>
 
         <!-- 例句 -->
-        <div v-if="idiom.example" class="mb-8">
+        <div
+          v-if="idiom.example"
+          class="mb-8"
+        >
           <h2
             class="text-lg font-bold mb-4 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
           >
@@ -115,7 +133,10 @@
         </div>
 
         <!-- 近义词 -->
-        <div v-if="idiom.synonyms?.length" class="mb-8">
+        <div
+          v-if="idiom.synonyms?.length"
+          class="mb-8"
+        >
           <h2
             class="text-lg font-bold mb-4 flex items-center gap-2 text-[var(--color-secondary-900)] font-serif"
           >
@@ -163,7 +184,12 @@
           <span
             class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-accent-50)] text-[var(--color-accent-600)]"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -173,7 +199,9 @@
             </svg>
           </span>
           <div class="text-left">
-            <div class="text-xs text-[var(--color-secondary-400)]"> 上一个 </div>
+            <div class="text-xs text-[var(--color-secondary-400)]">
+              上一个
+            </div>
             <div
               class="text-base font-semibold transition-colors text-[var(--color-secondary-700)]"
             >
@@ -189,7 +217,9 @@
           class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:shadow-lg transition-all"
         >
           <div class="text-right">
-            <div class="text-xs text-[var(--color-secondary-400)]"> 下一个 </div>
+            <div class="text-xs text-[var(--color-secondary-400)]">
+              下一个
+            </div>
             <div
               class="text-base font-semibold transition-colors text-[var(--color-secondary-700)]"
             >
@@ -199,7 +229,12 @@
           <span
             class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-accent-50)] text-[var(--color-accent-600)]"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -214,7 +249,15 @@
     </div>
   </div>
 
-  <Empty v-else description="未找到该成语">
-    <RouterLink to="/learn/idioms" class="text-[var(--color-accent-500)]"> 返回列表 </RouterLink>
+  <Empty
+    v-else
+    description="未找到该成语"
+  >
+    <RouterLink
+      to="/learn/idioms"
+      class="text-[var(--color-accent-500)]"
+    >
+      返回列表
+    </RouterLink>
   </Empty>
 </template>

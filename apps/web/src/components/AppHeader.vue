@@ -26,8 +26,15 @@
   >
     <div class="max-w-6xl mx-auto px-4 py-3">
       <div class="flex items-center justify-between">
-        <RouterLink to="/" class="flex items-center gap-2">
-          <img src="/favicon.svg" alt="logo" class="w-6 h-6" />
+        <RouterLink
+          to="/"
+          class="flex items-center gap-2"
+        >
+          <img
+            src="/favicon.svg"
+            alt="logo"
+            class="w-6 h-6"
+          />
           <span class="font-bold text-[var(--color-secondary-900)]">汉字学习</span>
         </RouterLink>
         <nav class="flex items-center gap-1">

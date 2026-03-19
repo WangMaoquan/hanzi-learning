@@ -33,7 +33,10 @@
       >
         <span class="text-lg">{{ iconMap[toast.type] }}</span>
         <span class="flex-1">{{ toast.message }}</span>
-        <button class="text-white/80 hover:text-white transition-colors" @click="remove(toast.id)">
+        <button
+          class="text-white/80 hover:text-white transition-colors"
+          @click="remove(toast.id)"
+        >
           ✕
         </button>
       </div>

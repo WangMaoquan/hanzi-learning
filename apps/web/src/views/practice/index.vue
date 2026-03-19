@@ -89,25 +89,39 @@
         <h2 class="text-lg font-semibold mb-4 text-[var(--color-secondary-900)] font-serif">
           学习统计
         </h2>
-        <div v-if="loading" class="text-center text-[var(--color-secondary-400)] py-4">
+        <div
+          v-if="loading"
+          class="text-center text-[var(--color-secondary-400)] py-4"
+        >
           加载中...
         </div>
-        <div v-else class="grid grid-cols-3 gap-6 text-center">
+        <div
+          v-else
+          class="grid grid-cols-3 gap-6 text-center"
+        >
           <div>
             <div class="text-2xl font-bold text-[var(--color-primary-700)]">
               {{ characterCount.toLocaleString() }}
             </div>
-            <div class="text-[var(--color-secondary-500)] text-sm"> 已学汉字 </div>
+            <div class="text-[var(--color-secondary-500)] text-sm">
+              已学汉字
+            </div>
           </div>
           <div>
             <div class="text-2xl font-bold text-[var(--color-secondary-900)]">
               {{ (poemCount / 1000).toFixed(0) }}k+
             </div>
-            <div class="text-[var(--color-secondary-500)] text-sm"> 已学古诗 </div>
+            <div class="text-[var(--color-secondary-500)] text-sm">
+              已学古诗
+            </div>
           </div>
           <div>
-            <div class="text-2xl font-bold text-gold-500"> 0 </div>
-            <div class="text-[var(--color-secondary-500)] text-sm"> 连续学习天数 </div>
+            <div class="text-2xl font-bold text-gold-500">
+              0
+            </div>
+            <div class="text-[var(--color-secondary-500)] text-sm">
+              连续学习天数
+            </div>
           </div>
         </div>
       </div>

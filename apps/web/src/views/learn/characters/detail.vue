@@ -60,17 +60,29 @@
 </script>
 
 <template>
-  <Loading v-if="loading" text="加载中..." />
+  <Loading
+    v-if="loading"
+    text="加载中..."
+  />
 
-  <div v-else-if="character" class="min-h-screen pb-12 bg-[var(--color-secondary-50)]">
+  <div
+    v-else-if="character"
+    class="min-h-screen pb-12 bg-[var(--color-secondary-50)]"
+  >
     <div class="max-w-6xl mx-auto px-4 pt-6">
       <!-- 返回链接 -->
       <div class="mb-6">
-        <BackLink to="/learn/characters" text="返回字表" />
+        <BackLink
+          to="/learn/characters"
+          text="返回字表"
+        />
       </div>
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <!-- 左侧：汉字展示 -->
-        <Card hoverable class="border-2 border-primary-700">
+        <Card
+          hoverable
+          class="border-2 border-primary-700"
+        >
           <!-- 汉字大字展示 -->
           <div
             class="flex items-center justify-center h-48 rounded-xl mb-6 bg-[var(--color-primary-50)]"
@@ -199,8 +211,14 @@
     </div>
   </div>
 
-  <Empty v-else description="未找到该汉字">
-    <RouterLink to="/learn/characters" class="text-[var(--color-primary-700)]">
+  <Empty
+    v-else
+    description="未找到该汉字"
+  >
+    <RouterLink
+      to="/learn/characters"
+      class="text-[var(--color-primary-700)]"
+    >
       返回字表
     </RouterLink>
   </Empty>

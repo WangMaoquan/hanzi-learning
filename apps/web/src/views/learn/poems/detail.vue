@@ -47,13 +47,22 @@
 </script>
 
 <template>
-  <Loading v-if="loading" text="加载中..." />
+  <Loading
+    v-if="loading"
+    text="加载中..."
+  />
 
-  <div v-else-if="poem" class="min-h-screen pb-12 bg-[var(--color-secondary-50)]">
+  <div
+    v-else-if="poem"
+    class="min-h-screen pb-12 bg-[var(--color-secondary-50)]"
+  >
     <div class="max-w-6xl mx-auto px-4 pt-6">
       <!-- 返回链接 -->
       <div class="mb-6">
-        <BackLink to="/learn/poems" text="返回列表" />
+        <BackLink
+          to="/learn/poems"
+          text="返回列表"
+        />
       </div>
 
       <!-- 标题区域 -->
@@ -124,7 +133,10 @@
               诗词信息
             </h2>
             <div class="space-y-4">
-              <div v-if="poem.type" class="flex items-center justify-between">
+              <div
+                v-if="poem.type"
+                class="flex items-center justify-between"
+              >
                 <span class="text-[var(--color-secondary-400)]">类型</span>
                 <span
                   class="px-3 py-1 font-medium rounded-lg bg-[var(--color-secondary-100)] text-[var(--color-secondary-600)]"
@@ -132,7 +144,10 @@
                   {{ poem.type }}
                 </span>
               </div>
-              <div v-if="poem.difficulty" class="flex items-center justify-between">
+              <div
+                v-if="poem.difficulty"
+                class="flex items-center justify-between"
+              >
                 <span class="text-[var(--color-secondary-400)]">难度</span>
                 <div class="flex items-center gap-2">
                   <div class="flex gap-1">
@@ -147,9 +162,7 @@
                       "
                     ></span>
                   </div>
-                  <span class="font-medium text-[var(--color-secondary-700)]"
-                    >{{ poem.difficulty }}/5</span
-                  >
+                  <span class="font-medium text-[var(--color-secondary-700)]">{{ poem.difficulty }}/5</span>
                 </div>
               </div>
               <div class="flex items-center justify-between">
@@ -187,7 +200,12 @@
           <span
             class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-secondary-100)] text-[var(--color-secondary-500)]"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -197,7 +215,9 @@
             </svg>
           </span>
           <div class="text-left">
-            <div class="text-xs text-[var(--color-secondary-400)]"> 上一首 </div>
+            <div class="text-xs text-[var(--color-secondary-400)]">
+              上一首
+            </div>
             <div
               class="text-base font-semibold transition-colors text-[var(--color-secondary-700)]"
             >
@@ -213,7 +233,9 @@
           class="group flex items-center gap-3 px-6 py-4 bg-[var(--color-surface)] rounded-xl border-2 border-[var(--color-secondary-200)] hover:shadow-lg transition-all"
         >
           <div class="text-right">
-            <div class="text-xs text-[var(--color-secondary-400)]"> 下一首 </div>
+            <div class="text-xs text-[var(--color-secondary-400)]">
+              下一首
+            </div>
             <div
               class="text-base font-semibold transition-colors text-[var(--color-secondary-700)]"
             >
@@ -223,7 +245,12 @@
           <span
             class="w-10 h-10 flex items-center justify-center rounded-full transition-colors bg-[var(--color-secondary-100)] text-[var(--color-secondary-500)]"
           >
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -238,7 +265,15 @@
     </div>
   </div>
 
-  <Empty v-else description="未找到该古诗">
-    <RouterLink to="/learn/poems" class="text-[var(--color-secondary-900)]"> 返回列表 </RouterLink>
+  <Empty
+    v-else
+    description="未找到该古诗"
+  >
+    <RouterLink
+      to="/learn/poems"
+      class="text-[var(--color-secondary-900)]"
+    >
+      返回列表
+    </RouterLink>
   </Empty>
 </template>

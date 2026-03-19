@@ -13,7 +13,10 @@
       <h1 class="text-3xl font-bold mb-2 text-[var(--color-secondary-900)] font-serif">
         {{ title }}
       </h1>
-      <p v-if="description" class="text-[var(--color-secondary-600)] mt-1">
+      <p
+        v-if="description"
+        class="text-[var(--color-secondary-600)] mt-1"
+      >
         {{ description }}
       </p>
     </div>

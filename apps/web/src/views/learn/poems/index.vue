@@ -47,7 +47,10 @@
 <template>
   <div class="min-h-screen bg-[var(--color-secondary-50)]">
     <!-- 页面头部 -->
-    <PageHeader title="古诗词" description="品味经典唐诗宋词，感受诗词之美" />
+    <PageHeader
+      title="古诗词"
+      description="品味经典唐诗宋词，感受诗词之美"
+    />
 
     <PageContent
       v-model:page="currentPage"
@@ -63,7 +66,9 @@
       @update:limit="handleSizeChange"
     >
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif"> 诗词列表 </h2>
+        <h2 class="text-xl font-bold text-[var(--color-secondary-900)] font-serif">
+          诗词列表
+        </h2>
         <span class="text-[var(--color-secondary-500)] text-sm">共 {{ total }} 首古诗</span>
       </div>
 

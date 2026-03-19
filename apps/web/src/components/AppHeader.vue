@@ -15,8 +15,8 @@
   const route = useRoute()
 
   const isActive = (path: string) => {
-    // 只精确匹配当前路由
-    return route.path === path
+    // 支持子路由高亮，如 /learn/characters 会高亮 /learn
+    return route.path === path || route.path.startsWith(path + '/')
   }
 </script>
 

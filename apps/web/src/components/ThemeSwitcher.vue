@@ -16,7 +16,7 @@
     <!-- 主题切换按钮 -->
     <button
       class="flex items-center gap-2 px-3 py-2 rounded-lg bg-[var(--color-surface)]/80 backdrop-blur-sm border border-[var(--color-secondary-200)] hover:bg-[var(--color-surface)] hover:shadow-md transition-all duration-200"
-      @click="showDropdown = !showDropdown"
+      @click.stop="showDropdown = !showDropdown"
     >
       <span class="text-lg">{{ themeNames.find((t) => t.value === themeStore.theme)?.icon }}</span>
       <span class="text-sm text-[var(--color-secondary-700)] hidden sm:inline">{{

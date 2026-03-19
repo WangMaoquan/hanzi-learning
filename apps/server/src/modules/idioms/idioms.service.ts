@@ -1,22 +1,23 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { PrismaService } from "../../prisma/prisma.service";
 import { IdiomTransformer } from "../../transformers";
 import type { IdiomVO, PaginatedVO } from "../../transformers/vo";
-import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class IdiomsService {
-  constructor(
-    private prisma: PrismaService,
-    @InjectPinoLogger() private logger: PinoLogger,
-  ) {}
+  private readonly logger = new Logger(IdiomsService.name);
+
+  constructor(private prisma: PrismaService) {}
 
   async findAll(
     page = 1,
     limit = 20,
     search?: string,
   ): Promise<PaginatedVO<IdiomVO>> {
-    this.logger.debug({ page, limit, search }, "Query idioms");
+    this.logger.debug(
+      `Query idioms: page=${page}, limit=${limit}, search=${search}`,
+      IdiomsService.name,
+    );
 
     const skip = (page - 1) * limit;
     const where = search
@@ -39,7 +40,10 @@ export class IdiomsService {
       this.prisma.idiom.count({ where }),
     ]);
 
-    this.logger.debug({ total, page, limit }, "Idioms query completed");
+    this.logger.debug(
+      `Idioms query completed: total=${total}, page=${page}, limit=${limit}`,
+      IdiomsService.name,
+    );
     return IdiomTransformer.toPaginatedVO(data, total, page, limit);
   }
 
@@ -48,7 +52,7 @@ export class IdiomsService {
   }
 
   async findOne(id: string): Promise<IdiomVO | null> {
-    this.logger.debug({ id }, "Find idiom by id");
+    this.logger.debug(`Find idiom by id: ${id}`, IdiomsService.name);
     const data = await this.prisma.idiom.findUnique({
       where: { id },
     });
@@ -56,7 +60,7 @@ export class IdiomsService {
   }
 
   async findByWord(word: string): Promise<IdiomVO | null> {
-    this.logger.debug({ word }, "Find idiom by word");
+    this.logger.debug(`Find idiom by word: ${word}`, IdiomsService.name);
     const data = await this.prisma.idiom.findUnique({
       where: { word },
     });
@@ -64,7 +68,7 @@ export class IdiomsService {
   }
 
   async findRandom(): Promise<IdiomVO | null> {
-    this.logger.debug({}, "Find random idiom");
+    this.logger.debug("Find random idiom", IdiomsService.name);
     const count = await this.prisma.idiom.count();
     if (count === 0) return null;
     const random = Math.floor(Math.random() * count);
@@ -78,7 +82,7 @@ export class IdiomsService {
   async findNeighbors(
     id: string,
   ): Promise<{ prev: IdiomVO | null; next: IdiomVO | null }> {
-    this.logger.debug({ id }, "Find idiom neighbors");
+    this.logger.debug(`Find idiom neighbors: ${id}`, IdiomsService.name);
     const current = await this.prisma.idiom.findUnique({ where: { id } });
     if (!current) {
       return { prev: null, next: null };

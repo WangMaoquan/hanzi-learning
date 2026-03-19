@@ -9,6 +9,7 @@ import { IdiomsModule } from "./modules/idioms/idioms.module";
 import { PoemsModule } from "./modules/poems/poems.module";
 import { HealthModule } from "./modules/health/health.module";
 import { PrismaModule } from "./prisma/prisma.module";
+import { SuccessInterceptor } from "./interceptors/success.interceptor";
 import { LoggingInterceptor } from "./interceptors/logging.interceptor";
 import { HttpExceptionFilter } from "./filters/http-exception.filter";
 import {
@@ -62,6 +63,10 @@ import {
     {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: SuccessInterceptor,
     },
     // 日志拦截器（使用 useClass 无法注入 ConfigService，改为 useFactory）
     {

@@ -1,16 +1,14 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, Logger } from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
 import { PoemTransformer } from "../../transformers";
 import type { PoemVO, PaginatedVO } from "../../transformers/vo";
-import { PinoLogger, InjectPinoLogger } from "nestjs-pino";
 
 @Injectable()
 export class PoemsService {
-  constructor(
-    private prisma: PrismaService,
-    @InjectPinoLogger() private logger: PinoLogger,
-  ) {}
+  private readonly logger = new Logger(PoemsService.name);
+
+  constructor(private prisma: PrismaService) {}
 
   async findAll(
     page = 1,
@@ -18,7 +16,10 @@ export class PoemsService {
     dynasty?: string,
     search?: string,
   ): Promise<PaginatedVO<PoemVO>> {
-    this.logger.debug({ page, limit, dynasty, search }, "Query poems");
+    this.logger.debug(
+      `Query poems: page=${page}, limit=${limit}, dynasty=${dynasty}, search=${search}`,
+      PoemsService.name,
+    );
 
     const skip = (page - 1) * limit;
     const where: Prisma.PoemWhereInput = {};
@@ -44,7 +45,10 @@ export class PoemsService {
       this.prisma.poem.count({ where }),
     ]);
 
-    this.logger.debug({ total, page, limit }, "Poems query completed");
+    this.logger.debug(
+      `Poems query completed: total=${total}, page=${page}, limit=${limit}`,
+      PoemsService.name,
+    );
     return PoemTransformer.toPaginatedVO(data, total, page, limit);
   }
 
@@ -53,7 +57,7 @@ export class PoemsService {
   }
 
   async findOne(id: string): Promise<PoemVO | null> {
-    this.logger.debug({ id }, "Find poem by id");
+    this.logger.debug(`Find poem by id: ${id}`, PoemsService.name);
     const data = await this.prisma.poem.findUnique({
       where: { id },
     });
@@ -61,7 +65,7 @@ export class PoemsService {
   }
 
   async findByTitle(title: string): Promise<PoemVO | null> {
-    this.logger.debug({ title }, "Find poem by title");
+    this.logger.debug(`Find poem by title: ${title}`, PoemsService.name);
     const data = await this.prisma.poem.findFirst({
       where: { title },
     });
@@ -69,7 +73,7 @@ export class PoemsService {
   }
 
   async findRandom(): Promise<PoemVO | null> {
-    this.logger.debug({}, "Find random poem");
+    this.logger.debug("Find random poem", PoemsService.name);
     const count = await this.prisma.poem.count();
     if (count === 0) return null;
     const random = Math.floor(Math.random() * count);
@@ -83,7 +87,7 @@ export class PoemsService {
   async findNeighbors(
     id: string,
   ): Promise<{ prev: PoemVO | null; next: PoemVO | null }> {
-    this.logger.debug({ id }, "Find poem neighbors");
+    this.logger.debug(`Find poem neighbors: ${id}`, PoemsService.name);
     const current = await this.prisma.poem.findUnique({ where: { id } });
     if (!current) {
       return { prev: null, next: null };

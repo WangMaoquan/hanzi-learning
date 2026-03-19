@@ -6,36 +6,11 @@ import {
   Logger,
 } from "@nestjs/common";
 import { Observable } from "rxjs";
-import { tap, map } from "rxjs/operators";
+import { tap } from "rxjs/operators";
 import { ConfigService } from "@nestjs/config";
 
-export interface Response<T> {
-  success: boolean;
-  data: T;
-  timestamp: string;
-}
-
 /**
- * 日志拦截器 - 控制详细日志输出 + 统一响应格式
- *
- * 功能：
- * 1. 请求/响应日志（可配置详细程度）
- * 2. 敏感字段脱敏
- * 3. 忽略特定路径
- * 4. 慢请求告警
- * 5. 统一响应包装 { success: true, data, timestamp }
- *
- * 配置选项（通过环境变量）：
- * - LOG_ENABLE_DETAILED: 是否启用详细日志
- * - LOG_REQUEST_BODY: 是否打印请求体
- * - LOG_RESPONSE_BODY: 是否打印响应体
- * - LOG_MAX_BODY_LENGTH: 响应体最大打印长度
- * - LOG_QUERY_PARAMS: 是否打印查询参数
- * - LOG_ROUTE_PARAMS: 是否打印路由参数
- * - LOG_USER_INFO: 是否打印用户信息
- * - LOG_IP_ADDRESS: 是否打印 IP 地址
- * - LOG_USER_AGENT: 是否打印 User Agent
- * - SLOW_REQUEST_THRESHOLD: 慢请求阈值（毫秒）
+ * 日志拦截器 - 控制详细日志输出
  */
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
@@ -43,10 +18,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
   constructor(private configService: ConfigService) {}
 
-  intercept(
-    context: ExecutionContext,
-    next: CallHandler,
-  ): Observable<Response<unknown>> {
+  intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
 
@@ -56,20 +28,16 @@ export class LoggingInterceptor implements NestInterceptor {
     }
 
     // 获取配置
-    const enableDetailedLogs = this.getConfig<boolean>(
-      "logging.enableDetailedLogs",
-      process.env.NODE_ENV !== "production",
-    );
-    const slowRequestThreshold = this.getConfig<number>(
-      "logging.slowRequestThreshold",
-      500,
-    );
+    const enableDetailedLogs =
+      this.configService.get<boolean>("logging.enableDetailedLogs") ?? true;
+    const slowRequestThreshold =
+      this.configService.get<number>("logging.slowRequestThreshold") ?? 500;
 
     const method = request.method;
     const url = request.url;
     const startTime = Date.now();
 
-    // 详细日志模式 - 打印请求信息
+    // 详细日志模式
     if (enableDetailedLogs) {
       this.logRequest(request);
     }
@@ -103,30 +71,16 @@ export class LoggingInterceptor implements NestInterceptor {
           );
         },
       }),
-      // 包装响应格式
-      map((data) => ({
-        success: true,
-        data,
-        timestamp: new Date().toISOString(),
-      })),
     );
-  }
-
-  /**
-   * 获取配置值
-   */
-  private getConfig<T>(key: string, defaultValue: T): T {
-    return this.configService.get<T>(key) ?? defaultValue;
   }
 
   /**
    * 判断是否忽略此路径
    */
   private shouldIgnore(url: string): boolean {
-    const ignoredPaths = this.getConfig<Array<string | RegExp>>(
+    const ignoredPaths = this.configService.get<Array<string | RegExp>>(
       "logging.ignoredPaths",
-      [/\/health$/, /\/favicon\.ico$/, /\/api\/docs/, /\/api$/],
-    );
+    ) || [/\/health$/, /\/favicon\.ico$/, /\/api\/docs/];
 
     return ignoredPaths.some((pattern) => {
       if (typeof pattern === "string") {
@@ -149,20 +103,16 @@ export class LoggingInterceptor implements NestInterceptor {
     ip: string;
     user?: unknown;
   }): void {
-    const logQueryParams = this.getConfig<boolean>(
-      "logging.logQueryParams",
-      true,
-    );
-    const logRouteParams = this.getConfig<boolean>(
-      "logging.logRouteParams",
-      true,
-    );
-    const logRequestBody = this.getConfig<boolean>(
-      "logging.logRequestBody",
-      true,
-    );
-    const logIpAddress = this.getConfig<boolean>("logging.logIpAddress", true);
-    const logUserAgent = this.getConfig<boolean>("logging.logUserAgent", true);
+    const logQueryParams =
+      this.configService.get<boolean>("logging.logQueryParams") ?? true;
+    const logRouteParams =
+      this.configService.get<boolean>("logging.logRouteParams") ?? true;
+    const logRequestBody =
+      this.configService.get<boolean>("logging.logRequestBody") ?? true;
+    const logIpAddress =
+      this.configService.get<boolean>("logging.logIpAddress") ?? true;
+    const logUserAgent =
+      this.configService.get<boolean>("logging.logUserAgent") ?? true;
 
     const parts: string[] = [];
 
@@ -232,7 +182,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     // 响应时间颜色
     let timeColor = "\x1b[32m"; // 绿色 - 快
-    if (responseTime >= slowRequestThreshold)
+    if (responseTime >= 500)
       timeColor = "\x1b[31m"; // 红色 - 慢
     else if (responseTime >= 200) timeColor = "\x1b[33m"; // 黄色 - 中等
 
@@ -250,18 +200,17 @@ export class LoggingInterceptor implements NestInterceptor {
       return body;
     }
 
-    const sensitiveFields = this.getConfig<string[]>(
+    const sensitiveFields = this.configService.get<string[]>(
       "logging.sensitiveFields",
-      [
-        "password",
-        "token",
-        "secret",
-        "apiKey",
-        "accessToken",
-        "refreshToken",
-        "secretKey",
-      ],
-    );
+    ) || [
+      "password",
+      "token",
+      "secret",
+      "apiKey",
+      "accessToken",
+      "refreshToken",
+      "secretKey",
+    ];
 
     const sanitized = { ...body } as Record<string, unknown>;
 

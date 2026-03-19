@@ -1,12 +1,10 @@
 import { NestFactory } from "@nestjs/core";
-import { ValidationPipe, Logger } from "@nestjs/common";
+import { ValidationPipe } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import compression from "compression";
 import { AppModule } from "./app.module";
 import * as winston from "winston";
-import { SuccessInterceptor } from "./interceptors/success.interceptor";
-import { HttpExceptionFilter } from "./filters/http-exception.filter";
 
 // 开发环境彩色格式
 const devFormat = winston.format.combine(

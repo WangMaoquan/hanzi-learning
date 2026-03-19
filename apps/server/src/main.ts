@@ -148,3 +148,4 @@ async function bootstrap() {
 }
 
 bootstrap();
+// test hook

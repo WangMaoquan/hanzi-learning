@@ -17,15 +17,7 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "apps/web/src/**/*.{js,ts,vue,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "apps/server/**/*.{js,ts}": [
-      "eslint --fix",
-      "prettier --write"
-    ],
-    "packages/**/*.{js,ts}": [
+    "*.{js,ts,vue,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],

@@ -8,19 +8,38 @@ import {
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { ConfigService } from "@nestjs/config";
+import { randomUUID } from "crypto";
 
 /**
  * 日志拦截器 - 控制详细日志输出
+ *
+ * 功能：
+ * 1. 请求/响应日志（可配置详细程度）
+ * 2. 敏感字段脱敏
+ * 3. 忽略特定路径
+ * 4. 慢请求告警
+ * 5. 统一响应包装
+ *
+ * 日志字段：
+ * - requestId: 请求唯一标识
+ * - responseTime: 响应时间
+ * - responseSize: 响应体大小
  */
 @Injectable()
 export class LoggingInterceptor implements NestInterceptor {
   private readonly logger = new Logger(LoggingInterceptor.name);
+  private readonly context = "LoggingInterceptor";
 
   constructor(private configService: ConfigService) {}
 
   intercept(context: ExecutionContext, next: CallHandler): Observable<unknown> {
     const request = context.switchToHttp().getRequest();
     const response = context.switchToHttp().getResponse();
+
+    // 生成请求 ID
+    const requestId =
+      (request.headers["x-request-id"] as string) || randomUUID();
+    request.headers["x-request-id"] = requestId;
 
     // 检查是否忽略此路径
     if (this.shouldIgnore(request.url)) {
@@ -39,7 +58,7 @@ export class LoggingInterceptor implements NestInterceptor {
 
     // 详细日志模式
     if (enableDetailedLogs) {
-      this.logRequest(request);
+      this.logRequest(request, requestId);
     }
 
     return next.handle().pipe(
@@ -55,19 +74,23 @@ export class LoggingInterceptor implements NestInterceptor {
               statusCode,
               responseTime,
               slowRequestThreshold,
+              requestId,
             );
           } else {
             // 简化日志
             const level = responseTime > slowRequestThreshold ? "warn" : "log";
             this.logger[level](
-              `${method} ${url} - ${statusCode} - ${responseTime}ms`,
+              `${method} ${url} - ${statusCode} - ${responseTime}ms [reqId=${requestId}]`,
+              this.context,
             );
           }
         },
         error: (error: Error) => {
           const responseTime = Date.now() - startTime;
           this.logger.error(
-            `${method} ${url} - Error: ${error.message} - ${responseTime}ms`,
+            `${method} ${url} - Error: ${error.message} - ${responseTime}ms [reqId=${requestId}]`,
+            error.stack,
+            this.context,
           );
         },
       }),
@@ -93,16 +116,19 @@ export class LoggingInterceptor implements NestInterceptor {
   /**
    * 打印请求日志
    */
-  private logRequest(request: {
-    method: string;
-    url: string;
-    query: Record<string, unknown>;
-    params: Record<string, unknown>;
-    body: unknown;
-    headers: Record<string, unknown>;
-    ip: string;
-    user?: unknown;
-  }): void {
+  private logRequest(
+    request: {
+      method: string;
+      url: string;
+      query: Record<string, unknown>;
+      params: Record<string, unknown>;
+      body: unknown;
+      headers: Record<string, unknown>;
+      ip: string;
+      user?: unknown;
+    },
+    requestId: string,
+  ): void {
     const logQueryParams =
       this.configService.get<boolean>("logging.logQueryParams") ?? true;
     const logRouteParams =
@@ -125,7 +151,9 @@ export class LoggingInterceptor implements NestInterceptor {
       DELETE: "\x1b[31m",
     };
     const color = methodColors[request.method] || "\x1b[0m";
-    parts.push(`${color}${request.method}\x1b[0m ${request.url}`);
+    parts.push(
+      `${color}${request.method}\x1b[0m ${request.url} [reqId=${requestId}]`,
+    );
 
     // 查询参数
     if (logQueryParams && Object.keys(request.query).length > 0) {
@@ -157,7 +185,7 @@ export class LoggingInterceptor implements NestInterceptor {
       parts.push(`\n  UA: ${request.headers["user-agent"]}`);
     }
 
-    this.logger.log(parts.join(""));
+    this.logger.log(parts.join(""), this.context);
   }
 
   /**
@@ -169,6 +197,7 @@ export class LoggingInterceptor implements NestInterceptor {
     statusCode: number,
     responseTime: number,
     slowRequestThreshold: number,
+    requestId: string,
   ): void {
     // 状态码颜色
     let statusColor = "\x1b[0m";
@@ -182,14 +211,17 @@ export class LoggingInterceptor implements NestInterceptor {
 
     // 响应时间颜色
     let timeColor = "\x1b[32m"; // 绿色 - 快
-    if (responseTime >= 500)
+    if (responseTime >= slowRequestThreshold)
       timeColor = "\x1b[31m"; // 红色 - 慢
     else if (responseTime >= 200) timeColor = "\x1b[33m"; // 黄色 - 中等
 
     const timeStr = `${timeColor}${responseTime}ms\x1b[0m`;
     const statusStr = `${statusColor}${statusCode}\x1b[0m`;
 
-    this.logger.log(`${method} ${url} - ${statusStr} - ${timeStr}`);
+    this.logger.log(
+      `${method} ${url} - ${statusStr} - ${timeStr} [reqId=${requestId}]`,
+      this.context,
+    );
   }
 
   /**

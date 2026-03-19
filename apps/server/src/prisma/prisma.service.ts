@@ -6,6 +6,8 @@ import {
 } from "@nestjs/common";
 import { Prisma, PrismaClient } from "@prisma/client";
 
+const isProduction = process.env.NODE_ENV === "production";
+
 @Injectable()
 export class PrismaService
   extends PrismaClient
@@ -16,22 +18,29 @@ export class PrismaService
 
   constructor() {
     super({
-      log: [
-        { level: "query", emit: "event" },
-        { level: "error", emit: "stdout" },
-        { level: "warn", emit: "stdout" },
-      ],
+      log: isProduction
+        ? [
+            { level: "error", emit: "stdout" as const },
+            { level: "warn", emit: "stdout" as const },
+          ]
+        : [
+            { level: "query", emit: "event" as const },
+            { level: "error", emit: "stdout" as const },
+            { level: "warn", emit: "stdout" as const },
+          ],
     });
   }
 
   async onModuleInit() {
-    // 监听查询事件
-    this.$on("query" as never, (event: Prisma.QueryEvent) => {
-      this.logger.log(
-        `SQL: ${event.query} | ${event.duration}ms`,
-        this.context,
-      );
-    });
+    // 开发环境监听查询事件
+    if (!isProduction) {
+      this.$on("query" as never, (event: Prisma.QueryEvent) => {
+        this.logger.log(
+          `SQL: ${event.query} | ${event.duration}ms`,
+          this.context,
+        );
+      });
+    }
 
     await this.$connect();
     this.logger.log("Prisma connected", this.context);

@@ -112,28 +112,31 @@ async function bootstrap() {
   );
 
   // Swagger API 文档配置
-  const swaggerConfig = new DocumentBuilder()
-    .setTitle("汉字学习平台 API")
-    .setDescription(
-      "趣味学习中华文化的在线平台 API 文档\n\n" +
-        "提供汉字、成语、古诗的查询接口\n\n" +
-        "### 功能说明\n" +
-        "- 汉字：查询汉字的拼音、笔画、释义等\n" +
-        "- 成语：查询成语的拼音、解释、出处、典故等\n" +
-        "- 古诗：查询古诗的作者、朝代、内容、赏析等\n\n" +
-        "### 认证说明\n" +
-        "当前接口无需认证，直接调用即可",
-    )
-    .setVersion("1.0")
-    .setContact("decade", "https://github.com/decade", "1782976211@qq.com")
-    .addTag("characters", "汉字相关接口 - 查询汉字的拼音、笔画、释义等")
-    .addTag("idioms", "成语相关接口 - 查询成语的拼音、解释、出处、典故等")
-    .addTag("poems", "古诗相关接口 - 查询古诗的作者、朝代、内容、赏析等")
-    .addTag("health", "健康检查接口 - 服务健康状态探测")
-    .addServer("/api/v1", "生产环境")
-    .build();
-  const document = SwaggerModule.createDocument(app, swaggerConfig);
-  SwaggerModule.setup("api/docs", app, document);
+  // Swagger 仅在开发环境启用
+  if (process.env.NODE_ENV !== "production") {
+    const swaggerConfig = new DocumentBuilder()
+      .setTitle("汉字学习平台 API")
+      .setDescription(
+        "趣味学习中华文化的在线平台 API 文档\n\n" +
+          "提供汉字、成语、古诗的查询接口\n\n" +
+          "### 功能说明\n" +
+          "- 汉字：查询汉字的拼音、笔画、释义等\n" +
+          "- 成语：查询成语的拼音、解释、出处、典故等\n" +
+          "- 古诗：查询古诗的作者、朝代、内容、赏析等\n\n" +
+          "### 认证说明\n" +
+          "当前接口无需认证，直接调用即可",
+      )
+      .setVersion("1.0")
+      .setContact("decade", "https://github.com/decade", "1782976211@qq.com")
+      .addTag("characters", "汉字相关接口 - 查询汉字的拼音、笔画、释义等")
+      .addTag("idioms", "成语相关接口 - 查询成语的拼音、解释、出处、典故等")
+      .addTag("poems", "古诗相关接口 - 查询古诗的作者、朝代、内容、赏析等")
+      .addTag("health", "健康检查接口 - 服务健康状态探测")
+      .addServer("/api/v1", "生产环境")
+      .build();
+    const document = SwaggerModule.createDocument(app, swaggerConfig);
+    SwaggerModule.setup("api/docs", app, document);
+  }
 
   // 从配置获取端口
   const port = configService.get<number>("app.port") || 3001;

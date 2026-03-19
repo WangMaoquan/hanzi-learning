@@ -225,7 +225,7 @@ export class LoggingInterceptor implements NestInterceptor {
   }
 
   /**
-   * 脱敏处理请求体
+   * 脱敏处理请求体（递归处理嵌套对象）
    */
   private sanitizeBody(body: unknown): unknown {
     if (!body || typeof body !== "object") {
@@ -244,11 +244,40 @@ export class LoggingInterceptor implements NestInterceptor {
       "secretKey",
     ];
 
-    const sanitized = { ...body } as Record<string, unknown>;
+    return this.sanitizeObject(
+      body as Record<string, unknown>,
+      sensitiveFields,
+    );
+  }
 
-    for (const field of sensitiveFields) {
-      if (field in sanitized) {
-        sanitized[field] = "***REDACTED***";
+  /**
+   * 递归脱敏对象中的敏感字段
+   */
+  private sanitizeObject(
+    obj: Record<string, unknown>,
+    sensitiveFields: string[],
+  ): Record<string, unknown> {
+    const sanitized: Record<string, unknown> = {};
+
+    for (const [key, value] of Object.entries(obj)) {
+      if (sensitiveFields.includes(key.toLowerCase())) {
+        sanitized[key] = "***REDACTED***";
+      } else if (Array.isArray(value)) {
+        sanitized[key] = value.map((item) =>
+          typeof item === "object" && item !== null
+            ? this.sanitizeObject(
+                item as Record<string, unknown>,
+                sensitiveFields,
+              )
+            : item,
+        );
+      } else if (typeof value === "object" && value !== null) {
+        sanitized[key] = this.sanitizeObject(
+          value as Record<string, unknown>,
+          sensitiveFields,
+        );
+      } else {
+        sanitized[key] = value;
       }
     }
 

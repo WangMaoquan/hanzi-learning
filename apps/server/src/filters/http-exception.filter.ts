@@ -71,15 +71,20 @@ export class HttpExceptionFilter implements ExceptionFilter {
     } else if (exception instanceof Error) {
       code = ErrorCode.INTERNAL_SERVER_ERROR;
       message = exception.message;
+      const requestId = request.headers["x-request-id"] || "";
       this.logger.error(
-        `${request.method} ${request.url} - ${status} - ${message}`,
+        `${request.method} ${request.url} - ${status} - ${message} [reqId=${requestId}]`,
+        exception.stack,
+        HttpExceptionFilter.name,
       );
     }
 
     // 简化日志输出
     if (exception instanceof HttpException) {
+      const requestId = request.headers["x-request-id"] || "";
       this.logger.warn(
-        `${request.method} ${request.url} - ${status} - ${message}`,
+        `${request.method} ${request.url} - ${status} - ${message} [reqId=${requestId}]`,
+        HttpExceptionFilter.name,
       );
     }
 

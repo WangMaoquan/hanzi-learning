@@ -8,33 +8,81 @@ import * as winston from "winston";
 import { SuccessInterceptor } from "./interceptors/success.interceptor";
 import { HttpExceptionFilter } from "./filters/http-exception.filter";
 
+// 开发环境彩色格式
+const devFormat = winston.format.combine(
+  winston.format.colorize(),
+  winston.format.timestamp({ format: "HH:mm:ss" }),
+  winston.format.printf(({ timestamp, level, message, context }) => {
+    const ctx = context ? `[${context}] ` : "";
+    return `${timestamp} ${level}: ${ctx}${message}`;
+  }),
+);
+
+// 生产环境 JSON 格式
+const prodFormat = winston.format.combine(
+  winston.format.timestamp(),
+  winston.format.errors({ stack: true }),
+  winston.format.json(),
+);
+
 // 创建 Winston Logger
 const winstonLogger = winston.createLogger({
-  level: "info",
-  format: winston.format.combine(
-    winston.format.timestamp(),
-    winston.format.errors({ stack: true }),
-  ),
+  level: process.env.LOG_LEVEL || "info",
+  format: process.env.NODE_ENV === "production" ? prodFormat : devFormat,
   transports: [
     new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.printf(({ timestamp, level, message }) => {
-          return `${timestamp} ${level}: ${message}`;
-        }),
-      ),
+      format: process.env.NODE_ENV === "production" ? prodFormat : devFormat,
     }),
+    // 生产环境文件输出
+    ...(process.env.NODE_ENV === "production"
+      ? [
+          new winston.transports.File({
+            filename: "logs/error.log",
+            level: "error",
+            format: prodFormat,
+          }),
+          new winston.transports.File({
+            filename: "logs/combined.log",
+            format: prodFormat,
+          }),
+        ]
+      : []),
   ],
 });
 
 // 创建适配器，将所有日志级别映射到 Winston
+// NestJS Logger: log(message, context), error(message, trace, context)
 const loggerAdapter = {
   debug: (message: string) => winstonLogger.debug(message),
   verbose: (message: string) => winstonLogger.verbose(message),
-  log: (message: string) => winstonLogger.info(message),
-  info: (message: string) => winstonLogger.info(message),
-  warn: (message: string) => winstonLogger.warn(message),
-  error: (message: string) => winstonLogger.error(message),
+  log: (message: string, context?: string) => {
+    if (context) {
+      winstonLogger.info(message, { context });
+    } else {
+      winstonLogger.info(message);
+    }
+  },
+  info: (message: string, context?: string) => {
+    if (context) {
+      winstonLogger.info(message, { context });
+    } else {
+      winstonLogger.info(message);
+    }
+  },
+  warn: (message: string, context?: string) => {
+    if (context) {
+      winstonLogger.warn(message, { context });
+    } else {
+      winstonLogger.warn(message);
+    }
+  },
+  error: (message: string, trace?: string, context?: string) => {
+    if (context || trace) {
+      winstonLogger.error(message, { trace, context });
+    } else {
+      winstonLogger.error(message);
+    }
+  },
 };
 
 async function bootstrap() {

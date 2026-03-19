@@ -12,6 +12,7 @@ export class PrismaService
   implements OnModuleInit, OnModuleDestroy
 {
   private readonly logger = new Logger(PrismaService.name);
+  private readonly context = "PrismaService";
 
   constructor() {
     super({
@@ -26,18 +27,18 @@ export class PrismaService
   async onModuleInit() {
     // 监听查询事件
     this.$on("query" as never, (event: Prisma.QueryEvent) => {
-      this.logger.debug(
-        `Prisma Query: ${event.query} - ${event.duration}ms`,
-        "PrismaService",
+      this.logger.log(
+        `SQL: ${event.query} | ${event.duration}ms`,
+        this.context,
       );
     });
 
     await this.$connect();
-    this.logger.log("Prisma connected", "PrismaService");
+    this.logger.log("Prisma connected", this.context);
   }
 
   async onModuleDestroy() {
     await this.$disconnect();
-    this.logger.log("Prisma disconnected", "PrismaService");
+    this.logger.log("Prisma disconnected", this.context);
   }
 }
